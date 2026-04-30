@@ -29,31 +29,48 @@
             
         </div>
 
-    <div class="login-box">
-        <form action="#" method="POST">
-            <h2>Iniciar Sesión</h2>
-            
-            <div class="input-group">
-                <input type="text" required>
-                <label>Usuario</label>
-                <i></i>
-            </div>
-            
-            <div class="input-group">
-                <input type="password" required>
-                <label>Contraseña</label>
-                <i></i>
-            </div>
+    <div class="login-box" id="loginCard">
+        <div class="page page-front">
+            <form action="#" method="POST" id="loginForm">
+                <h2>Iniciar Sesión</h2>
+                
+                <div class="input-group">
+                    <input type="text" id="username" required>
+                    <label>Usuario</label>
+                    <i></i>
+                </div>
+                
+                <div class="input-group">
+                    <input type="password" id="password" required>
+                    <label>Contraseña</label>
+                    <i></i>
+                </div>
 
-            <div class="links">
-                <a href="#">Olvidé mi clave</a>
-                <a href="#">Registrarse</a>
-            </div>
+                <div class="links">
+                    <a href="#">Olvidé mi clave</a>
+                    <a href="#">Registrarse</a>
+                </div>
 
-            <input type="submit" value="Ingresar" class="btn-submit">
-        </form>
+                <button type="button" id="loginBtn" class="btn-submit load-btn">
+                    <span class="default">Ingresar</span>
+                    <div class="load-state">
+                        <div class="ball"></div>
+                        <div class="ball"></div>
+                        <div class="ball"></div>
+                    </div>
+                </button>
+            </form>
+        </div>
+        
+        <div class="page page-back">
+            <img class="avatar" src="assets/Img/MUNIFY.jpeg" alt="Avatar">
+            <p class="welcome">Bienvenido, <span id="welcomeUser"></span>!</p>
+            <button type="button" id="replayBtn" class="btn-submit inline">Volver</button>
+        </div>
     </div>
     </div>
+
+    <script src="assets/Js/Login.js"></script>
 
 </body>
 </html>
