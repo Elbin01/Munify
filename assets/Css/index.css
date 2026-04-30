@@ -1,0 +1,241 @@
+/* ===== PALETA DE COLORES ORIGINAL ===== */
+:root {
+    --color-1: #40FFDC; /* Aguamarina */
+    --color-2: #00A9D4; /* Azul vibrante */
+    --color-3: #1C3166; /* Azul profundo */
+    --color-4: #240047; /* Morado oscuro */
+    --color-5: #1C0021; /* Fondo principal */
+    --color-logo-text: #2c3e6b;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* Fondo y centrado vertical/horizontal */
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: var(--color-5);
+    overflow: hidden;
+}
+
+/* Partículas de fondo (intactas) */
+.background-animate {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    display: flex;
+    justify-content: space-around;
+    z-index: 1;
+}
+
+.background-animate span {
+    position: relative;
+    width: 20px;
+    height: 20px;
+    background: var(--color-1);
+    border-radius: 50%;
+    box-shadow: 0 0 20px var(--color-1), 0 0 50px var(--color-1);
+    animation: animateCloud calc(150s / var(--i)) linear infinite;
+    opacity: 0.15;
+}
+
+@keyframes animateCloud {
+    0% { transform: translateY(100vh) scale(0); }
+    100% { transform: translateY(-10vh) scale(1.2); }
+}
+
+/* Contenedor principal: centrado y con espacio para el logo */
+.main-container {
+    position: relative;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 1rem;
+}
+
+/* ===== LOGO AJUSTADO CORRECTAMENTE ===== */
+.header-logo {
+    text-align: center;
+    margin-bottom: 1.8rem;  /* Separación perfecta con el login-box */
+}
+
+.header-logo img {
+    width: 180px;           /* Tamaño proporcionado (ni muy grande ni pequeño) */
+    max-width: 80vw;        /* Responsivo: no se sale en móviles */
+    height: auto;
+    display: block;
+    filter: drop-shadow(0 0 6px rgba(64, 255, 220, 0.4));
+    transition: transform 0.2s ease;
+}
+
+.header-logo img:hover {
+    transform: scale(1.02);
+}
+
+/* Caja de login con borde animado (sin cambios en el efecto) */
+.login-box {
+    position: relative;
+    width: 400px;
+    height: 460px;
+    background: #1c3166;
+    border-radius: 8px;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.login-box::before, .login-box::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 400px;
+    height: 460px;
+    background: linear-gradient(0deg, transparent, var(--color-1), var(--color-1));
+    transform-origin: bottom right;
+    animation: rotateBorder 6s linear infinite;
+}
+
+.login-box::after {
+    background: linear-gradient(0deg, transparent, var(--color-2), var(--color-2));
+    animation-delay: -3s;
+}
+
+@keyframes rotateBorder {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Formulario interno */
+form {
+    position: absolute;
+    inset: 3px;
+    background: var(--color-5);
+    padding: 30px;
+    border-radius: 8px;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: calc(100% - 6px);
+}
+
+h2 {
+    color: var(--color-1);
+    font-weight: 500;
+    text-align: center;
+    letter-spacing: 0.1em;
+    margin-bottom: 0.5rem;
+}
+
+/* Campos de entrada */
+.input-group {
+    position: relative;
+    width: 100%;
+    margin-bottom: 1rem;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 10px 10px 10px 5px;
+    background: transparent;
+    outline: none;
+    border: none;
+    color: #fff;
+    font-size: 1em;
+    letter-spacing: 0.05em;
+    transition: 0.5s;
+    z-index: 10;
+    position: relative;
+}
+
+.input-group label {
+    position: absolute;
+    left: 0;
+    padding: 10px 5px;
+    pointer-events: none;
+    font-size: 1em;
+    color: #8f8f8f;
+    transition: 0.5s;
+}
+
+.input-group input:focus ~ label,
+.input-group input:valid ~ label {
+    color: var(--color-1);
+    transform: translateY(-34px);
+    font-size: 0.75em;
+}
+
+.input-group i {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 2px;
+    background: var(--color-1);
+    border-radius: 2px;
+    transition: 0.5s;
+    pointer-events: none;
+}
+
+.input-group input:focus ~ i,
+.input-group input:valid ~ i {
+    height: 44px;
+    opacity: 0.15;
+}
+
+/* Enlaces */
+.links {
+    display: flex;
+    justify-content: space-between;
+    margin: 0.2rem 0 0.8rem;
+}
+
+.links a {
+    font-size: 0.75em;
+    color: #8f8f8f;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.links a:hover {
+    color: var(--color-1);
+}
+
+/* Botón */
+.btn-submit {
+    border: none;
+    outline: none;
+    padding: 12px 0;
+    background: var(--color-1);
+    cursor: pointer;
+    border-radius: 4px;
+    font-weight: 600;
+    width: 160px;
+    align-self: center;
+    color: var(--color-5);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: 0.3s;
+    box-shadow: 0 5px 15px rgba(64, 255, 220, 0.2);
+}
+
+.btn-submit:hover {
+    background: var(--color-2);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0, 169, 212, 0.4);
+}
