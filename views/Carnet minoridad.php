@@ -1,0 +1,581 @@
+<?php
+// =============================================
+//  DATOS DE EJEMPLO - Reemplazar con tus datos
+//  reales desde tu base de datos o formulario
+// =============================================
+$datos_municipio = [
+    'alcaldia'      => 'Alcaldía Municipal de Ilobasco',
+    'departamento'  => 'Cabañas',
+    'pais'          => 'El Salvador',
+    'escudo_nacion' => '../assets/Img/escudo.jpeg',  // Escudo Nacional
+    'logo'          => '',                             // Logo de tu alcaldía
+];
+
+$datos_menor = [
+    'apellidos'          => 'Rodríguez López',
+    'nombres'            => 'María José',
+    'lugar_nacimiento'   => 'Ilobasco, Cabañas',
+    'fecha_nacimiento'   => '14/04/2015',
+    'fecha_expedicion'   => '02/05/2026',
+    'fecha_vencimiento'  => '14/04/2029',
+    'numero_carnet'      => '0601-004893',
+    'foto'               => '../assets/Img/', // Ruta a la foto del menor, ej: '../assets/Img/foto.jpg'
+];
+
+$datos_reverso = [
+    'direccion'          => 'Colonia Jardines, Calle Principal #12, Ilobasco, Cabañas',
+    'nombre_madre'       => 'Ana Sofía López de Rodríguez',
+    'nombre_padre'       => 'Carlos Alberto Rodríguez Martínez',
+    'color_piel'         => 'Moreno',
+    'color_ojos'         => 'Café',
+    'cabello'            => 'Negro',
+    'senales_especiales' => 'Ninguna',
+    'centro_estudios'    => 'Centro Escolar Sor Heriquez',
+    'tipo_tramite'       => 'PRIMERA VEZ', // PRIMERA VEZ o RENOVACIÓN
+];
+
+$datos_footer = [
+    'alcalde'    => 'Lic. Lorenzo Rivas',
+    'secretario' => 'Licda. Rosa Elena Méndez Castro',
+    'atendio'    => 'Asistente: María del Carmen Guevara',
+];
+?>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Carnet de Minoridad – <?= htmlspecialchars($datos_menor['nombres']) ?> <?= htmlspecialchars($datos_menor['apellidos']) ?></title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap');
+
+    :root {
+      --azul-oscuro:  #1C3166;
+      --azul-medio:   #00A9D4;
+      --azul-claro:   #e8f6fb;
+      --acento:       #40FFDC;
+      --acento-claro: #a0fff0;
+      --texto:        #1a1a1a;
+      --gris-linea:   #b0dce8;
+      --blanco:       #ffffff;
+      --sombra:       rgba(28, 49, 102, 0.15);
+    }
+
+    body {
+      font-family: 'EB Garamond', Georgia, serif;
+      background: #240047;
+      color: var(--texto);
+      min-height: 100vh;
+      padding: 2rem 1rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2rem;
+    }
+
+    /* ── Botón imprimir flotante ── */
+    .btn-imprimir {
+      position: fixed;
+      top: 1rem;
+      right: 1rem;
+      padding: 0.4rem 0.9rem;
+      background: var(--azul-oscuro);
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-family: 'Cinzel', serif;
+      font-size: 0.72rem;
+      letter-spacing: 0.08em;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+      z-index: 999;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+    .btn-imprimir:hover { background: var(--azul-medio); }
+
+    /* ── Etiqueta de cara ── */
+    .cara-label {
+      font-family: 'Cinzel', serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.15em;
+      color: var(--acento);
+      text-transform: uppercase;
+      align-self: flex-start;
+      margin-left: calc(50% - 400px);
+    }
+
+    /* ── Hoja (cara del carnet) ── */
+    .hoja {
+      width: 800px;
+      max-width: 100%;
+      background: var(--blanco);
+      border: 3px double var(--azul-medio);
+      outline: 6px solid var(--azul-oscuro);
+      outline-offset: -12px;
+      box-shadow: 0 8px 40px var(--sombra);
+      position: relative;
+    }
+
+    .banda-top {
+      background: linear-gradient(135deg, var(--azul-oscuro) 0%, var(--azul-medio) 100%);
+      height: 10px;
+    }
+    .banda-bot {
+      background: linear-gradient(135deg, var(--azul-medio) 0%, var(--azul-oscuro) 100%);
+      height: 10px;
+    }
+
+    /* ── Encabezado ── */
+    .encabezado {
+      padding: 1.2rem 2rem 1rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      border-bottom: 2px solid var(--acento);
+      background: var(--azul-oscuro);
+    }
+
+    .logo-wrap {
+      width: 70px;
+      height: 70px;
+      flex-shrink: 0;
+      border: 2px solid var(--acento);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255,255,255,0.1);
+      overflow: hidden;
+    }
+    .logo-wrap img { width: 100%; height: 100%; object-fit: contain; }
+    .logo-placeholder {
+      font-size: 10px;
+      color: var(--acento-claro);
+      text-align: center;
+      line-height: 1.3;
+    }
+
+    .encabezado-texto { flex: 1; text-align: center; }
+    .encabezado-texto h1 {
+      font-family: 'Cinzel', serif;
+      font-size: 0.85rem;
+      color: var(--blanco);
+      letter-spacing: 0.1em;
+      line-height: 1.5;
+    }
+    .encabezado-texto .titulo-doc {
+      margin-top: 0.4rem;
+      font-family: 'Cinzel', serif;
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--acento);
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    /* ══════════════════════════
+       CARA FRONTAL
+    ══════════════════════════ */
+    .frontal-body {
+      padding: 1.5rem 2rem;
+      display: flex;
+      gap: 1.5rem;
+    }
+
+    /* Foto */
+    .foto-wrap {
+      width: 130px;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .foto-box {
+      width: 130px;
+      height: 160px;
+      border: 2px solid var(--azul-oscuro);
+      background: var(--azul-claro);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    .foto-box img { width: 100%; height: 100%; object-fit: cover; }
+    .foto-placeholder {
+      font-size: 0.7rem;
+      color: var(--azul-medio);
+      text-align: center;
+      font-style: italic;
+    }
+    .numero-carnet {
+      font-family: 'Cinzel', serif;
+      font-size: 0.75rem;
+      color: var(--azul-oscuro);
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-align: center;
+    }
+
+    /* Campos frontales */
+    .frontal-campos {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .campo { display: flex; flex-direction: column; gap: 2px; }
+    .campo label {
+      font-size: 0.68rem;
+      font-weight: 600;
+      color: var(--azul-medio);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      font-family: 'Cinzel', serif;
+    }
+    .campo .valor {
+      font-size: 1rem;
+      color: var(--texto);
+      border-bottom: 1px solid var(--gris-linea);
+      padding-bottom: 3px;
+      min-height: 1.4em;
+    }
+    .campo.full { grid-column: 1 / -1; }
+
+    .campos-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.8rem 1.5rem;
+    }
+
+    /* Sellos y firmas frontales */
+    .frontal-footer {
+      padding: 0.8rem 2rem 1.2rem;
+      border-top: 1px solid var(--gris-linea);
+      display: flex;
+      justify-content: space-around;
+      align-items: flex-end;
+      gap: 1rem;
+    }
+
+    .sello-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.3rem;
+    }
+    .sello-circulo {
+      width: 60px;
+      height: 60px;
+      border: 2px solid var(--azul-oscuro);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.55rem;
+      color: var(--azul-oscuro);
+      text-align: center;
+      font-family: 'Cinzel', serif;
+      letter-spacing: 0.04em;
+      line-height: 1.3;
+    }
+    .firma-linea-sm {
+      width: 120px;
+      border-bottom: 1.5px solid var(--azul-oscuro);
+      height: 30px;
+    }
+    .firma-label {
+      font-family: 'Cinzel', serif;
+      font-size: 0.62rem;
+      color: var(--azul-oscuro);
+      text-align: center;
+      letter-spacing: 0.05em;
+    }
+    .firma-nombre-sm {
+      font-size: 0.72rem;
+      font-style: italic;
+      color: var(--azul-medio);
+      text-align: center;
+    }
+
+    /* ══════════════════════════
+       CARA POSTERIOR
+    ══════════════════════════ */
+    .reverso-body {
+      padding: 1.5rem 2rem;
+    }
+
+    .reverso-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.9rem 2rem;
+    }
+
+    .tipo-tramite-badge {
+      display: inline-block;
+      background: var(--azul-oscuro);
+      color: var(--acento);
+      font-family: 'Cinzel', serif;
+      font-size: 0.72rem;
+      letter-spacing: 0.1em;
+      padding: 0.25rem 0.8rem;
+      border-radius: 2px;
+      align-self: center;
+      justify-self: end;
+    }
+
+    .reverso-footer {
+      padding: 1rem 2rem 1.2rem;
+      border-top: 1px solid var(--gris-linea);
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+
+    .huella-box {
+      width: 55px;
+      height: 70px;
+      border: 1px solid var(--gris-linea);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.3rem;
+    }
+    .huella-box span {
+      font-size: 0.6rem;
+      color: #888;
+      font-style: italic;
+    }
+    .huella-oval {
+      width: 28px;
+      height: 40px;
+      border: 1.5px solid #999;
+      border-radius: 50%;
+    }
+
+    .ministerio-wrap {
+      text-align: right;
+      font-family: 'Cinzel', serif;
+      font-size: 0.7rem;
+      color: var(--azul-oscuro);
+      letter-spacing: 0.06em;
+      line-height: 1.6;
+    }
+    .ministerio-num {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--azul-oscuro);
+    }
+
+    .atendio-wrap {
+      text-align: center;
+      font-size: 0.8rem;
+      color: #555;
+      font-style: italic;
+      border-top: 1px dashed var(--gris-linea);
+      padding: 0.6rem 2rem;
+    }
+
+    /* ── Print ── */
+    @media print {
+      body { background: none; padding: 0; gap: 1.5rem; }
+      .hoja { box-shadow: none; outline: none; border-color: #999; width: 100%; }
+      .btn-imprimir { display: none; }
+      .cara-label { margin-left: 0; }
+    }
+  </style>
+</head>
+<body>
+
+<button class="btn-imprimir" onclick="window.print()">&#128438; Imprimir</button>
+
+<!-- ══════════════════════════════════
+     CARA FRONTAL
+══════════════════════════════════ -->
+<div class="cara-label">▶ Cara frontal</div>
+<div class="hoja">
+  <div class="banda-top"></div>
+
+  <!-- Encabezado -->
+  <div class="encabezado">
+    <div class="logo-wrap">
+      <?php if (!empty($datos_municipio['escudo_nacion'])): ?>
+        <img src="<?= htmlspecialchars($datos_municipio['escudo_nacion']) ?>" alt="Escudo Nacional">
+      <?php else: ?>
+        <div class="logo-placeholder">ESCUDO<br>NACIONAL</div>
+      <?php endif; ?>
+    </div>
+
+    <div class="encabezado-texto">
+      <h1>
+        REPÚBLICA DE EL SALVADOR<br>
+        DOCUMENTO DE IDENTIDAD PERSONAL<br>
+        <?= htmlspecialchars($datos_municipio['alcaldia']) ?>,<br>
+        DEPARTAMENTO DE <?= strtoupper(htmlspecialchars($datos_municipio['departamento'])) ?>
+      </h1>
+      <div class="titulo-doc">Carnet de Minoridad</div>
+    </div>
+
+    <div class="logo-wrap">
+      <?php if (!empty($datos_municipio['logo'])): ?>
+        <img src="<?= htmlspecialchars($datos_municipio['logo']) ?>" alt="Logo Alcaldía">
+      <?php else: ?>
+        <div class="logo-placeholder">LOGO<br>ALCALDÍA</div>
+      <?php endif; ?>
+    </div>
+  </div>
+
+  <!-- Cuerpo frontal -->
+  <div class="frontal-body">
+
+    <!-- Foto -->
+    <div class="foto-wrap">
+      <div class="foto-box">
+        <?php if (!empty($datos_menor['foto'])): ?>
+          <img src="<?= htmlspecialchars($datos_menor['foto']) ?>" alt="Foto del menor">
+        <?php else: ?>
+          <div class="foto-placeholder">FOTOGRAFÍA<br>DEL MENOR</div>
+        <?php endif; ?>
+      </div>
+      <div class="numero-carnet"><?= htmlspecialchars($datos_menor['numero_carnet']) ?></div>
+    </div>
+
+    <!-- Campos -->
+    <div class="frontal-campos">
+      <div class="campo">
+        <label>Apellidos</label>
+        <div class="valor"><?= htmlspecialchars($datos_menor['apellidos']) ?></div>
+      </div>
+      <div class="campo">
+        <label>Nombres</label>
+        <div class="valor"><?= htmlspecialchars($datos_menor['nombres']) ?></div>
+      </div>
+      <div class="campo">
+        <label>Lugar y fecha de nacimiento</label>
+        <div class="valor">
+          <?= htmlspecialchars($datos_menor['lugar_nacimiento']) ?> &nbsp;|&nbsp;
+          <?= htmlspecialchars($datos_menor['fecha_nacimiento']) ?>
+        </div>
+      </div>
+      <div class="campos-grid">
+        <div class="campo">
+          <label>Fecha de expedición</label>
+          <div class="valor"><?= htmlspecialchars($datos_menor['fecha_expedicion']) ?></div>
+        </div>
+        <div class="campo">
+          <label>Fecha de vencimiento</label>
+          <div class="valor"><?= htmlspecialchars($datos_menor['fecha_vencimiento']) ?></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Firmas y sellos frontales -->
+  <div class="frontal-footer">
+    <div class="sello-wrap">
+      <div class="firma-linea-sm"></div>
+      <div class="firma-label">Alcalde</div>
+      <div class="firma-nombre-sm"><?= htmlspecialchars($datos_footer['alcalde']) ?></div>
+    </div>
+    <div class="sello-wrap">
+      <div class="sello-circulo">SELLO<br>ALCALDÍA</div>
+    </div>
+    <div class="sello-wrap">
+      <div class="firma-linea-sm"></div>
+      <div class="firma-label">Secretario(a)</div>
+      <div class="firma-nombre-sm"><?= htmlspecialchars($datos_footer['secretario']) ?></div>
+    </div>
+  </div>
+
+  <div class="banda-bot"></div>
+</div><!-- /frontal -->
+
+
+<!-- ══════════════════════════════════
+     CARA POSTERIOR
+══════════════════════════════════ -->
+<div class="cara-label">▶ Cara posterior</div>
+<div class="hoja">
+  <div class="banda-top"></div>
+
+  <div class="reverso-body">
+    <div class="reverso-grid">
+
+      <div class="campo full" style="grid-column:1/-1">
+        <label>Dirección</label>
+        <div class="valor"><?= htmlspecialchars($datos_reverso['direccion']) ?></div>
+      </div>
+
+      <div class="campo">
+        <label>Nombre de la madre</label>
+        <div class="valor"><?= htmlspecialchars($datos_reverso['nombre_madre']) ?></div>
+      </div>
+
+      <div class="campo" style="display:flex;flex-direction:column;justify-content:flex-end;">
+        <div class="tipo-tramite-badge">
+          Tipo de trámite: <?= htmlspecialchars($datos_reverso['tipo_tramite']) ?>
+        </div>
+      </div>
+
+      <div class="campo" style="grid-column:1/-1">
+        <label>Nombre del padre</label>
+        <div class="valor"><?= htmlspecialchars($datos_reverso['nombre_padre']) ?></div>
+      </div>
+
+      <div class="campo">
+        <label>Color de piel</label>
+        <div class="valor"><?= htmlspecialchars($datos_reverso['color_piel']) ?></div>
+      </div>
+      <div class="campo">
+        <label>Color de ojos</label>
+        <div class="valor"><?= htmlspecialchars($datos_reverso['color_ojos']) ?></div>
+      </div>
+      <div class="campo">
+        <label>Cabello</label>
+        <div class="valor"><?= htmlspecialchars($datos_reverso['cabello']) ?></div>
+      </div>
+      <div class="campo">
+        <label>Señales especiales</label>
+        <div class="valor"><?= htmlspecialchars($datos_reverso['senales_especiales']) ?></div>
+      </div>
+
+      <div class="campo" style="grid-column:1/-1">
+        <label>Centro de estudios o lugar de trabajo</label>
+        <div class="valor"><?= htmlspecialchars($datos_reverso['centro_estudios']) ?></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Footer reverso: huella, firma, ministerio -->
+  <div class="reverso-footer">
+    <div class="sello-wrap">
+      <div class="firma-linea-sm"></div>
+      <div class="firma-label">Firma</div>
+    </div>
+
+    <div class="huella-box">
+      <div class="huella-oval"></div>
+      <span>Huella</span>
+    </div>
+
+    <div class="ministerio-wrap">
+      MINISTERIO DE HACIENDA<br>
+      <span class="ministerio-num">No <?= htmlspecialchars($datos_menor['numero_carnet']) ?> "A"</span>
+    </div>
+  </div>
+
+  <div class="atendio-wrap"><?= htmlspecialchars($datos_footer['atendio']) ?></div>
+
+  <div class="banda-bot"></div>
+</div><!-- /reverso -->
+
+</body>
+</html>
