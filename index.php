@@ -24,7 +24,7 @@
             position: fixed; top: 0; width: 100%; z-index: 300;
             display: flex; align-items: center; justify-content: space-between;
             padding: 1rem 4rem;
-            background: rgba(28, 0, 33, 0.92);
+            background: rgba(8, 8, 8, 0.92);
             backdrop-filter: blur(16px);
             border-bottom: 1px solid rgba(64, 255, 220, 0.15);
         }
@@ -66,7 +66,7 @@
             display: flex; align-items: center;
             overflow: hidden;
             /* Degradado institucional de fondo — no necesita imagen */
-            background: linear-gradient(135deg, var(--color-5) 0%, #2a0050 45%, var(--color-3) 100%);
+            background: linear-gradient(135deg, var(--color-3) 0%, #100938 45%, var(--color-3) 100%);
         }
 
         /* Efecto de malla luminosa */
@@ -223,13 +223,13 @@
         /* ══════════════ QUIÉNES SOMOS ══════════════ */
         .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; margin-top: 3.5rem; }
         .vals { display: flex; flex-direction: column; gap: 1rem; margin-top: 1.8rem; }
-        .val { display: flex; align-items: flex-start; gap: 1rem; background: rgba(28,49,102,0.28); border: 1px solid rgba(64,255,220,0.1); border-radius: 10px; padding: 1rem 1.2rem; transition: border-color 0.2s; }
+        .val { display: flex; align-items: flex-start; gap: 1rem; background: rgba(60, 101, 206, 0.28); border: 1px solid rgba(64,255,220,0.1); border-radius: 10px; padding: 1rem 1.2rem; transition: border-color 0.2s; }
         .val:hover { border-color: rgba(64,255,220,0.3); }
         .vi { width: 38px; height: 38px; flex-shrink: 0; background: rgba(64,255,220,0.1); border-radius: 9px; display: flex; align-items: center; justify-content: center; color: var(--color-1); font-size: 1rem; }
         .val h4 { font-size: 0.85rem; font-weight: 600; margin-bottom: 0.2rem; }
         .val p { font-size: 0.75rem; color: rgba(255,255,255,0.42); line-height: 1.5; }
         .stats-vis { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-        .sc { background: rgba(28,49,102,0.35); border: 1px solid rgba(64,255,220,0.12); border-radius: 12px; padding: 1.5rem; text-align: center; transition: transform 0.2s, border-color 0.2s; }
+        .sc { background: rgba(66, 74, 143, 0.35); border: 1px solid rgba(64,255,220,0.12); border-radius: 12px; padding: 1.5rem; text-align: center; transition: transform 0.2s, border-color 0.2s; }
         .sc:hover { transform: translateY(-3px); border-color: rgba(64,255,220,0.3); }
         .sc:nth-child(2) { margin-top: 1.5rem; }
         .sc:nth-child(4) { margin-top: -1.5rem; }
@@ -357,6 +357,7 @@
             <div class="hc-pills">
                 <span class="hc-pill">Partida de Nacimiento</span>
                 <span class="hc-pill">Carnet Minoridad</span>
+                <span class="hc-pill">Acta de Defunción</span>
             </div>
         </div>
     </div>
@@ -394,10 +395,7 @@
                     </div>
                 </div>
             </div>
-            <div class="stats-vis">
-                <div class="sc"><div class="sn">+12k</div><div class="sl">Partidas Emitidas</div></div>
-                <div class="sc"><div class="sn">+3.8k</div><div class="sl">Carnets de Minoridad</div></div>
-            </div>
+            
         </div>
     </div>
 </section>
@@ -422,13 +420,10 @@
             </div>
             <div class="svc">
                 <div class="svc-ico"><i class="fas fa-copy"></i></div>
-                <h3>Duplicado y reposición</h3>
+                <h3>Acta de Defunción</h3>
+                <p>Documento Legal a Través del Cual Se Certifica El Fallecimiento de Una Persona y El Lugar Donde El Fallecimiento Fue Inscrito.</p>
             </div>
-            <div class="svc">
-                <div class="svc-ico"><i class="fas fa-magnifying-glass"></i></div>
-                <h3>Consultas de trámite</h3>
-                <p>Revisa el estado de tu solicitud en tiempo real con tu número de referencia.</p>
-            </div>
+            
         </div>
     </div>
 </section>
