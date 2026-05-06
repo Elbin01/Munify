@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -357,6 +357,7 @@
             <div class="hc-pills">
                 <span class="hc-pill">Partida de Nacimiento</span>
                 <span class="hc-pill">Carnet Minoridad</span>
+                 <span class="hc-pill">Acta de defuncion</span>
             </div>
         </div>
     </div>
