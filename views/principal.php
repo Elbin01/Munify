@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -9,17 +9,97 @@
     <link rel="stylesheet" href="../assets/Css/index.css?v=<?php echo time(); ?>">
 </head>
 <body>
-    <div class="login-wrapper">
-        <div class="login-sidebar">
-            <div class="sidebar-content">
-                <div class="logo-container">
-                    <img src="../assets/Img/MUNIFY.jpeg" alt="Logo Alcaldía" onerror="this.style.display='none';this.parentElement.innerHTML='🏛️'">
-                </div>
-                <h2>MUNIFY</h2>
-                <p>Sistema Integrado de Registro Civil Municipal</p>
-                <div class="gov-badges">
-                    <span><i class="fas fa-landmark"></i> Institucional</span>
-                    <span><i class="fas fa-lock"></i> Seguro</span>
+
+<!-- NAVBAR -->
+<nav>
+    <a href="#" class="nav-brand">
+        <div class="nav-logo">
+            <img src="assets/Img/MUNIFY.jpeg" alt="Logo"
+                 onerror="this.style.display='none';this.parentElement.innerHTML='🏛️'">
+        </div>
+        <span class="nav-name">MUNIFY</span>
+    </a>
+    <button class="hamburger" onclick="toggleMenu()" aria-label="Menú">
+        <i class="fas fa-bars" id="ham-icon"></i>
+    </button>
+    <div class="nav-links" id="nav-menu">
+        <a href="#nosotros">Inicio</a>
+        <a href="#servicios">Servicios</a>
+        <a href="#nosotros">Nosotros</a>
+        <a href="#ubicacion">Contacto</a>
+        <a href="index.php" class="btn-login">Iniciar sesión</a>
+    </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+    <div class="hero-particles">
+        <span style="--i:11"></span><span style="--i:18"></span>
+        <span style="--i:24"></span><span style="--i:14"></span><span style="--i:20"></span>
+    </div>
+
+    <div class="hero-inner">
+        <div class="hero-left">
+            <div class="hero-badge">
+                <i class="fas fa-landmark"></i>
+                Institución &bull; Servicio &bull; Comunidad
+            </div>
+            <h1 class="hero-title">
+                Bienvenido a<br><em>MUNIFY</em>
+            </h1>
+            <p class="hero-sub">
+                Sistema de registro civil municipal. Tramita Partidas de Nacimiento, Carnets de Minoridad y más de forma rápida, segura y sin filas.
+            </p>
+            <div class="hero-btns">
+                <a href="#servicios" class="btn-cta"><i class="fas fa-list-check"></i> Ver servicios</a>
+                <a href="index.php" class="btn-ghost"><i class="fas fa-arrow-right-to-bracket"></i> Acceder al sistema</a>
+            </div>
+        </div>
+
+        <!-- Tarjeta flotante -->
+        <div class="hero-card">
+            <div class="hc-icon"><i class="fas fa-landmark"></i></div>
+            <h3>Gestión con identidad</h3>
+            <p>Documentos oficiales para cada ciudadano, con atención ágil y proceso 100% verificado por la alcaldía.</p>
+            <div class="hc-pills">
+                <span class="hc-pill">Partida de Nacimiento</span>
+                <span class="hc-pill">Carnet Minoridad</span>
+                 <span class="hc-pill">Acta de defuncion</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="scroll-hint">
+        <span>Explorar</span>
+        <i class="fas fa-chevron-down"></i>
+    </div>
+</section>
+
+<!-- QUIÉNES SOMOS -->
+<div class="sep"><span>Nuestra institución</span></div>
+<section id="nosotros">
+    <div class="si">
+        <p class="stag">¿Quiénes somos?</p>
+        <h2 class="sh">Comprometidos con la Comunidad</h2>
+        <div class="about-grid">
+            <div>
+                <p class="sb">
+                    Somos la Alcaldía Municipal, la institución de gobierno local dedicada al bienestar y desarrollo de todos los ciudadanos.<br><br>
+                    Nuestro equipo trabaja cada día para ofrecer servicios de registro civil ágiles, confiables y accesibles para toda la población.
+                </p>
+                <div class="vals">
+                    <div class="val">
+                        <div class="vi"><i class="fas fa-shield-halved"></i></div>
+                        <div><h4>Transparencia</h4><p>Cada trámite gestionado con honestidad y rendición de cuentas a los ciudadanos.</p></div>
+                    </div>
+                    <div class="val">
+                        <div class="vi"><i class="fas fa-people-group"></i></div>
+                        <div><h4>Servicio ciudadano</h4><p>El ciudadano es el centro de todo lo que hacemos. Su tiempo y dignidad importan.</p></div>
+                    </div>
+                    <div class="val">
+                        <div class="vi"><i class="fas fa-bolt"></i></div>
+                        <div><h4>Eficiencia digital</h4><p>Procesos de trámites municipales presenciales.</p></div>
+                    </div>
                 </div>
             </div>
         </div>

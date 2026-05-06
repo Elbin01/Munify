@@ -1,4 +1,3 @@
-
 <?php
 // =============================================
 //  DATOS DE EJEMPLO - Reemplazar con tus datos
@@ -8,8 +7,8 @@ $datos_municipio = [
     'alcaldia'      => 'Alcaldía Municipal de Ilobasco',
     'departamento'  => 'Cabañas',
     'pais'          => 'El Salvador',
-    'escudo_nacion' => '../assets/Img/escudo.jpeg',          // Escudo Nacional de El Salvador
-    'logo'          => 'assets/Img/escudo_alcaldia.png',  // Logo de tu alcaldía
+    'escudo_nacion' => '../assets/Img/escudo.jpeg',
+
 ];
 
 $datos_nacido = [
@@ -24,7 +23,7 @@ $datos_padre = [
     'nombre'    => 'Carlos Alberto Rodríguez Martínez',
     'dui'       => '01234567-8',
     'edad'      => '32',
-    'domicilio' => 'Colonia El Siete, Calle Principal #12, ilobasco',
+    'domicilio' => 'Colonia El Siete, Calle Principal #12, Ilobasco',
     'profesion' => 'Mecánico Automotriz',
 ];
 
@@ -38,7 +37,7 @@ $datos_madre = [
 
 $datos_certificacion = [
     'informante'         => 'Carlos Alberto Rodríguez Martínez',
-    'parentesco'         => 'Papa',
+    'parentesco'         => 'Padre',
     'dui_informante'     => '05647382-9',
     'fecha_inscripcion'  => '16 de abril de 2005',
 ];
@@ -56,270 +55,327 @@ $datos_footer = [
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Partida de Nacimiento – <?= htmlspecialchars($datos_nacido['nombre']) ?></title>
   <style>
-    /* ── Reset & Base ── */
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
     @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap');
 
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
     :root {
-      --azul-oscuro:  #1C3166;
-      --azul-medio:   #00A9D4;
-      --azul-claro:   #e8f6fb;
-      --dorado:       #40FFDC;
-      --dorado-claro: #a0fff0;
-      --texto:        #1a1a1a;
-      --gris-linea:   #b0dce8;
+      --negro:        #000000;
+      --rojo-oscuro:  #550000;
+      --rojo-medio:   #7a0000;
       --blanco:       #ffffff;
-      --sombra:       rgba(28, 49, 102, 0.15);
+      --gris-claro:   #f5f5f5;
+      --gris-linea:   #cccccc;
+      --texto:        #111111;
+      --sombra:       rgba(0, 0, 0, 0.2);
     }
 
     body {
       font-family: 'EB Garamond', Georgia, serif;
-      background: #240047;
+      background: #1a0000;
       color: var(--texto);
       min-height: 100vh;
-      padding: 2rem 1rem;
+      padding: 1.5rem 0.5rem;
       display: flex;
       justify-content: center;
+      align-items: flex-start;
     }
 
     /* ── Hoja ── */
     .hoja {
-      width: 800px;
-      max-width: 100%;
+      width: 100%;
+      max-width: 760px;
       background: var(--blanco);
-      border: 3px double var(--azul-medio);
-      outline: 6px solid var(--azul-oscuro);
-      outline-offset: -12px;
-      padding: 0;
-      box-shadow: 0 8px 40px var(--sombra);
+      border: 2px solid var(--negro);
+      outline: 5px solid var(--rojo-oscuro);
+      outline-offset: -10px;
+      box-shadow: 0 6px 30px var(--sombra);
       position: relative;
+      overflow: hidden;
     }
 
-    /* ── Banda decorativa superior ── */
+    /* ── Banda decorativa ── */
     .banda-top {
-      background: linear-gradient(135deg, var(--azul-oscuro) 0%, var(--azul-medio) 100%);
-      height: 10px;
+      background: linear-gradient(90deg, var(--negro) 0%, var(--rojo-oscuro) 50%, var(--negro) 100%);
+      height: 8px;
+    }
+
+    .banda-bot {
+      background: linear-gradient(90deg, var(--negro) 0%, var(--rojo-oscuro) 50%, var(--negro) 100%);
+      height: 8px;
     }
 
     /* ── Encabezado ── */
     .encabezado {
-      padding: 2rem 2.5rem 1.2rem;
+      padding: 1.2rem 1.5rem 1rem;
       display: flex;
       align-items: center;
-      gap: 1.5rem;
-      border-bottom: 2px solid var(--dorado);
+      gap: 1rem;
+      border-bottom: 2px solid var(--rojo-oscuro);
+      background: var(--blanco);
     }
 
     .logo-wrap {
-      width: 80px;
-      height: 80px;
+      width: 65px;
+      height: 65px;
       flex-shrink: 0;
-      border: 2px solid var(--dorado);
+      border: 2px solid var(--rojo-oscuro);
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      background: var(--azul-claro);
+      background: var(--gris-claro);
       overflow: hidden;
     }
 
     .logo-wrap img { width: 100%; height: 100%; object-fit: contain; }
 
     .logo-placeholder {
-      font-size: 11px;
-      color: var(--azul-medio);
+      font-size: 9px;
+      color: var(--rojo-oscuro);
       text-align: center;
       line-height: 1.3;
-      padding: 0.25rem;
+      padding: 0.2rem;
+      font-family: 'Cinzel', serif;
     }
 
-    .encabezado-texto { flex: 1; text-align: center; }
+    .encabezado-texto {
+      flex: 1;
+      text-align: center;
+    }
 
     .encabezado-texto h1 {
       font-family: 'Cinzel', serif;
-      font-size: 1.1rem;
-      color: var(--azul-oscuro);
-      letter-spacing: 0.08em;
-      line-height: 1.35;
+      font-size: 0.82rem;
+      color: var(--negro);
+      letter-spacing: 0.06em;
+      line-height: 1.4;
+      font-weight: 700;
     }
 
     .encabezado-texto .subtitulo {
-      font-size: 0.85rem;
-      color: var(--azul-medio);
-      margin-top: 0.3rem;
+      font-size: 0.72rem;
+      color: var(--negro);
+      margin-top: 0.25rem;
       font-style: italic;
     }
 
     .encabezado-texto .titulo-doc {
-      margin-top: 0.8rem;
+      margin-top: 0.5rem;
       font-family: 'Cinzel', serif;
-      font-size: 1.4rem;
+      font-size: 1.05rem;
       font-weight: 700;
-      color: var(--dorado);
-      letter-spacing: 0.12em;
+      color: var(--negro);
+      letter-spacing: 0.1em;
       text-transform: uppercase;
     }
 
     /* ── Cuerpo ── */
     .cuerpo {
-      padding: 1.5rem 2.5rem 1rem;
+      padding: 1rem 1.5rem 0.8rem;
       display: flex;
       flex-direction: column;
-      gap: 1.2rem;
+      gap: 0.9rem;
     }
 
     /* ── Cards ── */
     .card {
       border: 1px solid var(--gris-linea);
-      border-radius: 4px;
+      border-radius: 3px;
       overflow: hidden;
+      page-break-inside: avoid;
     }
 
     .card-header {
-      background: var(--azul-oscuro);
-      color: var(--dorado-claro);
+      background: var(--blanco);
+      color: var(--negro);
       font-family: 'Cinzel', serif;
-      font-size: 0.78rem;
-      letter-spacing: 0.12em;
+      font-size: 0.68rem;
+      letter-spacing: 0.1em;
       text-transform: uppercase;
-      padding: 0.45rem 1rem;
+      padding: 0.35rem 0.8rem;
       display: flex;
       align-items: center;
-      gap: 0.5rem;
+      gap: 0.4rem;
+      border-bottom: 1px solid var(--gris-linea);
     }
 
     .card-header::before {
       content: '';
       display: inline-block;
-      width: 16px;
+      width: 12px;
       height: 2px;
-      background: var(--dorado);
+      background: var(--negro);
       flex-shrink: 0;
     }
 
     .card-body {
-      padding: 1rem;
-      background: #f0fafd;
+      padding: 0.75rem 0.8rem;
+      background: var(--gris-claro);
     }
 
     /* ── Grid de campos ── */
     .campos {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      gap: 0.75rem 1.5rem;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 0.55rem 1.2rem;
     }
 
-    .campo { display: flex; flex-direction: column; gap: 2px; }
+    .campo { display: flex; flex-direction: column; gap: 1px; }
 
     .campo label {
-      font-size: 0.68rem;
-      font-weight: 600;
-      color: var(--azul-medio);
+      font-size: 0.6rem;
+      font-weight: 700;
+      color: var(--negro);
       letter-spacing: 0.06em;
       text-transform: uppercase;
       font-family: 'Cinzel', serif;
     }
 
     .campo .valor {
-      font-size: 0.95rem;
+      font-size: 0.82rem;
       color: var(--texto);
       border-bottom: 1px solid var(--gris-linea);
-      padding-bottom: 3px;
-      min-height: 1.4em;
+      padding-bottom: 2px;
+      min-height: 1.3em;
     }
 
-    /* ── Campo ancho completo ── */
     .campo.full { grid-column: 1 / -1; }
 
-
-    /* ── Footer ── */
+    /* ── Footer: Firmas ── */
     .footer {
-      padding: 1.2rem 2.5rem 1.5rem;
-      border-top: 2px solid var(--dorado);
+      padding: 0.9rem 1.5rem 1rem;
+      border-top: 2px solid var(--rojo-oscuro);
     }
 
     .firmas {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 2rem;
-      margin-bottom: 1.4rem;
+      gap: 1.5rem;
+      margin-bottom: 1rem;
     }
 
-    .firma-bloque { display: flex; flex-direction: column; align-items: center; gap: 0.3rem; }
+    .firma-bloque {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.25rem;
+    }
 
     .firma-linea {
       width: 100%;
-      border-bottom: 1.5px solid var(--azul-oscuro);
-      height: 40px;
+      border-bottom: 1.5px solid var(--negro);
+      height: 35px;
     }
 
     .firma-titulo {
       font-family: 'Cinzel', serif;
-      font-size: 0.7rem;
-      color: var(--azul-oscuro);
+      font-size: 0.62rem;
+      color: var(--negro);
       text-align: center;
-      letter-spacing: 0.07em;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
     }
 
     .firma-nombre {
-      font-size: 0.82rem;
+      font-size: 0.75rem;
       font-style: italic;
-      color: var(--azul-medio);
+      color: var(--negro);
       text-align: center;
     }
 
     .atendio-wrap {
       text-align: center;
-      font-size: 0.82rem;
-      color: #555;
+      font-size: 0.72rem;
+      color: #444;
       font-style: italic;
       border-top: 1px dashed var(--gris-linea);
-      padding-top: 0.8rem;
+      padding-top: 0.6rem;
     }
 
-    /* ── Banda decorativa inferior ── */
-    .banda-bot {
-      background: linear-gradient(135deg, var(--azul-medio) 0%, var(--azul-oscuro) 100%);
-      height: 10px;
-    }
-
-    /* ── Botón imprimir flotante ── */
+    /* ── Botón imprimir ── */
     .btn-imprimir {
       position: fixed;
       top: 1rem;
       right: 1rem;
-      padding: 0.4rem 0.9rem;
-      background: var(--azul-oscuro);
-      color: #fff;
-      border: none;
-      border-radius: 4px;
+      padding: 0.35rem 0.8rem;
+      background: var(--negro);
+      color: var(--blanco);
+      border: 2px solid var(--rojo-oscuro);
+      border-radius: 3px;
       cursor: pointer;
       font-family: 'Cinzel', serif;
-      font-size: 0.72rem;
+      font-size: 0.65rem;
       letter-spacing: 0.08em;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.35);
       z-index: 999;
       display: flex;
       align-items: center;
-      gap: 0.4rem;
+      gap: 0.35rem;
+      transition: background 0.2s;
     }
 
-    .btn-imprimir:hover { background: var(--azul-medio); }
+    .btn-imprimir:hover { background: var(--rojo-oscuro); }
+
+    /* ── Responsivo ── */
+    @media (max-width: 600px) {
+      body { padding: 0.5rem 0.25rem; }
+
+      .encabezado {
+        flex-direction: column;
+        text-align: center;
+        padding: 1rem;
+        gap: 0.6rem;
+      }
+
+      .logo-wrap { width: 50px; height: 50px; }
+
+      .encabezado-texto h1 { font-size: 0.72rem; }
+      .encabezado-texto .titulo-doc { font-size: 0.9rem; }
+
+      .cuerpo { padding: 0.75rem 0.75rem 0.5rem; gap: 0.7rem; }
+
+      .campos { grid-template-columns: 1fr 1fr; }
+
+      .campo .valor { font-size: 0.75rem; }
+
+      .firmas { grid-template-columns: 1fr; gap: 1rem; }
+
+      .footer { padding: 0.75rem 0.75rem 0.8rem; }
+    }
+
+    @media (max-width: 400px) {
+      .campos { grid-template-columns: 1fr; }
+    }
 
     /* ── Print ── */
     @media print {
-      body { background: none; padding: 0; }
-      .hoja { box-shadow: none; outline: none; border-color: #999; width: 100%; }
+      body {
+        background: none;
+        padding: 0;
+        margin: 0;
+      }
+
+      .hoja {
+        box-shadow: none;
+        outline: none;
+        border-color: #999;
+        width: 100%;
+        max-width: 100%;
+        page-break-after: avoid;
+      }
+
       .btn-imprimir { display: none; }
+
+      .card { page-break-inside: avoid; }
+
+      .cuerpo { padding: 0.8rem 1.2rem; }
+      .footer { padding: 0.7rem 1.2rem 0.8rem; }
     }
   </style>
 </head>
 <body>
 
-<!-- ══════════════════════════════════════════
-     PLANTILLA PARTIDA DE NACIMIENTO
-     ══════════════════════════════════════════ -->
 <div class="hoja">
 
   <div class="banda-top"></div>
@@ -327,7 +383,6 @@ $datos_footer = [
   <!-- ENCABEZADO -->
   <div class="encabezado">
 
-    <!-- Escudo Nacional (izquierda) -->
     <div class="logo-wrap">
       <?php if (!empty($datos_municipio['escudo_nacion'])): ?>
         <img src="<?= htmlspecialchars($datos_municipio['escudo_nacion']) ?>" alt="Escudo Nacional de El Salvador">
@@ -336,7 +391,6 @@ $datos_footer = [
       <?php endif; ?>
     </div>
 
-    <!-- Texto central -->
     <div class="encabezado-texto">
       <h1>
         <?= htmlspecialchars($datos_municipio['alcaldia']) ?><br>
@@ -347,21 +401,14 @@ $datos_footer = [
       <div class="titulo-doc">Partida de Nacimiento</div>
     </div>
 
-    <!-- Logo Alcaldía (derecha) -->
-    <div class="logo-wrap">
-      <?php if (!empty($datos_municipio['logo'])): ?>
-        <img src="<?= htmlspecialchars($datos_municipio['logo']) ?>" alt="Logo Alcaldía">
-      <?php else: ?>
-        <div class="logo-placeholder">LOGO<br>ALCALDÍA</div>
-      <?php endif; ?>
-    </div>
+
 
   </div>
 
   <!-- CUERPO -->
   <div class="cuerpo">
 
-    <!-- ── CARD 1: DATOS DEL NACIDO ── -->
+    <!-- DATOS DEL NACIDO -->
     <div class="card">
       <div class="card-header">Datos del Nacido</div>
       <div class="card-body">
@@ -390,7 +437,7 @@ $datos_footer = [
       </div>
     </div>
 
-    <!-- ── CARD 2: DATOS DEL PADRE ── -->
+    <!-- DATOS DEL PADRE -->
     <div class="card">
       <div class="card-header">Datos del Padre</div>
       <div class="card-body">
@@ -419,7 +466,7 @@ $datos_footer = [
       </div>
     </div>
 
-    <!-- ── CARD 3: DATOS DE LA MADRE ── -->
+    <!-- DATOS DE LA MADRE -->
     <div class="card">
       <div class="card-header">Datos de la Madre</div>
       <div class="card-body">
@@ -448,7 +495,7 @@ $datos_footer = [
       </div>
     </div>
 
-    <!-- ── CARD 4: CERTIFICACIÓN ── -->
+    <!-- CERTIFICACIÓN -->
     <div class="card">
       <div class="card-header">Certificación</div>
       <div class="card-body">
