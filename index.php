@@ -163,7 +163,7 @@
             background: #ffffff;
             border-radius: 16px; padding: 2.5rem 2rem;
             width: 300px; flex-shrink: 0; color: var(--color-4);
-            box-shadow: 0 25px 50px rgba(0,0,0,0.3), border-bottom: 4px solid var(--color-2);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.3);
             animation: up 0.7s 0.45s ease both;
             border-bottom: 4px solid var(--color-2);
         }
@@ -379,6 +379,7 @@
             <div class="hc-pills">
                 <span class="hc-pill">Partida de Nacimiento</span>
                 <span class="hc-pill">Carnet Minoridad</span>
+                <span class="hc-pill">Acta de Defunción</span>
             </div>
         </div>
     </div>
@@ -416,10 +417,7 @@
                     </div>
                 </div>
             </div>
-            <div class="stats-vis">
-                <div class="sc"><div class="sn">+12k</div><div class="sl">Partidas Emitidas</div></div>
-                <div class="sc"><div class="sn">+3.8k</div><div class="sl">Carnets de Minoridad</div></div>
-            </div>
+            
         </div>
     </div>
 </section>
@@ -460,13 +458,10 @@
             </div>
             <div class="svc">
                 <div class="svc-ico"><i class="fas fa-copy"></i></div>
-                <h3>Duplicado y reposición</h3>
+                <h3>Acta de Defunción</h3>
+                <p>Documento Legal a Través del Cual Se Certifica El Fallecimiento de Una Persona y El Lugar Donde El Fallecimiento Fue Inscrito.</p>
             </div>
-            <div class="svc">
-                <div class="svc-ico"><i class="fas fa-magnifying-glass"></i></div>
-                <h3>Consultas de trámite</h3>
-                <p>Revisa el estado de tu solicitud en tiempo real con tu número de referencia.</p>
-            </div>
+            
         </div>
     </div>
 </section>
