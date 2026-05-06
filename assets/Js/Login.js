@@ -5,6 +5,14 @@
     const welcomeModal = document.getElementById('welcomeModal');
     const welcomeUser = document.getElementById('welcomeUser');
 
+    // Elementos para cambio de vista
+    const loginSection = document.getElementById('loginSection');
+    const forgotSection = document.getElementById('forgotSection');
+    const showForgotBtn = document.getElementById('showForgotBtn');
+    const backToLoginBtn = document.getElementById('backToLoginBtn');
+    const recoverBtn = document.getElementById('recoverBtn');
+    const recoveryEmail = document.getElementById('recoveryEmail');
+
     // Credenciales válidas para demo
     const VALID_USER = 'admin';
     const VALID_PASS = '1234';
@@ -64,4 +72,45 @@
             });
         }
     });
+
+    // Lógica para alternar vistas
+    if (showForgotBtn) {
+        showForgotBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            loginSection.style.display = 'none';
+            forgotSection.style.display = 'block';
+        });
+    }
+
+    if (backToLoginBtn) {
+        backToLoginBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            forgotSection.style.display = 'none';
+            loginSection.style.display = 'block';
+        });
+    }
+
+    // Lógica botón recuperar contraseña
+    if (recoverBtn) {
+        recoverBtn.addEventListener('click', () => {
+            const email = recoveryEmail.value.trim();
+            if (email !== '') {
+                recoverBtn.classList.add('loading');
+                recoverBtn.disabled = true;
+                
+                setTimeout(() => {
+                    recoverBtn.classList.remove('loading');
+                    recoverBtn.disabled = false;
+                    recoveryEmail.value = '';
+                    alert('Se han enviado las instrucciones a su correo electrónico.');
+                    
+                    // Volver al login
+                    forgotSection.style.display = 'none';
+                    loginSection.style.display = 'block';
+                }, 1500);
+            } else {
+                alert('Por favor ingrese un correo válido.');
+            }
+        });
+    }
 })();
