@@ -13,51 +13,63 @@
     const recoverBtn = document.getElementById('recoverBtn');
     const recoveryEmail = document.getElementById('recoveryEmail');
 
-    // Credenciales válidas para demo
-    const VALID_USER = 'admin';
-    const VALID_PASS = '1234';
+    // Función para manejar el error de autenticación
+    function showError() {
+        const originalBg = loginBtn.style.backgroundColor;
+        const originalText = loginBtn.querySelector('.btn-text').innerText;
 
-    function handleLogin() {
+        loginBtn.style.backgroundColor = '#E63946';
+        loginBtn.querySelector('.btn-text').innerText = 'Credenciales Inválidas';
+        loginBtn.classList.add('error-shake');
+
+        loginBtn.classList.remove('loading');
+        loginBtn.disabled = false;
+
+        setTimeout(() => {
+            loginBtn.style.backgroundColor = originalBg;
+            loginBtn.querySelector('.btn-text').innerText = originalText;
+            loginBtn.classList.remove('error-shake');
+        }, 2000);
+    }
+
+    async function handleLogin() {
         const user = username.value.trim();
         const pass = password.value.trim();
 
-        if (user === VALID_USER && pass === VALID_PASS) {
+        if (user !== '' && pass !== '') {
             // 1. Activar botón de carga
             loginBtn.classList.add('loading');
             loginBtn.disabled = true;
 
-            // 2. Simular validación en servidor
-            setTimeout(() => {
-                welcomeUser.innerText = user;
-                welcomeModal.classList.add('show');
+            try {
+                // 2. Realizar petición al servidor
+                const response = await fetch('../controller/LoginController.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ usuario: user, password: pass })
+                });
 
-                // 3. Simular redirección
-                setTimeout(() => {
-                    // Aquí iría el window.location.href real hacia el dashboard
-                    // window.location.href = 'dashboard.php';
-                    welcomeModal.classList.remove('show');
-                    loginBtn.classList.remove('loading');
-                    loginBtn.disabled = false;
-                    username.value = '';
-                    password.value = '';
-                }, 2500);
+                const data = await response.json();
 
-            }, 1200);
+                if (data.success) {
+                    welcomeUser.innerText = data.usuario || user;
+                    welcomeModal.classList.add('show');
 
+                    // 3. Redirección exitosa
+                    setTimeout(() => {
+                        window.location.href = 'SolicitudCitas.php';
+                    }, 2500);
+                } else {
+                    showError();
+                }
+            } catch (error) {
+                console.error("Error en login:", error);
+                showError();
+            }
         } else {
-            // Error de autenticación
-            const originalBg = loginBtn.style.backgroundColor;
-            const originalText = loginBtn.querySelector('.btn-text').innerText;
-            
-            loginBtn.style.backgroundColor = '#E63946';
-            loginBtn.querySelector('.btn-text').innerText = 'Credenciales Inválidas';
-            loginBtn.classList.add('error-shake');
-            
-            setTimeout(() => { 
-                loginBtn.style.backgroundColor = originalBg; 
-                loginBtn.querySelector('.btn-text').innerText = originalText;
-                loginBtn.classList.remove('error-shake');
-            }, 2000);
+            showError();
         }
     }
 
@@ -90,20 +102,19 @@
         });
     }
 
-    // Lógica botón recuperar contraseña
     if (recoverBtn) {
         recoverBtn.addEventListener('click', () => {
             const email = recoveryEmail.value.trim();
             if (email !== '') {
                 recoverBtn.classList.add('loading');
                 recoverBtn.disabled = true;
-                
+
                 setTimeout(() => {
                     recoverBtn.classList.remove('loading');
                     recoverBtn.disabled = false;
                     recoveryEmail.value = '';
                     alert('Se han enviado las instrucciones a su correo electrónico.');
-                    
+
                     // Volver al login
                     forgotSection.style.display = 'none';
                     loginSection.style.display = 'block';

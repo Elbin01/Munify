@@ -8,25 +8,25 @@ $datos_municipio = [
 ];
 
 $datos_menor = [
-    'apellidos'          => 'Rodríguez López',
-    'nombres'            => 'María José',
-    'lugar_nacimiento'   => 'Ilobasco, Cabañas',
-    'fecha_nacimiento'   => '14/04/2015',
-    'fecha_expedicion'   => '02/05/2026',
-    'fecha_vencimiento'  => '14/04/2029',
-    'numero_carnet'      => '0601-004893',
-    'foto'               => '',
+    'apellidos'          => $_POST['m_apellidos'] ?? 'Rodríguez López',
+    'nombres'            => $_POST['m_nombres'] ?? 'María José',
+    'lugar_nacimiento'   => $_POST['m_lugar_nac'] ?? 'Ilobasco, Cabañas',
+    'fecha_nacimiento'   => $_POST['m_fecha_nac'] ?? '14/04/2015',
+    'fecha_expedicion'   => date('d/m/Y'),
+    'fecha_vencimiento'  => date('d/m/Y', strtotime('+3 years')),
+    'numero_carnet'      => '0601-' . rand(100000, 999999),
+    'foto'               => $_POST['m_foto_path'] ?? '',
 ];
 
 $datos_reverso = [
-    'direccion'          => 'Colonia Jardines, Calle Principal #12, Ilobasco, Cabañas',
-    'nombre_madre'       => 'Ana Sofía López de Rodríguez',
-    'nombre_padre'       => 'Carlos Alberto Rodríguez Martínez',
-    'color_piel'         => 'Moreno',
-    'color_ojos'         => 'Café',
-    'cabello'            => 'Negro',
-    'senales_especiales' => 'Ninguna',
-    'centro_estudios'    => 'Centro Escolar Sor Heriquez',
+    'direccion'          => $_POST['m_direccion'] ?? 'Colonia Jardines, Calle Principal #12, Ilobasco, Cabañas',
+    'nombre_madre'       => $_POST['m_nombre_madre'] ?? 'Ana Sofía López de Rodríguez',
+    'nombre_padre'       => $_POST['m_nombre_padre'] ?? 'Carlos Alberto Rodríguez Martínez',
+    'color_piel'         => $_POST['m_color_piel'] ?? 'Moreno',
+    'color_ojos'         => $_POST['m_color_ojos'] ?? 'Café',
+    'cabello'            => $_POST['m_color_cabello'] ?? 'Negro',
+    'senales_especiales' => $_POST['m_senales_especiales'] ?? 'Ninguna',
+    'centro_estudios'    => $_POST['m_centro_estudios'] ?? 'Centro Escolar Sor Heriquez',
     'tipo_tramite'       => 'PRIMERA VEZ',
 ];
 

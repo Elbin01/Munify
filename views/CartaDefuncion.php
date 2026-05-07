@@ -183,17 +183,17 @@
             
             <div class="form-group full-width">
                 <label for="nombre">Nombre Completo</label>
-                <input type="text" id="nombre" name="nombre" required>
+                <input type="text" id="nombre" name="nombre" value="<?= $_POST['d_nombre_fallecido'] ?? '' ?>" required>
             </div>
 
             <div class="form-group">
                 <label for="identidad">Número de Documento (DUI)</label>
-                <input type="text" id="identidad" name="identidad">
+                <input type="text" id="identidad" name="identidad" value="<?= $_POST['d_dui'] ?? '' ?>">
             </div>
 
             <div class="form-group">
                 <label for="fecha">Fecha de Defunción</label>
-                <input type="date" id="fecha" name="fecha" required>
+                <input type="date" id="fecha" name="fecha" value="<?= $_POST['d_fecha_defuncion'] ?? '' ?>" required>
             </div>
 
             <div class="form-group">
@@ -215,7 +215,7 @@
 
             <div class="form-group">
                 <label for="declarante">Nombre del Declarante</label>
-                <input type="text" id="declarante" name="declarante">
+                <input type="text" id="declarante" name="declarante" value="<?= $_POST['d_nombre_declarante'] ?? '' ?>">
             </div>
 
             <div class="form-group">
