@@ -8,7 +8,6 @@ $datos_municipio = [
     'departamento'  => 'Cabañas',
     'pais'          => 'El Salvador',
     'escudo_nacion' => '../assets/Img/escudo.jpeg',
-
 ];
 
 $datos_nacido = [
@@ -60,49 +59,54 @@ $datos_footer = [
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --negro:        #000000;
-      --rojo-oscuro:  #550000;
-      --rojo-medio:   #7a0000;
-      --blanco:       #ffffff;
-      --gris-claro:   #f5f5f5;
-      --gris-linea:   #cccccc;
-      --texto:        #111111;
-      --sombra:       rgba(0, 0, 0, 0.2);
+      --negro:       #000000;
+      --azul-oscuro: #003366;
+      --azul-medio:  #005599;
+      --azul-claro:  #e8f0f8;
+      --blanco:      #ffffff;
+      --gris-claro:  #f4f7fb;
+      --gris-linea:  #c5d5e8;
+      --texto:       #111111;
+      --sombra:      rgba(0, 51, 102, 0.15);
+    }
+
+    html {
+      overflow-x: hidden;
+      margin: 0;
+      padding: 0;
     }
 
     body {
       font-family: 'EB Garamond', Georgia, serif;
-      background: #1a0000;
+      background: var(--blanco);
       color: var(--texto);
-      min-height: 100vh;
-      padding: 1.5rem 0.5rem;
-      display: flex;
-      justify-content: center;
-      align-items: flex-start;
+      display: block;
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+      width: 100vw;
     }
 
-    /* ── Hoja ── */
+    /* ── Hoja: ocupa exactamente el ancho visible sin scroll ── */
     .hoja {
-      width: 100%;
-      max-width: 760px;
+      width: 100vw;
+      min-height: 100vh;
       background: var(--blanco);
-      border: 2px solid var(--negro);
-      outline: 5px solid var(--rojo-oscuro);
-      outline-offset: -10px;
-      box-shadow: 0 6px 30px var(--sombra);
-      position: relative;
-      overflow: hidden;
+      border: none;
+      display: flex;
+      flex-direction: column;
+      box-sizing: border-box;
     }
 
     /* ── Banda decorativa ── */
-    .banda-top {
-      background: linear-gradient(90deg, var(--negro) 0%, var(--rojo-oscuro) 50%, var(--negro) 100%);
+    .banda-top,
+    .banda-bot 
+     {
+      display: none;
+      background: linear-gradient(90deg, var(--negro) 0%, var(--azul-oscuro) 40%, var(--azul-medio) 60%, var(--negro) 100%);
       height: 8px;
-    }
-
-    .banda-bot {
-      background: linear-gradient(90deg, var(--negro) 0%, var(--rojo-oscuro) 50%, var(--negro) 100%);
-      height: 8px;
+      flex-shrink: 0;
+      
     }
 
     /* ── Encabezado ── */
@@ -110,21 +114,23 @@ $datos_footer = [
       padding: 1.2rem 1.5rem 1rem;
       display: flex;
       align-items: center;
-      gap: 1rem;
-      border-bottom: 2px solid var(--rojo-oscuro);
+      gap: 1.2rem;
+      border-bottom: 2px solid var(--azul-oscuro);
       background: var(--blanco);
+      box-sizing: border-box;
+      width: 100%;
     }
 
     .logo-wrap {
-      width: 65px;
-      height: 65px;
+      width: 70px;
+      height: 70px;
       flex-shrink: 0;
-      border: 2px solid var(--rojo-oscuro);
+      border: 2px solid var(--azul-oscuro);
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      background: var(--gris-claro);
+      background: var(--azul-claro);
       overflow: hidden;
     }
 
@@ -132,7 +138,7 @@ $datos_footer = [
 
     .logo-placeholder {
       font-size: 9px;
-      color: var(--rojo-oscuro);
+      color: var(--azul-oscuro);
       text-align: center;
       line-height: 1.3;
       padding: 0.2rem;
@@ -146,16 +152,16 @@ $datos_footer = [
 
     .encabezado-texto h1 {
       font-family: 'Cinzel', serif;
-      font-size: 0.82rem;
+      font-size: 0.88rem;
       color: var(--negro);
       letter-spacing: 0.06em;
-      line-height: 1.4;
+      line-height: 1.5;
       font-weight: 700;
     }
 
     .encabezado-texto .subtitulo {
-      font-size: 0.72rem;
-      color: var(--negro);
+      font-size: 0.75rem;
+      color: var(--azul-medio);
       margin-top: 0.25rem;
       font-style: italic;
     }
@@ -163,19 +169,24 @@ $datos_footer = [
     .encabezado-texto .titulo-doc {
       margin-top: 0.5rem;
       font-family: 'Cinzel', serif;
-      font-size: 1.05rem;
+      font-size: 1.1rem;
       font-weight: 700;
       color: var(--negro);
-      letter-spacing: 0.1em;
+      letter-spacing: 0.12em;
       text-transform: uppercase;
+      display: inline-block;
     }
 
     /* ── Cuerpo ── */
     .cuerpo {
-      padding: 1rem 1.5rem 0.8rem;
+      padding: 1.2rem 1.5rem 1rem;
       display: flex;
       flex-direction: column;
-      gap: 0.9rem;
+      gap: 1rem;
+      flex: 1;
+      box-sizing: border-box;
+      width: 100%;
+      overflow-x: hidden;
     }
 
     /* ── Cards ── */
@@ -184,74 +195,79 @@ $datos_footer = [
       border-radius: 3px;
       overflow: hidden;
       page-break-inside: avoid;
+      box-sizing: border-box;
+      width: 100%;
     }
 
     .card-header {
-      background: var(--blanco);
-      color: var(--negro);
+      background: var(--azul-oscuro);
+      color: var(--blanco);
       font-family: 'Cinzel', serif;
-      font-size: 0.68rem;
-      letter-spacing: 0.1em;
+      font-size: 0.7rem;
+      letter-spacing: 0.12em;
       text-transform: uppercase;
-      padding: 0.35rem 0.8rem;
+      padding: 0.4rem 1rem;
       display: flex;
       align-items: center;
-      gap: 0.4rem;
-      border-bottom: 1px solid var(--gris-linea);
+      gap: 0.5rem;
     }
 
     .card-header::before {
       content: '';
       display: inline-block;
-      width: 12px;
+      width: 14px;
       height: 2px;
-      background: var(--negro);
+      background: var(--blanco);
       flex-shrink: 0;
+      opacity: 0.7;
     }
 
     .card-body {
-      padding: 0.75rem 0.8rem;
+      padding: 0.85rem 1rem;
       background: var(--gris-claro);
     }
 
     /* ── Grid de campos ── */
     .campos {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-      gap: 0.55rem 1.2rem;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 0.6rem 1.5rem;
     }
 
-    .campo { display: flex; flex-direction: column; gap: 1px; }
+    .campo { display: flex; flex-direction: column; gap: 2px; }
 
     .campo label {
       font-size: 0.6rem;
       font-weight: 700;
-      color: var(--negro);
-      letter-spacing: 0.06em;
+      color: var(--azul-oscuro);
+      letter-spacing: 0.08em;
       text-transform: uppercase;
       font-family: 'Cinzel', serif;
     }
 
     .campo .valor {
-      font-size: 0.82rem;
+      font-size: 0.85rem;
       color: var(--texto);
       border-bottom: 1px solid var(--gris-linea);
-      padding-bottom: 2px;
-      min-height: 1.3em;
+      padding-bottom: 3px;
+      min-height: 1.4em;
     }
 
     .campo.full { grid-column: 1 / -1; }
 
     /* ── Footer: Firmas ── */
     .footer {
-      padding: 0.9rem 1.5rem 1rem;
-      border-top: 2px solid var(--rojo-oscuro);
+      padding: 1rem 1.5rem 1.2rem;
+      border-top: 2px solid var(--azul-oscuro);
+      background: var(--blanco);
+      box-sizing: border-box;
+      width: 100%;
     }
 
     .firmas {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 1.5rem;
+      gap: 2rem;
       margin-bottom: 1rem;
     }
 
@@ -259,26 +275,26 @@ $datos_footer = [
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 0.25rem;
+      gap: 0.3rem;
     }
 
     .firma-linea {
-      width: 100%;
+      width: 50%;
       border-bottom: 1.5px solid var(--negro);
-      height: 35px;
+      height: 10px;
     }
 
     .firma-titulo {
       font-family: 'Cinzel', serif;
       font-size: 0.62rem;
-      color: var(--negro);
+      color: var(--azul-oscuro);
       text-align: center;
-      letter-spacing: 0.06em;
+      letter-spacing: 0.07em;
       text-transform: uppercase;
     }
 
     .firma-nombre {
-      font-size: 0.75rem;
+      font-size: 0.78rem;
       font-style: italic;
       color: var(--negro);
       text-align: center;
@@ -298,29 +314,27 @@ $datos_footer = [
       position: fixed;
       top: 1rem;
       right: 1rem;
-      padding: 0.35rem 0.8rem;
-      background: var(--negro);
+      padding: 0.4rem 0.9rem;
+      background: var(--azul-oscuro);
       color: var(--blanco);
-      border: 2px solid var(--rojo-oscuro);
+      border: 2px solid var(--negro);
       border-radius: 3px;
       cursor: pointer;
       font-family: 'Cinzel', serif;
       font-size: 0.65rem;
       letter-spacing: 0.08em;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.35);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.25);
       z-index: 999;
       display: flex;
       align-items: center;
-      gap: 0.35rem;
+      gap: 0.4rem;
       transition: background 0.2s;
     }
 
-    .btn-imprimir:hover { background: var(--rojo-oscuro); }
+    .btn-imprimir:hover { background: var(--negro); }
 
     /* ── Responsivo ── */
     @media (max-width: 600px) {
-      body { padding: 0.5rem 0.25rem; }
-
       .encabezado {
         flex-direction: column;
         text-align: center;
@@ -328,20 +342,20 @@ $datos_footer = [
         gap: 0.6rem;
       }
 
-      .logo-wrap { width: 50px; height: 50px; }
+      .logo-wrap { width: 55px; height: 55px; }
 
-      .encabezado-texto h1 { font-size: 0.72rem; }
-      .encabezado-texto .titulo-doc { font-size: 0.9rem; }
+      .encabezado-texto h1 { font-size: 0.75rem; }
+      .encabezado-texto .titulo-doc { font-size: 0.95rem; }
 
-      .cuerpo { padding: 0.75rem 0.75rem 0.5rem; gap: 0.7rem; }
+      .cuerpo { padding: 0.8rem 0.8rem 0.6rem; gap: 0.8rem; }
 
       .campos { grid-template-columns: 1fr 1fr; }
 
-      .campo .valor { font-size: 0.75rem; }
+      .campo .valor { font-size: 0.78rem; }
 
       .firmas { grid-template-columns: 1fr; gap: 1rem; }
 
-      .footer { padding: 0.75rem 0.75rem 0.8rem; }
+      .footer { padding: 0.4rem 1.5rem 1rem; }
     }
 
     @media (max-width: 400px) {
@@ -350,35 +364,27 @@ $datos_footer = [
 
     /* ── Print ── */
     @media print {
-      body {
-        background: none;
-        padding: 0;
-        margin: 0;
-      }
+      body { background: none; }
 
       .hoja {
         box-shadow: none;
-        outline: none;
         border-color: #999;
         width: 100%;
-        max-width: 100%;
-        page-break-after: avoid;
+        min-height: auto;
       }
 
       .btn-imprimir { display: none; }
 
       .card { page-break-inside: avoid; }
 
-      .cuerpo { padding: 0.8rem 1.2rem; }
-      .footer { padding: 0.7rem 1.2rem 0.8rem; }
+      .cuerpo { padding: 0.8rem 1.5rem; }
+      .footer { padding: 0.8rem 1.5rem; }
     }
   </style>
 </head>
 <body>
 
 <div class="hoja">
-
-  <div class="banda-top"></div>
 
   <!-- ENCABEZADO -->
   <div class="encabezado">
@@ -400,8 +406,6 @@ $datos_footer = [
       <div class="subtitulo">Registro del Estado Familiar</div>
       <div class="titulo-doc">Partida de Nacimiento</div>
     </div>
-
-
 
   </div>
 
