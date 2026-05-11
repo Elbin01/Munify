@@ -1,8 +1,20 @@
 <?php
-// =============================================
-//  DATOS DE EJEMPLO - Reemplazar con tus datos
-//  reales desde tu base de datos o formulario
-// =============================================
+require_once __DIR__ . '/../models/PartidaModel.php';
+
+$id_partida = $_GET['id'] ?? null;
+
+if (!$id_partida) {
+    die("Error: No se proporcionó un ID de partida.");
+}
+
+$modelo = new PartidaModel();
+$datos = $modelo->obtenerPorId($id_partida);
+
+if (!$datos) {
+    die("Error: No se encontró la partida con el ID proporcionado.");
+}
+
+// Datos de la alcaldía (Se mantienen fijos o configurables)
 $datos_municipio = [
     'alcaldia'      => 'Alcaldía Municipal de Ilobasco',
     'departamento'  => 'Cabañas',
@@ -10,41 +22,60 @@ $datos_municipio = [
     'escudo_nacion' => '../assets/Img/escudo.jpeg',
 ];
 
+// Función para formatear fecha a español
+function fechaEspañol($fecha) {
+    if (!$fecha) return '---';
+    $dias = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
+    $meses = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"];
+    $timestamp = strtotime($fecha);
+    $dia = date('d', $timestamp);
+    $mes = $meses[date('n', $timestamp) - 1];
+    $año = date('Y', $timestamp);
+    return "$dia de $mes de $año";
+}
+
+// Mapeo de datos del nacido desde la base de datos
 $datos_nacido = [
-    'nombre'    => 'María José Rodríguez López',
-    'lugar'     => 'Hospital Nacional de Ilobasco',
-    'hora'      => '03:45 PM',
-    'fecha'     => '14 de abril de 2005',
-    'sexo'      => 'Femenino',
+    'nombre'    => (string)($datos['nombres'] . ' ' . $datos['apellidos']),
+    'lugar'     => (string)($datos['lugar_nacimiento'] ?: $datos['hospital'] ?: '---'),
+    'hora'      => (string)($datos['hora_nacimiento'] ?: '---'),
+    'fecha'     => fechaEspañol($datos['fecha_nacimiento']),
+    'sexo'      => ($datos['sexo'] == 'M' ? 'Masculino' : 'Femenino'),
+    'numero'    => (string)$datos['numero_partida'],
+    'libro'     => (string)$datos['libro'],
+    'folio'     => (string)$datos['folio'],
 ];
 
+// Datos de los padres (Si existen en la tabla o como texto)
 $datos_padre = [
-    'nombre'    => 'Carlos Alberto Rodríguez Martínez',
-    'dui'       => '01234567-8',
-    'edad'      => '32',
-    'domicilio' => 'Colonia El Siete, Calle Principal #12, Ilobasco',
-    'profesion' => 'Mecánico Automotriz',
+    'nombre'    => (string)($datos['nombre_padre'] ?: 'No registrado'),
+    'dui'       => 'No registrado',
+    'edad'      => '---',
+    'domicilio' => '---',
+    'profesion' => '---',
 ];
 
 $datos_madre = [
-    'nombre'    => 'Ana Sofía López de Rodríguez',
-    'dui'       => '09876543-2',
-    'edad'      => '29',
-    'domicilio' => 'Colonia El Siete, Calle Principal #12, Ilobasco',
-    'profesion' => 'Maestra de Educación Básica',
+    'nombre'    => (string)($datos['nombre_madre'] ?: 'No registrado'),
+    'dui'       => 'No registrado',
+    'edad'      => '---',
+    'domicilio' => '---',
+    'profesion' => '---',
 ];
 
+$informante_default = $datos['nombre_padre'] ?: $datos['nombre_madre'] ?: 'No especificado';
+
 $datos_certificacion = [
-    'informante'         => 'Carlos Alberto Rodríguez Martínez',
-    'parentesco'         => 'Padre',
-    'dui_informante'     => '05647382-9',
-    'fecha_inscripcion'  => '16 de abril de 2005',
+    'informante'         => (string)$informante_default,
+    'parentesco'         => ($datos['nombre_padre'] ? 'Padre' : ($datos['nombre_madre'] ? 'Madre' : '---')),
+    'dui_informante'     => '---',
+    'fecha_inscripcion'  => fechaEspañol($datos['fecha_emision']),
 ];
 
 $datos_footer = [
     'jefe_registros'  => 'Licda. Rosa Elena Méndez Castro',
-    'informante'      => 'Carlos Alberto Rodríguez Martínez',
-    'atendio'         => 'Asistente: María del Carmen Guevara',
+    'informante'      => (string)$informante_default,
+    'atendio'         => 'Sistema Munify',
 ];
 ?>
 <!DOCTYPE html>
@@ -87,15 +118,17 @@ $datos_footer = [
       width: 100vw;
     }
 
-    /* ── Hoja: ocupa exactamente el ancho visible sin scroll ── */
+    /* ── Hoja ── */
     .hoja {
-      width: 100vw;
-      min-height: 100vh;
+      width: 100%;
+      max-width: 800px;
+      margin: 0 auto;
       background: var(--blanco);
       border: none;
       display: flex;
       flex-direction: column;
       box-sizing: border-box;
+      min-height: 100vh;
     }
 
     /* ── Banda decorativa ── */
@@ -111,10 +144,10 @@ $datos_footer = [
 
     /* ── Encabezado ── */
     .encabezado {
-      padding: 1.2rem 1.5rem 1rem;
+      padding: 0.8rem 1.2rem;
       display: flex;
       align-items: center;
-      gap: 1.2rem;
+      gap: 1rem;
       border-bottom: 2px solid var(--azul-oscuro);
       background: var(--blanco);
       box-sizing: border-box;
@@ -179,10 +212,10 @@ $datos_footer = [
 
     /* ── Cuerpo ── */
     .cuerpo {
-      padding: 1.2rem 1.5rem 1rem;
+      padding: 0.8rem 1.2rem;
       display: flex;
       flex-direction: column;
-      gap: 1rem;
+      gap: 0.5rem;
       flex: 1;
       box-sizing: border-box;
       width: 100%;
@@ -223,7 +256,7 @@ $datos_footer = [
     }
 
     .card-body {
-      padding: 0.85rem 1rem;
+      padding: 0.6rem 1rem;
       background: var(--gris-claro);
     }
 
@@ -257,7 +290,7 @@ $datos_footer = [
 
     /* ── Footer: Firmas ── */
     .footer {
-      padding: 1rem 1.5rem 1.2rem;
+      padding: 0.8rem 1.2rem;
       border-top: 2px solid var(--azul-oscuro);
       background: var(--blanco);
       box-sizing: border-box;
@@ -364,21 +397,36 @@ $datos_footer = [
 
     /* ── Print ── */
     @media print {
+      @page {
+        margin: 0.5cm;
+        size: letter;
+      }
       body { background: none; }
 
       .hoja {
         box-shadow: none;
         border-color: #999;
         width: 100%;
-        min-height: auto;
+        min-height: 0;
+        max-width: none;
       }
 
       .btn-imprimir { display: none; }
 
       .card { page-break-inside: avoid; }
 
-      .cuerpo { padding: 0.8rem 1.5rem; }
-      .footer { padding: 0.8rem 1.5rem; }
+      .cuerpo { padding: 0.7rem 1.3rem; gap: 0.7rem; }
+      .footer { padding: 0.7rem 1.3rem; }
+      .card-body { padding: 0.5rem 1.1rem; }
+      .campos { gap: 0.4rem 1.3rem; }
+      .encabezado { padding: 0.7rem 1.3rem; }
+      .encabezado-texto h1 { font-size: 0.88rem; }
+      .encabezado-texto .titulo-doc { font-size: 1.05rem; margin-top: 0.35rem; }
+      .campo label { font-size: 0.6rem; }
+      .campo .valor { font-size: 0.88rem; }
+      .card-header { padding: 0.35rem 1.1rem; font-size: 0.8rem; }
+      .firmas { gap: 1.8rem; margin-bottom: 0.7rem; }
+      .atendio-wrap { padding-top: 0.45rem; font-size: 0.75rem; }
     }
   </style>
 </head>
@@ -391,7 +439,7 @@ $datos_footer = [
 
     <div class="logo-wrap">
       <?php if (!empty($datos_municipio['escudo_nacion'])): ?>
-        <img src="<?= htmlspecialchars($datos_municipio['escudo_nacion']) ?>" alt="Escudo Nacional de El Salvador">
+        <img src="<?= htmlspecialchars((string)$datos_municipio['escudo_nacion']) ?>" alt="Escudo Nacional de El Salvador">
       <?php else: ?>
         <div class="logo-placeholder">ESCUDO<br>NACIONAL</div>
       <?php endif; ?>
@@ -399,9 +447,9 @@ $datos_footer = [
 
     <div class="encabezado-texto">
       <h1>
-        <?= htmlspecialchars($datos_municipio['alcaldia']) ?><br>
-        Departamento de <?= htmlspecialchars($datos_municipio['departamento']) ?>
-        – <?= htmlspecialchars($datos_municipio['pais']) ?>
+        <?= htmlspecialchars((string)$datos_municipio['alcaldia']) ?><br>
+        Departamento de <?= htmlspecialchars((string)$datos_municipio['departamento']) ?>
+        – <?= htmlspecialchars((string)$datos_municipio['pais']) ?>
       </h1>
       <div class="subtitulo">Registro del Estado Familiar</div>
       <div class="titulo-doc">Partida de Nacimiento</div>
@@ -412,6 +460,27 @@ $datos_footer = [
   <!-- CUERPO -->
   <div class="cuerpo">
 
+    <!-- DATOS DE REGISTRO (FOLIO) -->
+    <div class="card">
+      <div class="card-header">Información de Registro</div>
+      <div class="card-body">
+        <div class="campos">
+          <div class="campo">
+            <label>Número de Partida</label>
+            <div class="valor"><?= htmlspecialchars((string)$datos_nacido['numero']) ?></div>
+          </div>
+          <div class="campo">
+            <label>Libro (Tomo)</label>
+            <div class="valor"><?= htmlspecialchars((string)$datos_nacido['libro']) ?></div>
+          </div>
+          <div class="campo">
+            <label>Folio</label>
+            <div class="valor"><?= htmlspecialchars((string)$datos_nacido['folio']) ?></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- DATOS DEL NACIDO -->
     <div class="card">
       <div class="card-header">Datos del Nacido</div>
@@ -419,23 +488,23 @@ $datos_footer = [
         <div class="campos">
           <div class="campo full">
             <label>Nombre completo</label>
-            <div class="valor"><?= htmlspecialchars($datos_nacido['nombre']) ?></div>
+            <div class="valor"><?= htmlspecialchars((string)$datos_nacido['nombre']) ?></div>
           </div>
           <div class="campo">
             <label>Lugar de nacimiento</label>
-            <div class="valor"><?= htmlspecialchars($datos_nacido['lugar']) ?></div>
+            <div class="valor"><?= htmlspecialchars((string)$datos_nacido['lugar']) ?></div>
           </div>
           <div class="campo">
             <label>Fecha de nacimiento</label>
-            <div class="valor"><?= htmlspecialchars($datos_nacido['fecha']) ?></div>
+            <div class="valor"><?= htmlspecialchars((string)$datos_nacido['fecha']) ?></div>
           </div>
           <div class="campo">
             <label>Hora de nacimiento</label>
-            <div class="valor"><?= htmlspecialchars($datos_nacido['hora']) ?></div>
+            <div class="valor"><?= htmlspecialchars((string)$datos_nacido['hora']) ?></div>
           </div>
           <div class="campo">
             <label>Sexo</label>
-            <div class="valor"><?= htmlspecialchars($datos_nacido['sexo']) ?></div>
+            <div class="valor"><?= htmlspecialchars((string)$datos_nacido['sexo']) ?></div>
           </div>
         </div>
       </div>
@@ -448,23 +517,23 @@ $datos_footer = [
         <div class="campos">
           <div class="campo full">
             <label>Nombre completo</label>
-            <div class="valor"><?= htmlspecialchars($datos_padre['nombre']) ?></div>
+            <div class="valor"><?= htmlspecialchars((string)$datos_padre['nombre']) ?></div>
           </div>
           <div class="campo">
             <label>DUI</label>
-            <div class="valor"><?= htmlspecialchars($datos_padre['dui']) ?></div>
+            <div class="valor"><?= htmlspecialchars((string)$datos_padre['dui']) ?></div>
           </div>
           <div class="campo">
             <label>Edad</label>
-            <div class="valor"><?= htmlspecialchars($datos_padre['edad']) ?> años</div>
+            <div class="valor"><?= htmlspecialchars((string)$datos_padre['edad']) ?> años</div>
           </div>
           <div class="campo">
             <label>Profesión u oficio</label>
-            <div class="valor"><?= htmlspecialchars($datos_padre['profesion']) ?></div>
+            <div class="valor"><?= htmlspecialchars((string)$datos_padre['profesion']) ?></div>
           </div>
           <div class="campo full">
             <label>Domicilio</label>
-            <div class="valor"><?= htmlspecialchars($datos_padre['domicilio']) ?></div>
+            <div class="valor"><?= htmlspecialchars((string)$datos_padre['domicilio']) ?></div>
           </div>
         </div>
       </div>
@@ -477,23 +546,23 @@ $datos_footer = [
         <div class="campos">
           <div class="campo full">
             <label>Nombre completo</label>
-            <div class="valor"><?= htmlspecialchars($datos_madre['nombre']) ?></div>
+            <div class="valor"><?= htmlspecialchars((string)$datos_madre['nombre']) ?></div>
           </div>
           <div class="campo">
             <label>DUI</label>
-            <div class="valor"><?= htmlspecialchars($datos_madre['dui']) ?></div>
+            <div class="valor"><?= htmlspecialchars((string)$datos_madre['dui']) ?></div>
           </div>
           <div class="campo">
             <label>Edad</label>
-            <div class="valor"><?= htmlspecialchars($datos_madre['edad']) ?> años</div>
+            <div class="valor"><?= htmlspecialchars((string)$datos_madre['edad']) ?> años</div>
           </div>
           <div class="campo">
             <label>Profesión u oficio</label>
-            <div class="valor"><?= htmlspecialchars($datos_madre['profesion']) ?></div>
+            <div class="valor"><?= htmlspecialchars((string)$datos_madre['profesion']) ?></div>
           </div>
           <div class="campo full">
             <label>Domicilio</label>
-            <div class="valor"><?= htmlspecialchars($datos_madre['domicilio']) ?></div>
+            <div class="valor"><?= htmlspecialchars((string)$datos_madre['domicilio']) ?></div>
           </div>
         </div>
       </div>
@@ -506,19 +575,19 @@ $datos_footer = [
         <div class="campos">
           <div class="campo">
             <label>Informante</label>
-            <div class="valor"><?= htmlspecialchars($datos_certificacion['informante']) ?></div>
+            <div class="valor"><?= htmlspecialchars((string)$datos_certificacion['informante']) ?></div>
           </div>
           <div class="campo">
             <label>Parentesco</label>
-            <div class="valor"><?= htmlspecialchars($datos_certificacion['parentesco']) ?></div>
+            <div class="valor"><?= htmlspecialchars((string)$datos_certificacion['parentesco']) ?></div>
           </div>
           <div class="campo">
             <label>DUI del informante</label>
-            <div class="valor"><?= htmlspecialchars($datos_certificacion['dui_informante']) ?></div>
+            <div class="valor"><?= htmlspecialchars((string)$datos_certificacion['dui_informante']) ?></div>
           </div>
           <div class="campo">
             <label>Fecha de inscripción</label>
-            <div class="valor"><?= htmlspecialchars($datos_certificacion['fecha_inscripcion']) ?></div>
+            <div class="valor"><?= htmlspecialchars((string)$datos_certificacion['fecha_inscripcion']) ?></div>
           </div>
         </div>
       </div>
@@ -532,16 +601,16 @@ $datos_footer = [
       <div class="firma-bloque">
         <div class="firma-linea"></div>
         <div class="firma-titulo">Jefe de Registros Familiares</div>
-        <div class="firma-nombre"><?= htmlspecialchars($datos_footer['jefe_registros']) ?></div>
+        <div class="firma-nombre"><?= htmlspecialchars((string)$datos_footer['jefe_registros']) ?></div>
       </div>
       <div class="firma-bloque">
         <div class="firma-linea"></div>
         <div class="firma-titulo">Firma del Informante</div>
-        <div class="firma-nombre"><?= htmlspecialchars($datos_footer['informante']) ?></div>
+        <div class="firma-nombre"><?= htmlspecialchars((string)$datos_footer['informante']) ?></div>
       </div>
     </div>
     <div class="atendio-wrap">
-      <?= htmlspecialchars($datos_footer['atendio']) ?>
+      <?= htmlspecialchars((string)$datos_footer['atendio']) ?>
     </div>
   </div>
 
@@ -550,6 +619,15 @@ $datos_footer = [
 </div><!-- /hoja -->
 
 <button class="btn-imprimir" onclick="window.print()">&#128438; Imprimir</button>
+
+<script>
+    // Disparar el diálogo de impresión automáticamente al cargar la página
+    window.onload = function() {
+        setTimeout(function() {
+            window.print();
+        }, 500);
+    };
+</script>
 
 </body>
 </html>

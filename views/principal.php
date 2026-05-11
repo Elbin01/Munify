@@ -13,9 +13,8 @@
         <div class="login-sidebar">
             <div class="sidebar-content">
                 <div class="logo-container">
-                    <img src="../assets/Img/MUNIFY.jpeg" alt="Logo Alcaldía" onerror="this.style.display='none';this.parentElement.innerHTML='🏛️'">
+                    <img src="../assets/Img/logo_munify/logo_negativo.png" alt="Munify Logo" style="width: 220px; height: auto;">
                 </div>
-                <h2>MUNIFY</h2>
                 <p>Sistema Integrado de Registro Civil Municipal</p>
                 <div class="gov-badges">
                     <span><i class="fas fa-landmark"></i> Institucional</span>
@@ -26,8 +25,7 @@
         <div class="login-main">
             <div class="login-form-container">
                 <div class="mobile-logo">
-                    <img src="../assets/Img/MUNIFY.jpeg" alt="Logo Alcaldía" onerror="this.style.display='none'">
-                    <h2>MUNIFY</h2>
+                    <img src="../assets/Img/logo_munify/logo_negativo.png" alt="Munify Logo" style="width: 140px; height: auto;">
                 </div>
                 <div class="form-header">
                     <h1>Acceso al Sistema</h1>

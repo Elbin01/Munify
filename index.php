@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -30,11 +30,9 @@
         }
         .nav-brand { display: flex; align-items: center; gap: 0.75rem; text-decoration: none; }
         .nav-logo {
-            width: 42px; height: 42px; border-radius: 50%;
-            border: 2px solid var(--color-1);
-            background: var(--color-3);
+            width: 45px; height: auto;
             display: flex; align-items: center; justify-content: center;
-            font-size: 1.2rem; overflow: hidden;
+            overflow: hidden;
         }
         .nav-logo img { width: 100%; height: 100%; object-fit: cover; }
         .nav-name {
@@ -274,7 +272,7 @@
         /* ══════════════ FOOTER ══════════════ */
         footer { position: relative; z-index: 10; border-top: 1px solid rgba(64,255,220,0.1); padding: 2.5rem 4rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1.2rem; }
         .fb { display: flex; align-items: center; gap: 0.7rem; }
-        .fb img { width: 34px; height: 34px; border-radius: 50%; border: 1.5px solid var(--color-1); object-fit: cover; }
+        .fb img { width: 38px; height: auto; object-fit: cover; }
         .fb span { font-size: 0.8rem; color: rgba(255,255,255,0.3); }
         .fl { display: flex; gap: 2rem; }
         .fl a { font-size: 0.74rem; color: rgba(255,255,255,0.3); text-decoration: none; transition: color 0.2s; }
@@ -306,11 +304,7 @@
 <!-- NAVBAR -->
 <nav>
     <a href="#" class="nav-brand">
-        <div class="nav-logo">
-            <img src="assets/Img/MUNIFY.jpeg" alt="Logo"
-                 onerror="this.style.display='none';this.parentElement.innerHTML='🏛️'">
-        </div>
-        <span class="nav-name">MUNIFY</span>
+        <img src="assets/Img/logo_munify/logo_negativo.png" alt="Munify Logo" style="height: 40px; width: auto;">
     </a>
     <button class="hamburger" id="hamburger-btn" aria-label="Menú">
         <i class="fas fa-bars" id="ham-icon"></i>
@@ -514,8 +508,7 @@
 <!-- FOOTER -->
 <footer>
     <div class="fb">
-        <img src="assets/Img/MUNIFY.jpeg" alt="Logo" onerror="this.style.display='none'">
-        <span>Alcaldía Municipal — MUNIFY</span>
+        <img src="assets/Img/logo_munify/logo_negativo.png" alt="Munify Logo" style="height: 35px; width: auto;">
     </div>
     <div class="fl">
         <a href="#nosotros">Institución</a>

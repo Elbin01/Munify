@@ -1,1 +1,6 @@
 public/BDD_Munify.txt
+config/conexion.php
+models/CiudadanoModel.php
+controller/CiudadanoController.php
+models/PartidaModel.php
+controller/PartidaController.php
