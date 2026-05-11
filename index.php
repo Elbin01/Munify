@@ -67,17 +67,14 @@
             min-height: 100vh;
             display: flex; align-items: center;
             overflow: hidden;
-            background: linear-gradient(135deg, var(--color-1) 0%, var(--color-2) 100%);
+            background: var(--color-1);
         }
 
-        /* Efecto de malla luminosa */
+        /* Efecto de malla luminosa simplificado para estilo flat */
         .hero::before {
             content: '';
             position: absolute; inset: 0;
-            background:
-                radial-gradient(ellipse at 15% 50%, rgba(255, 255, 255,0.12) 0%, transparent 55%),
-                radial-gradient(ellipse at 80% 20%, rgba(28, 49, 102,0.3) 0%, transparent 50%),
-                radial-gradient(ellipse at 75% 80%, rgba(85, 0, 0,0.4) 0%, transparent 50%);
+            background: rgba(0, 0, 0, 0.05);
         }
 
         /* Partículas */
@@ -242,9 +239,9 @@
         /* ══════════════ SERVICIO DESTACADO ══════════════ */
         .featured-svc {
             display: flex; align-items: center; justify-content: space-between; gap: 2.5rem;
-            background: linear-gradient(135deg, var(--color-1) 0%, var(--color-2) 100%);
+            background: var(--color-1);
             border-radius: 16px; padding: 2.5rem; margin: 2rem 0 3rem;
-            box-shadow: 0 15px 35px rgba(28, 49, 102, 0.25);
+            box-shadow: 0 15px 35px rgba(28, 49, 102, 0.15);
         }
         .featured-svc-img {
             flex-shrink: 0; width: 220px; height: 220px; border-radius: 12px;
