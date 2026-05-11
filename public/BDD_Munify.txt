@@ -1,0 +1,99 @@
+CREATE DATABASE Munify;
+USE Munify;
+
+CREATE TABLE Rol (
+    id_rol INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(50) NOT NULL
+);
+
+CREATE TABLE Usuario (
+    id_usuario INT AUTO_INCREMENT PRIMARY KEY,
+    id_rol INT NOT NULL,
+    nombre VARCHAR(100) NOT NULL,
+    correo VARCHAR(100) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    FOREIGN KEY (id_rol) REFERENCES Rol(id_rol)
+);
+
+CREATE TABLE Ciudadano (
+    id_ciudadano INT AUTO_INCREMENT PRIMARY KEY,
+    nombres VARCHAR(100) NOT NULL,
+    apellidos VARCHAR(100) NOT NULL,
+    sexo CHAR(1),
+    fecha_nacimiento DATE,
+    DUI VARCHAR(10) UNIQUE,
+    hospital VARCHAR(100),
+    lugar_nacimiento VARCHAR(150),
+    hora_nacimiento TIME,
+
+    id_padre INT,
+    id_madre INT,
+
+    nombre_padre VARCHAR(150),
+    nombre_madre VARCHAR(150),
+
+    FOREIGN KEY (id_padre) REFERENCES Ciudadano(id_ciudadano),
+    FOREIGN KEY (id_madre) REFERENCES Ciudadano(id_ciudadano)
+);
+
+CREATE TABLE Tipo_Tramite (
+    id_tipo INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(50) NOT NULL
+);
+
+CREATE TABLE Cita (
+    id_cita INT AUTO_INCREMENT PRIMARY KEY,
+    id_usuario INT NOT NULL,
+    id_tipo INT NOT NULL,
+    fecha_creacion DATE DEFAULT CURRENT_DATE,
+    fecha_cita DATE NOT NULL,
+    hora_cita TIME NOT NULL,
+    estado ENUM('pendiente','confirmada','denegada'),
+    FOREIGN KEY (id_usuario) REFERENCES Usuario(id_usuario),
+    FOREIGN KEY (id_tipo) REFERENCES Tipo_Tramite(id_tipo)
+);
+
+CREATE TABLE Partida_Nacimiento (
+    id_partida INT AUTO_INCREMENT PRIMARY KEY,
+    id_ciudadano INT NOT NULL,
+    numero_partida VARCHAR(50),
+    libro VARCHAR(50),
+    folio VARCHAR(50),
+    fecha_emision DATE DEFAULT CURRENT_DATE,
+    FOREIGN KEY (id_ciudadano) REFERENCES Ciudadano(id_ciudadano)
+);
+
+CREATE TABLE Carta_Defuncion (
+    id_carta INT AUTO_INCREMENT PRIMARY KEY,
+    id_ciudadano INT NOT NULL,
+    fecha_defuncion DATE NOT NULL,
+    lugar_defuncion VARCHAR(150),
+    causa VARCHAR(200),
+    nombre_declarante VARCHAR(100),
+    parentesco_declarante VARCHAR(50),
+    fecha_emision DATE DEFAULT CURRENT_DATE,
+    FOREIGN KEY (id_ciudadano) REFERENCES Ciudadano(id_ciudadano)
+);
+
+CREATE TABLE Carnet_Menoridad (
+    id_carnet INT AUTO_INCREMENT PRIMARY KEY,
+    id_ciudadano INT NOT NULL,
+    numero_carnet VARCHAR(50) UNIQUE,
+    fecha_emision DATE DEFAULT CURRENT_DATE,
+    fecha_vencimiento DATE,
+    lugar_estudio VARCHAR(150),
+    color_piel VARCHAR(50),
+    color_ojos VARCHAR(50),
+    color_cabello VARCHAR(50),
+    senales_especiales VARCHAR(200),
+    FOREIGN KEY (id_ciudadano) REFERENCES Ciudadano(id_ciudadano)
+);
+
+INSERT INTO Rol (nombre) VALUES 
+('Secretar@'),
+('Ciudadano');
+
+INSERT INTO Tipo_Tramite (nombre) VALUES 
+('Partida de nacimiento'),
+('Carta de defunción'),
+('Carnet de menoridad');
