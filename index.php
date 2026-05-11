@@ -9,11 +9,11 @@
         <style>
         :root {
             --color-1: #1C3166;
-            --color-2: #550000;
+            --color-2: #FFFFFF;
             --color-3: #FFFFFF;
-            --color-4: #333333;
-            --color-5: #F4F7F6;
-            --color-6: #00A9D4;
+            --color-4: #000000;
+            --color-5: #FFFFFF;
+            --color-6: #1C3166;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -120,7 +120,7 @@
             animation: up 0.6s 0.1s ease both;
         }
         .hero-title em {
-            font-style: italic; color: #40FFDC;
+            font-style: italic; color: #FFFFFF;
             font-family: 'Playfair Display', serif;
         }
 
@@ -174,10 +174,15 @@
         .hero-card p { font-size: 0.85rem; color: #666; line-height: 1.65; margin-bottom: 1.5rem; }
         .hc-pills { display: flex; flex-wrap: wrap; gap: 0.5rem; }
         .hc-pill {
-            background: rgba(85, 0, 0, 0.1); color: var(--color-2);
-            border-radius: 50px; padding: 0.35rem 0.9rem;
-            font-size: 0.75rem; font-weight: 600;
+            background: var(--color-1); color: #ffffff;
+            border-radius: 50px; padding: 0.4rem 1.1rem;
+            font-size: 0.72rem; font-weight: 600;
+            display: flex; align-items: center; gap: 0.5rem;
+            box-shadow: 0 4px 10px rgba(28, 49, 102, 0.2);
+            transition: all 0.3s;
         }
+        .hc-pill:hover { transform: translateY(-2px); background: var(--color-2); }
+        .hc-pill i { font-size: 0.8rem; }
 
         /* Indicador de scroll */
         .scroll-hint {
@@ -207,32 +212,43 @@
         .si { max-width: 1040px; margin: 0 auto; padding: 5.5rem 2rem; }
         .stag { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--color-2); margin-bottom: 0.4rem; }
         .sh { font-family: 'Playfair Display', serif; font-size: clamp(2rem,3vw,2.6rem); font-weight: 700; color: var(--color-1); margin-bottom: 1rem; }
-        .sb { font-size: 0.95rem; font-weight: 400; color: #555; line-height: 1.8; max-width: 600px; }
+        .sb { font-size: 0.95rem; font-weight: 400; color: #1c3166; line-height: 1.8; max-width: 600px; opacity: 0.9; }
 
         /* ══════════════ QUIÉNES SOMOS ══════════════ */
-        .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; margin-top: 3.5rem; }
-        .vals { display: flex; flex-direction: column; gap: 1rem; margin-top: 1.8rem; }
-        .val { display: flex; align-items: flex-start; gap: 1.2rem; background: #ffffff; border: 1px solid #E2E8F0; box-shadow: 0 4px 6px rgba(0,0,0,0.02); border-radius: 12px; padding: 1.2rem 1.4rem; transition: border-color 0.2s, box-shadow 0.2s; }
-        .val:hover { border-color: rgba(28, 49, 102, 0.3); box-shadow: 0 10px 20px rgba(0,0,0,0.06); }
-        .vi { width: 44px; height: 44px; flex-shrink: 0; background: rgba(85, 0, 0, 0.08); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: var(--color-2); font-size: 1.2rem; }
-        .val h4 { font-size: 0.95rem; font-weight: 700; color: var(--color-1); margin-bottom: 0.3rem; }
-        .val p { font-size: 0.8rem; color: #666; line-height: 1.5; }
-        .stats-vis { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-        .sc { background: #ffffff; border: 1px solid #E2E8F0; box-shadow: 0 4px 10px rgba(0,0,0,0.04); border-radius: 16px; padding: 2rem; text-align: center; transition: transform 0.2s; }
-        .sc:hover { transform: translateY(-5px); border-color: var(--color-1); }
-        .sc:nth-child(2) { margin-top: 2rem; }
-        .sc:nth-child(4) { margin-top: -2rem; }
-        .sn { font-family: 'Playfair Display', serif; font-size: 2.5rem; font-weight: 700; color: var(--color-2); line-height: 1; margin-bottom: 0.5rem; }
-        .sl { font-size: 0.8rem; font-weight: 600; color: var(--color-1); letter-spacing: 0.05em; text-transform: uppercase;}
+        .about-grid { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 2.5rem; align-items: stretch; margin-top: 3rem; }
+        .vals { display: flex; flex-direction: column; gap: 0.6rem; margin-top: 1.2rem; }
+        .val { display: flex; align-items: center; gap: 0.8rem; background: #ffffff; border: 1px solid #E2E8F0; box-shadow: 0 2px 4px rgba(0,0,0,0.02); border-radius: 8px; padding: 0.6rem 1rem; transition: all 0.2s; }
+        .val:hover { border-color: var(--color-1); box-shadow: 0 6px 12px rgba(28, 49, 102, 0.08); transform: translateX(4px); }
+        .vi { width: 36px; height: 36px; flex-shrink: 0; background: #f0f4ff; border: 1px solid #e0e7ff; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: var(--color-1); font-size: 1rem; }
+        .val h4 { font-size: 0.8rem; font-weight: 700; color: var(--color-1); margin-bottom: 0.1rem; }
+        .val p { font-size: 0.72rem; color: #333; line-height: 1.4; }
+
+        .about-image-wrapper {
+            position: relative;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+            border: 3px solid var(--color-3);
+            height: 100%;
+        }
+        .about-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        .about-image-wrapper:hover .about-img {
+            transform: scale(1.05);
+        }
 
         /* ══════════════ SERVICIOS ══════════════ */
         .svc-section { background: rgba(28, 49, 102, 0.03); border-top: 1px solid rgba(0,0,0,0.05); border-bottom: 1px solid rgba(0,0,0,0.05); }
         .svc-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(240px,1fr)); gap: 1.5rem; margin-top: 3rem; }
         .svc { background: #ffffff; border: 1px solid #E2E8F0; border-radius: 14px; padding: 2rem 1.8rem; transition: all 0.3s; position: relative; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.03); }
         .svc::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 4px; background: var(--color-2); transform: scaleX(0); transition: transform 0.3s; transform-origin: left; }
-        .svc:hover { border-color: rgba(85, 0, 0, 0.2); transform: translateY(-5px); box-shadow: 0 20px 40px rgba(0,0,0,0.08); }
+        .svc:hover { border-color: var(--color-1); transform: translateY(-5px); box-shadow: 0 20px 40px rgba(0,0,0,0.08); }
         .svc:hover::after { transform: scaleX(1); }
-        .svc-ico { width: 56px; height: 56px; background: rgba(28, 49, 102, 0.06); border-radius: 14px; display: flex; align-items: center; justify-content: center; color: var(--color-1); font-size: 1.5rem; margin-bottom: 1.2rem; }
+        .svc-ico { width: 56px; height: 56px; background: #f0f4ff; border: 1px solid #e0e7ff; border-radius: 14px; display: flex; align-items: center; justify-content: center; color: var(--color-1); font-size: 1.5rem; margin-bottom: 1.2rem; }
         .svc h3 { font-size: 1.05rem; font-weight: 700; color: var(--color-1); margin-bottom: 0.6rem; }
         .svc p { font-size: 0.85rem; color: #666; line-height: 1.65; }
 
@@ -250,7 +266,7 @@
         .featured-svc-img img { width: 100%; height: 100%; object-fit: cover; }
         .featured-svc-content { flex: 1; }
         .featured-svc-title { font-size: 2rem; font-weight: 700; color: #ffffff; margin-bottom: 0.5rem; font-family: 'Poppins', sans-serif; }
-        .featured-svc-subtitle { font-size: 0.9rem; color: #40FFDC; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 1.2rem; }
+        .featured-svc-subtitle { font-size: 0.9rem; color: #FFFFFF; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 1.2rem; }
         .featured-svc-desc { font-size: 0.95rem; color: rgba(255,255,255,0.9); line-height: 1.7; max-width: 650px; }
         .btn-featured {
             background: #ffffff; color: var(--color-1); padding: 0.9rem 2rem; border-radius: 50px;
@@ -270,9 +286,9 @@
         .loc-info { display: flex; flex-direction: column; gap: 1rem; }
         .ir { display: flex; align-items: flex-start; gap: 1rem; background: #ffffff; border: 1px solid #E2E8F0; border-radius: 12px; padding: 1.2rem 1.4rem; transition: border-color 0.2s, box-shadow 0.2s; box-shadow: 0 4px 6px rgba(0,0,0,0.02); }
         .ir:hover { border-color: rgba(28, 49, 102, 0.3); box-shadow: 0 10px 20px rgba(0,0,0,0.06); }
-        .ii { width: 44px; height: 44px; flex-shrink: 0; background: rgba(85, 0, 0, 0.08); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: var(--color-2); font-size: 1.2rem; }
+        .ii { width: 44px; height: 44px; flex-shrink: 0; background: rgba(0, 0, 0, 0.05); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: var(--color-1); font-size: 1.2rem; }
         .ir h4 { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--color-1); margin-bottom: 0.25rem; }
-        .ir p { font-size: 0.9rem; color: #555; line-height: 1.5; }
+        .ir p { font-size: 0.9rem; color: #1c3166; line-height: 1.5; opacity: 0.85; }
         .sched { background: #ffffff; border: 1px solid #E2E8F0; border-radius: 12px; padding: 1.5rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; box-shadow: 0 4px 6px rgba(0,0,0,0.02); }
         .sd-item { text-align: center; }
         .sd-day { font-size: 0.7rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--color-1); margin-bottom: 0.3rem; }
@@ -339,7 +355,6 @@
         <a href="#servicios">Servicios</a>
         <a href="#nosotros">Nosotros</a>
         <a href="#ubicacion">Contacto</a>
-        <a href="views/login.php" class="btn-login" id="btn-login-nav">Iniciar sesión</a>
     </div>
 </nav>
 
@@ -364,19 +379,18 @@
             </p>
             <div class="hero-btns">
                 <a href="#servicios" class="btn-cta"><i class="fas fa-list-check"></i> Ver servicios</a>
-                <a href="views/login.php" class="btn-ghost" id="btn-login-hero"><i class="fas fa-arrow-right-to-bracket"></i> Acceder al sistema</a>
             </div>
         </div>
 
         <!-- Tarjeta flotante -->
         <div class="hero-card">
-            <div class="hc-icon"><i class="fas fa-landmark"></i></div>
+            <div class="hc-icon"><i class="fas fa-fingerprint"></i></div>
             <h3>Gestión con identidad</h3>
             <p>Documentos oficiales para cada ciudadano, con atención ágil y proceso 100% verificado por la alcaldía.</p>
             <div class="hc-pills">
-                <span class="hc-pill">Partida de Nacimiento</span>
-                <span class="hc-pill">Carnet Minoridad</span>
-                <span class="hc-pill">Acta de Defunción</span>
+                <span class="hc-pill"><i class="fas fa-baby"></i> Nacimiento</span>
+                <span class="hc-pill"><i class="fas fa-id-card-clip"></i> Minoridad</span>
+                <span class="hc-pill"><i class="fas fa-file-contract"></i> Defunción</span>
             </div>
         </div>
     </div>
@@ -401,20 +415,24 @@
                 </p>
                 <div class="vals">
                     <div class="val">
-                        <div class="vi"><i class="fas fa-shield-halved"></i></div>
+                        <div class="vi"><i class="fas fa-eye"></i></div>
                         <div><h4>Transparencia</h4><p>Cada trámite gestionado con honestidad y rendición de cuentas a los ciudadanos.</p></div>
                     </div>
                     <div class="val">
-                        <div class="vi"><i class="fas fa-people-group"></i></div>
+                        <div class="vi"><i class="fas fa-hand-holding-heart"></i></div>
                         <div><h4>Servicio ciudadano</h4><p>El ciudadano es el centro de todo lo que hacemos. Su tiempo y dignidad importan.</p></div>
                     </div>
                     <div class="val">
-                        <div class="vi"><i class="fas fa-bolt"></i></div>
+                        <div class="vi"><i class="fas fa-laptop-code"></i></div>
                         <div><h4>Eficiencia digital</h4><p>Procesos de trámites municipales presenciales.</p></div>
                     </div>
                 </div>
             </div>
-            
+            <div class="stats-vis">
+                <div class="about-image-wrapper">
+                    <img src="assets/Img/compromiso.png" alt="Compromiso Municipal" class="about-img">
+                </div>
+            </div>
         </div>
     </div>
 </section>
@@ -475,7 +493,7 @@
                     <div class="ii"><i class="fas fa-location-dot"></i></div>
                     <div>
                         <h4>Dirección</h4>
-                        <p>Universidad Catolica  Regional de Ilobasco, El Salvador</p>
+                        <p>Carretera a Ilobasco, Km. 51 1/2, Cantón Agua Zarca, Cabañas.</p>
                     </div>
                 </div>
                 <div class="ir">
@@ -513,7 +531,7 @@
             <!-- ✏️ Reemplaza el src con el embed real de tu alcaldía en Google Maps -->
             <div class="map-box">
                 <iframe
-                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3876.5!2d-89.2182!3d13.6929!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTPCsDQxJzM0LjQiTiA4OcKwMTMnMDUuNSJX!5e0!3m2!1ses!2ssv!4v1700000000000"
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3875.46074128565!2d-88.8576484!3d13.8413998!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8f63567840130001%3A0x8f63567840130001!2sUniversidad%20Cat%C3%B3lica%20de%20El%20Salvador%2C%20Centro%20Regional%20de%20Ilobasco!5e0!3m2!1ses-419!2ssv!4v1715442800000!5m2!1ses-419!2ssv"
                     allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade">
                 </iframe>
             </div>
@@ -530,16 +548,16 @@
         <p class="sb" style="margin: 0.5rem auto 0;">Entérate de noticias, horarios especiales y avisos de tu alcaldía.</p>
         <div class="social-grid">
             <!-- ✏️ Cambia los href por las URLs reales -->
-            <a href="https://facebook.com/" target="_blank" class="soc" style="--c:#1877F2">
+            <a href="https://facebook.com/" target="_blank" class="soc" style="--c:#1C3166">
                 <i class="fab fa-facebook-f"></i><span>Facebook</span>
             </a>
-            <a href="https://instagram.com/" target="_blank" class="soc" style="--c:#E1306C">
+            <a href="https://instagram.com/" target="_blank" class="soc" style="--c:#000000">
                 <i class="fab fa-instagram"></i><span>Instagram</span>
             </a>
-            <a href="https://twitter.com/" target="_blank" class="soc" style="--c:#1DA1F2">
+            <a href="https://twitter.com/" target="_blank" class="soc" style="--c:#1C3166">
                 <i class="fab fa-x-twitter"></i><span>Twitter / X</span>
             </a>
-            <a href="https://wa.me/50300000000" target="_blank" class="soc" style="--c:#25D366">
+            <a href="https://wa.me/50300000000" target="_blank" class="soc" style="--c:#000000">
                 <i class="fab fa-whatsapp"></i><span>WhatsApp</span>
             </a>
         </div>
@@ -556,7 +574,6 @@
         <a href="#nosotros">Institución</a>
         <a href="#servicios">Servicios</a>
         <a href="#ubicacion">Contacto</a>
-        <a href="views/login.php">Sistema</a>
     </div>
     <p class="copy">&copy; <?= date('Y') ?> Alcaldía Municipal. Todos los derechos reservados.</p>
 </footer>

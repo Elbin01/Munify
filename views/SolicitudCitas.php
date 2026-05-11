@@ -6,146 +6,126 @@
     <title>Munify - Solicitar Trámite</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="../assets/Css/components.css">
     <style>
         :root {
             --color-1: #1C3166;
-            --color-2: #550000;
+            --color-2: #000000;
             --color-3: #FFFFFF;
-            --color-4: #333333;
-            --color-5: #F4F7F6;
+            --color-4: #000000;
+            --color-5: #FFFFFF;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        
-        body { 
-            font-family: 'Poppins', sans-serif; 
-            background: var(--color-5); 
-            color: var(--color-4);
-            display: flex; 
-            justify-content: center; 
-            align-items: center;   
-            min-height: 100vh;     
-            padding: 2rem 1rem;
+        /* ════════ MAIN CONTENT ════════ */
+        .main-content {
+            flex: 1;
+            padding: 3rem 2rem;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            overflow-y: auto;
         }
 
         .container { 
             width: 100%; 
-            max-width: 700px; 
+            max-width: 800px; 
             background: var(--color-3); 
-            border-radius: 12px; 
+            border-radius: 16px; 
             overflow: hidden; 
-            box-shadow: 0 15px 35px rgba(0,0,0,0.1); 
-            border-top: 5px solid var(--color-2);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.05); 
+            border-top: 6px solid var(--color-2);
         }
 
         .header { 
-            background: var(--color-1); 
-            color: var(--color-3); 
-            padding: 2rem; 
-            text-align: center; 
-            position: relative;
-        }
-        
-        .header-logo {
-            width: 60px;
-            height: 60px;
-            background: var(--color-3);
-            border-radius: 50%;
-            margin: 0 auto 1rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-            border: 2px solid var(--color-3);
-        }
-        
-        .header-logo img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
+            background: #ffffff; 
+            color: var(--color-1); 
+            padding: 2.5rem 2rem; 
+            text-align: left; 
+            border-bottom: 1px solid #f0f0f0;
         }
 
         .header h1 { 
             margin: 0; 
             font-family: 'Playfair Display', serif;
-            font-size: 1.8rem; 
+            font-size: 2.2rem; 
             font-weight: 700;
-            letter-spacing: 1px; 
         }
         
         .header p {
-            font-size: 0.85rem;
-            opacity: 0.9;
-            margin-top: 0.5rem;
+            font-size: 1rem;
+            color: #666;
+            margin-top: 0.4rem;
         }
 
         form { 
-            padding: 2rem; 
+            padding: 2.5rem; 
         }
 
         .form-section {
-            margin-bottom: 1.5rem;
-            padding-bottom: 1.5rem;
-            border-bottom: 1px solid #eee;
+            margin-bottom: 2rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid #f0f0f0;
         }
         
         .form-section-title {
             color: var(--color-1);
-            font-family: 'Playfair Display', serif;
-            font-size: 1.2rem;
-            margin-bottom: 1rem;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            font-size: 1.3rem;
+            margin-bottom: 1.5rem;
             display: flex;
             align-items: center;
-            gap: 0.5rem;
+            gap: 0.8rem;
+        }
+
+        .form-section-title i {
+            color: var(--color-2);
         }
 
         .input-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 1rem;
+            gap: 1.5rem;
         }
         
         .full-width {
             grid-column: 1 / -1;
         }
 
-        .input-box { 
-            margin-bottom: 1rem; 
-        }
-
         label { 
             display: block; 
-            margin-bottom: 0.4rem; 
+            margin-bottom: 0.6rem; 
             font-weight: 600; 
             color: var(--color-1); 
-            font-size: 0.85rem; 
+            font-size: 0.9rem; 
         }
 
         select, input, textarea { 
             width: 100%; 
-            padding: 0.8rem 1rem; 
-            border: 1px solid #ddd; 
-            border-radius: 6px; 
+            padding: 0.9rem 1.2rem; 
+            border: 1.5px solid #eee; 
+            border-radius: 10px; 
             font-family: 'Poppins', sans-serif;
-            font-size: 0.9rem;
+            font-size: 0.95rem;
             transition: all 0.3s ease; 
-            background: #fff;
+            background: #fdfdfd;
         }
 
         select:focus, input:focus, textarea:focus { 
             border-color: var(--color-1); 
             outline: none; 
-            box-shadow: 0 0 0 3px rgba(28, 49, 102, 0.1);
+            background: #fff;
+            box-shadow: 0 0 0 4px rgba(28, 49, 102, 0.05);
         }
 
         .status-info { 
-            background: rgba(28, 49, 102, 0.05); 
-            padding: 1rem; 
-            border-left: 4px solid var(--color-1); 
-            margin-bottom: 1.5rem; 
-            font-size: 0.85rem; 
-            color: var(--color-4);
-            border-radius: 0 6px 6px 0;
+            background: rgba(0, 0, 0, 0.05); 
+            padding: 1.2rem; 
+            border-left: 5px solid var(--color-1); 
+            margin-bottom: 2rem; 
+            font-size: 0.95rem; 
+            color: #000;
+            border-radius: 8px;
         }
 
         .btn-submit { 
@@ -153,23 +133,43 @@
             color: var(--color-3); 
             border: none; 
             width: 100%; 
-            padding: 1rem; 
-            border-radius: 6px; 
+            padding: 1.2rem; 
+            border-radius: 10px; 
             font-family: 'Poppins', sans-serif;
-            font-size: 1rem; 
-            font-weight: 600; 
+            font-size: 1.1rem; 
+            font-weight: 700; 
             cursor: pointer; 
             transition: all 0.3s;
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 0.5rem;
+            gap: 0.8rem;
+            box-shadow: 0 10px 20px rgba(28, 49, 102, 0.1);
         }
 
         .btn-submit:hover { 
-            background: var(--color-2); 
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(85, 0, 0, 0.2);
+            background: #000000; 
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.6); backdrop-filter: blur(8px);
+            display: none; justify-content: center; align-items: center; z-index: 1000;
+        }
+        
+        @media (max-width: 900px) {
+            .sidebar {
+                display: none;
+            }
+        }
+
+        @media (max-width: 600px) { 
+            .input-grid { grid-template-columns: 1fr; }
+            .header { padding: 1.5rem; }
+            form { padding: 1.5rem; }
+            .main-content { padding: 1rem; }
         }
 
         .dynamic-fields {
@@ -214,14 +214,28 @@
 </head>
 <body>
 
-<div class="container">
-    <div class="header">
-        <div class="header-logo">
-            <img src="../assets/Img/MUNIFY.jpeg" alt="Logo Alcaldía" onerror="this.style.display='none';">
+<div class="app-container">
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-logo">
+                <img src="../assets/Img/MUNIFY.jpeg" alt="Logo">
+            </div>
+            <h2>MUNIFY</h2>
         </div>
-        <h1>Solicitud de Trámites</h1>
-        <p>Registro Civil de la Alcaldía Municipal</p>
-    </div>
+        <nav class="sidebar-nav">
+            <a href="../index.php"><i class="fas fa-home"></i> Inicio</a>
+            <a href="#" class="active"><i class="fas fa-file-signature"></i> Trámites</a>
+            <a href="Usuarios.php"><i class="fas fa-users-cog"></i> Usuarios</a>
+            <a href="login.php"><i class="fas fa-sign-out-alt"></i> Salir</a>
+        </nav>
+    </aside>
+
+    <main class="main-content">
+        <div class="container">
+            <div class="header">
+                <h1>Solicitud de Trámites</h1>
+                <p>Registro Civil de la Alcaldía Municipal</p>
+            </div>
     
     <form id="formCita">
         <div class="status-info">
@@ -283,7 +297,7 @@
                 
                 <!-- Datos del Padre -->
                 <div class="input-box full-width" style="margin-top:1rem; padding-top:1rem; border-top:1px dashed #ccc;">
-                    <label style="color:#550000; font-size:1rem;"><i class="fas fa-male"></i> Datos del Padre</label>
+                    <label style="color:var(--color-2); font-size:1rem;"><i class="fas fa-male"></i> Datos del Padre</label>
                 </div>
                 <div class="input-box full-width">
                     <label>Nombre del Padre</label>
@@ -300,7 +314,7 @@
                 
                 <!-- Datos de la Madre -->
                 <div class="input-box full-width" style="margin-top:1rem; padding-top:1rem; border-top:1px dashed #ccc;">
-                    <label style="color:#550000; font-size:1rem;"><i class="fas fa-female"></i> Datos de la Madre</label>
+                    <label style="color:var(--color-2); font-size:1rem;"><i class="fas fa-female"></i> Datos de la Madre</label>
                 </div>
                 <div class="input-box full-width">
                     <label>Nombre de la Madre</label>
@@ -369,7 +383,7 @@
                 
                 <!-- Datos de los Padres -->
                 <div class="input-box full-width" style="margin-top:1rem; padding-top:1rem; border-top:1px dashed #ccc;">
-                    <label style="color:#550000; font-size:1rem;"><i class="fas fa-users"></i> Datos de los Padres</label>
+                    <label style="color:var(--color-2); font-size:1rem;"><i class="fas fa-users"></i> Datos de los Padres</label>
                 </div>
                 <div class="input-box">
                     <label>Nombre de la Madre</label>
@@ -382,7 +396,7 @@
 
                 <!-- Rasgos Físicos -->
                 <div class="input-box full-width" style="margin-top:1rem; padding-top:1rem; border-top:1px dashed #ccc;">
-                    <label style="color:#550000; font-size:1rem;"><i class="fas fa-user-tag"></i> Rasgos Físicos</label>
+                    <label style="color:var(--color-2); font-size:1rem;"><i class="fas fa-user-tag"></i> Rasgos Físicos</label>
                 </div>
                 <div class="input-box">
                     <label>Color de Piel</label>
@@ -403,7 +417,7 @@
 
                 <!-- Fotografía -->
                 <div class="input-box full-width" style="margin-top:1rem; padding-top:1rem; border-top:1px dashed #ccc;">
-                    <label style="color:#550000; font-size:1rem;"><i class="fas fa-camera"></i> Fotografía del Menor</label>
+                    <label style="color:var(--color-2); font-size:1rem;"><i class="fas fa-camera"></i> Fotografía del Menor</label>
                 </div>
                 <div class="input-box full-width">
                     <label>Subir foto (Formato JPG o PNG)</label>
@@ -415,9 +429,12 @@
         <button type="submit" class="btn-submit" id="btnSubmit">
             <i class="fas fa-paper-plane"></i> Enviar Solicitud
         </button>
-    </form>
+        </form>
+    </div>
+</main>
 </div>
 
+<script src="../assets/Js/notifications.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', () => {
         const selectTramite = document.getElementById('tipoTramite');

@@ -1,13 +1,13 @@
 :root {
     --color-1: #1C3166;
-    --color-2: #550000;
+    --color-2: #000000;
     --color-3: #1C3166;
-    --color-4: #550000;
+    --color-4: #000000;
     --color-5: #000000;
-    --text-dark: #333333;
-    --text-gray: #666666;
-    --bg-light: #F4F7F6;
-    --border-color: #E0E0E0;
+    --text-dark: #000000;
+    --text-gray: #000000;
+    --bg-light: #FFFFFF;
+    --border-color: #000000;
 }
 
 * {
@@ -172,7 +172,7 @@ body {
 }
 
 .form-header p {
-    color: var(--text-gray);
+    color: #000000;
     font-size: 1rem;
 }
 
@@ -197,7 +197,7 @@ body {
 .input-wrapper i {
     position: absolute;
     left: 1.2rem;
-    color: #999;
+    color: #000000;
     font-size: 1.1rem;
     transition: color 0.3s;
 }
@@ -209,7 +209,7 @@ body {
     border-radius: 8px;
     font-size: 1rem;
     color: var(--text-dark);
-    background: #F8F9FA;
+    background: #FFFFFF;
     transition: all 0.3s;
 }
 
@@ -233,7 +233,7 @@ body {
 
 .forgot-link {
     font-size: 0.9rem;
-    color: var(--text-gray);
+    color: #000000;
     text-decoration: none;
     font-weight: 500;
     transition: color 0.3s;
@@ -310,7 +310,7 @@ body {
 
 .back-link {
     font-size: 0.95rem;
-    color: var(--text-gray);
+    color: #000000;
     text-decoration: none;
     display: inline-flex;
     align-items: center;
@@ -361,7 +361,7 @@ body {
 
 .success-icon {
     font-size: 4.5rem;
-    color: #10B981;
+    color: var(--color-1);
     margin-bottom: 1.5rem;
 }
 
@@ -373,7 +373,7 @@ body {
 }
 
 .modal-content p {
-    color: var(--text-gray);
+    color: #000000;
     margin-bottom: 1.5rem;
     font-size: 1.05rem;
 }
@@ -413,4 +413,3 @@ body {
         display: block;
     }
 }
-
