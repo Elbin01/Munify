@@ -49,8 +49,8 @@ $datos_footer = [
 
     :root {
       --negro:       #000000;
-      --rojo-oscuro: #550000;
-      --rojo-medio:  #7a0000;
+      --azul-oscuro: #003366;
+      --azul-medio:  #005599;
       --blanco:      #ffffff;
       --gris-claro:  #f5f5f5;
       --gris-linea:  #cccccc;
@@ -60,10 +60,10 @@ $datos_footer = [
 
     body {
       font-family: 'EB Garamond', Georgia, serif;
-      background: #1a0000;
+      background: #ffffff;
       color: var(--texto);
       min-height: 100vh;
-      padding: 1.5rem 0.5rem;
+      padding: 1.5rem 0.5rem 0;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -91,17 +91,18 @@ $datos_footer = [
       gap: 0.35rem;
       transition: background 0.2s;
     }
-    .btn-imprimir:hover { background: var(--rojo-oscuro); }
+    .btn-imprimir:hover { background: var(--azul-oscuro); }
 
     /* ── Etiqueta de cara ── */
     .cara-label {
       font-family: 'Cinzel', serif;
       font-size: 0.68rem;
       letter-spacing: 0.12em;
-      color: #ffaaaa;
+      color: #555555;
       text-transform: uppercase;
       align-self: flex-start;
       margin-left: calc(50% - 380px);
+      margin-top: 1rem;
     }
 
     /* ── Hoja ── */
@@ -109,21 +110,11 @@ $datos_footer = [
       width: 100%;
       max-width: 760px;
       background: var(--blanco);
-      border: 2px solid var(--negro);
-      outline: 5px solid var(--rojo-oscuro);
-      outline-offset: -10px;
+      border: 1.5px solid #999;
       box-shadow: 0 6px 30px var(--sombra);
       position: relative;
       overflow: hidden;
-    }
-
-    .banda-top {
-      background: linear-gradient(90deg, var(--negro) 0%, var(--rojo-oscuro) 50%, var(--negro) 100%);
-      height: 8px;
-    }
-    .banda-bot {
-      background: linear-gradient(90deg, var(--negro) 0%, var(--rojo-oscuro) 50%, var(--negro) 100%);
-      height: 8px;
+      margin-bottom: 2rem;
     }
 
     /* ── Encabezado ── */
@@ -316,8 +307,7 @@ $datos_footer = [
 
     .tipo-tramite-badge {
       display: inline-block;
-      background: var(--negro);
-      color: var(--blanco);
+      color: var(--negro);
       font-family: 'Cinzel', serif;
       font-size: 0.62rem;
       letter-spacing: 0.08em;
@@ -384,37 +374,21 @@ $datos_footer = [
 
     /* ── Responsivo ── */
     @media (max-width: 600px) {
-      body { padding: 0.5rem 0.25rem; }
-
+      body { padding: 0.5rem 0.25rem 0; }
       .cara-label { margin-left: 0.25rem; }
-
-      .encabezado {
-        flex-direction: column;
-        text-align: center;
-        padding: 0.8rem;
-        gap: 0.5rem;
-      }
+      .encabezado { flex-direction: column; text-align: center; padding: 0.8rem; gap: 0.5rem; }
       .logo-wrap { width: 50px; height: 50px; }
       .encabezado-texto h1 { font-size: 0.65rem; }
       .encabezado-texto .titulo-doc { font-size: 0.85rem; }
-
-      .frontal-body {
-        flex-direction: column;
-        align-items: center;
-        padding: 0.8rem;
-      }
+      .frontal-body { flex-direction: column; align-items: center; padding: 0.8rem; }
       .foto-wrap { width: 90px; }
       .foto-box { width: 90px; height: 115px; }
-
       .campos-grid { grid-template-columns: 1fr; }
-
       .frontal-footer { padding: 0.6rem 0.8rem 0.8rem; }
       .firma-linea-sm { width: 85px; }
-
       .reverso-body { padding: 0.8rem; }
       .reverso-grid { grid-template-columns: 1fr; }
       .tipo-tramite-badge { justify-self: start; }
-
       .reverso-footer { padding: 0.6rem 0.8rem; flex-wrap: wrap; gap: 0.8rem; }
     }
 
@@ -425,9 +399,9 @@ $datos_footer = [
     /* ── Print ── */
     @media print {
       body { background: none; padding: 0; gap: 1rem; }
-      .hoja { box-shadow: none; outline: none; border-color: #999; width: 100%; max-width: 100%; }
+      .hoja { box-shadow: none; outline: none; border-color: #999; width: 100%; max-width: 100%; margin-bottom: 1rem; }
       .btn-imprimir { display: none; }
-      .cara-label { margin-left: 0; }
+      .cara-label { display: none; }
     }
   </style>
 </head>
@@ -435,10 +409,9 @@ $datos_footer = [
 
 <button class="btn-imprimir" onclick="window.print()">&#128438; Imprimir</button>
 
-<!-- CARA FRONTAL -->
+<!-- ══ CARA FRONTAL ══ -->
 <div class="cara-label">▶ Cara frontal</div>
 <div class="hoja">
-  <div class="banda-top"></div>
 
   <div class="encabezado">
     <div class="logo-wrap">
@@ -459,7 +432,6 @@ $datos_footer = [
     </div>
     <div class="logo-wrap">
       <?php if (!empty($datos_municipio['logo'])): ?>
-        <img src="<?= htmlspecialchars($datos_municipio['logo']) ?>" alt="Logo Alcaldía">
       <?php else: ?>
         <div class="logo-placeholder">LOGO<br>ALCALDÍA</div>
       <?php endif; ?>
@@ -523,13 +495,11 @@ $datos_footer = [
     </div>
   </div>
 
-  <div class="banda-bot"></div>
-</div>
+</div><!-- /hoja frontal -->
 
-<!-- CARA POSTERIOR -->
+<!-- ══ CARA POSTERIOR ══ -->
 <div class="cara-label">▶ Cara posterior</div>
 <div class="hoja">
-  <div class="banda-top"></div>
 
   <div class="reverso-body">
     <div class="reverso-grid">
@@ -597,8 +567,7 @@ $datos_footer = [
 
   <div class="atendio-wrap"><?= htmlspecialchars($datos_footer['atendio']) ?></div>
 
-  <div class="banda-bot"></div>
-</div>
+</div><!-- /hoja posterior -->
 
 </body>
 </html>
