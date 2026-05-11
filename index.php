@@ -6,6 +6,7 @@
     <title>Alcaldía Municipal — MUNIFY</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
     <style>
         :root {
             --color-1: #40FFDC;
@@ -30,11 +31,10 @@
         }
         .nav-brand { display: flex; align-items: center; gap: 0.75rem; text-decoration: none; }
         .nav-logo {
-            width: 45px; height: auto;
+            width: 160px; height: auto;
             display: flex; align-items: center; justify-content: center;
-            overflow: hidden;
         }
-        .nav-logo img { width: 100%; height: 100%; object-fit: cover; }
+        .nav-logo img { width: 100%; height: auto; object-fit: contain; }
         .nav-name {
             font-family: 'Playfair Display', serif;
             font-size: 1.1rem; font-weight: 700;
@@ -304,7 +304,7 @@
 <!-- NAVBAR -->
 <nav>
     <a href="#" class="nav-brand">
-        <img src="assets/Img/logo_munify/logo_negativo.png" alt="Munify Logo" style="height: 40px; width: auto;">
+        <img src="assets/Img/logo_munify/logo_negativo.png?v=<?= time() ?>" alt="Munify Logo" style="height: 45px; width: auto;">
     </a>
     <button class="hamburger" id="hamburger-btn" aria-label="Menú">
         <i class="fas fa-bars" id="ham-icon"></i>
@@ -518,7 +518,6 @@
     </div>
     <p class="copy">&copy; <?= date('Y') ?> Alcaldía Municipal. Todos los derechos reservados.</p>
 </footer>
-
 <script src="assets/Js/principal.js"></script>
 
 </body>

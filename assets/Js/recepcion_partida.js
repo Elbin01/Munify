@@ -4,7 +4,7 @@ $(document).ready(function() {
 
     function cargarUltimasPartidas() {
         $.ajax({
-            url: '../controller/api_partidas_recientes.php',
+            url: '../controller/partidas_recientes_controller.php',
             type: 'GET',
             dataType: 'json',
             success: function(data) {
@@ -58,7 +58,7 @@ $(document).ready(function() {
 
         // Petición AJAX al servidor
         $.ajax({
-            url: '../controller/api_buscar_ciudadano.php',
+            url: '../controller/buscar_ciudadano_controller.php',
             type: 'GET',
             data: { q: query },
             dataType: 'json',
@@ -135,7 +135,7 @@ $(document).ready(function() {
         }
 
         $.ajax({
-            url: '../controller/api_guardar_ciudadano.php',
+            url: '../controller/guardar_ciudadano_controller.php',
             type: 'POST',
             data: data,
             dataType: 'json',
@@ -177,7 +177,7 @@ $(document).ready(function() {
         }
 
         $.ajax({
-            url: '../controller/api_guardar_partida.php',
+            url: '../controller/guardar_partida_controller.php',
             type: 'POST',
             data: data,
             dataType: 'json',

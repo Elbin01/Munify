@@ -14,6 +14,8 @@ $totalPartidas = $partidaModel->contarPartidas();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard - Munify</title>
+    <!-- Fonts -->
+    <?php include 'layouts/fonts.php'; ?>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Bootstrap Icons -->
@@ -21,6 +23,7 @@ $totalPartidas = $partidaModel->contarPartidas();
     <!-- Custom CSS -->
     <link rel="stylesheet" href="../assets/Css/index.css">
     <link rel="stylesheet" href="../assets/Css/sidebar.css">
+    <link rel="stylesheet" href="../assets/Css/footer.css">
     <style>
         body {
             width: 100%;
@@ -34,11 +37,18 @@ $totalPartidas = $partidaModel->contarPartidas();
             background-color: var(--bg-light);
         }
         .main-content {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;  
             flex: 1;
             overflow-y: auto;
             overflow-x: hidden;
             background-color: var(--bg-light);
         }
+
+        .main-content > .container-fluid {
+    flex: 1;
+}
         .stat-card {
             border: none;
             border-radius: 12px;
@@ -99,7 +109,7 @@ $totalPartidas = $partidaModel->contarPartidas();
                 <div class="col-12 col-md-4">
                     <div class="card stat-card h-100">
                         <div class="card-body d-flex align-items-center">
-                            <div class="stat-icon bg-success-soft me-3">
+                            <div class="stat-icon bg-primary-soft me-3">
                                 <i class="bi bi-calendar-check-fill"></i>
                             </div>
                             <div>
@@ -112,7 +122,7 @@ $totalPartidas = $partidaModel->contarPartidas();
                 <div class="col-12 col-md-4">
                     <div class="card stat-card h-100">
                         <div class="card-body d-flex align-items-center">
-                            <div class="stat-icon bg-warning-soft me-3">
+                            <div class="stat-icon bg-primary-soft me-3">
                                 <i class="bi bi-file-earmark-text-fill"></i>
                             </div>
                             <div>
@@ -179,7 +189,7 @@ $totalPartidas = $partidaModel->contarPartidas();
                             <div class="d-flex align-items-start mb-3 pb-3 border-bottom">
                                 <div class="bg-primary-soft p-2 rounded me-3 text-center" style="min-width: 55px;">
                                     <div class="fw-bold" style="font-size: 1.1rem; line-height: 1;">12</div>
-                                    <small class="text-muted" style="font-size: 0.75rem;">MAY</small>
+                                    <small style="font-size: 0.75rem; opacity: 0.8;">MAY</small>
                                 </div>
                                 <div>
                                     <h6 class="mb-1 fw-bold" style="font-size: 0.95rem;">Carnet de Minoridad</h6>
@@ -188,9 +198,9 @@ $totalPartidas = $partidaModel->contarPartidas();
                             </div>
                             
                             <div class="d-flex align-items-start mb-3 pb-3 border-bottom">
-                                <div class="bg-success-soft p-2 rounded me-3 text-center" style="min-width: 55px;">
+                                <div class="bg-primary-soft p-2 rounded me-3 text-center" style="min-width: 55px;">
                                     <div class="fw-bold" style="font-size: 1.1rem; line-height: 1;">12</div>
-                                    <small class="text-muted" style="font-size: 0.75rem;">MAY</small>
+                                    <small style="font-size: 0.75rem; opacity: 0.8;">MAY</small>
                                 </div>
                                 <div>
                                     <h6 class="mb-1 fw-bold" style="font-size: 0.95rem;">Carta de Defunción</h6>
@@ -199,9 +209,9 @@ $totalPartidas = $partidaModel->contarPartidas();
                             </div>
                             
                             <div class="d-flex align-items-start">
-                                <div class="bg-warning-soft p-2 rounded me-3 text-center" style="min-width: 55px;">
+                                <div class="bg-primary-soft p-2 rounded me-3 text-center" style="min-width: 55px;">
                                     <div class="fw-bold" style="font-size: 1.1rem; line-height: 1;">13</div>
-                                    <small class="text-muted" style="font-size: 0.75rem;">MAY</small>
+                                    <small style="font-size: 0.75rem; opacity: 0.8;">MAY</small>
                                 </div>
                                 <div>
                                     <h6 class="mb-1 fw-bold" style="font-size: 0.95rem;">Partida de Nacimiento</h6>
@@ -217,6 +227,7 @@ $totalPartidas = $partidaModel->contarPartidas();
                 </div>
             </div>
             </div>
+            <?php include 'layouts/footer.php'; ?>
         </main>
     </div>
 

@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Partida de Nacimiento - Munify</title>
+    <!-- Fonts -->
+    <?php include 'layouts/fonts.php'; ?>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Bootstrap Icons -->
@@ -12,10 +14,42 @@
     <link rel="stylesheet" href="../assets/Css/index.css">
     <link rel="stylesheet" href="../assets/Css/sidebar.css">
     <link rel="stylesheet" href="../assets/Css/partida.css">
+    <link rel="stylesheet" href="../assets/Css/footer.css">
     <style>
         body { width: 100%; overflow-x: hidden; display: block !important; }
         .dashboard-container { display: flex; width: 100%; min-height: 100vh; background-color: var(--bg-light); }
-        .main-content { flex: 1; overflow-y: auto; overflow-x: hidden; background-color: var(--bg-light); }
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            overflow-x: hidden;
+            overflow-y: auto;
+            background-color: var(--bg-light);
+        }
+        .main-content > .container-fluid {
+            flex: 1;
+        }
+        .btn-asiento {
+            background-color: var(--color-3);
+            color: white !important;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 10px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            font-weight: 600;
+        }
+        .btn-asiento:hover {
+            background-color: var(--color-4);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(28, 49, 102, 0.25);
+            color: white !important;
+        }
+        .btn-asiento:active {
+            transform: translateY(0);
+        }
     </style>
 </head>
 <body>
@@ -25,7 +59,7 @@
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content border-0 shadow">
                 <div class="modal-header" style="background-color: var(--color-3); color: white;">
-                    <h5 class="modal-title"><i class="bi bi-person-plus-fill me-2"></i>Registro de Nuevo Ciudadano</h5>
+                    <h5 class="modal-title"><i class="bi bi-person-plus-fill me-2"></i>Registro de Nuevo Asiento</h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body p-4">
@@ -104,7 +138,7 @@
                 <div class="modal-footer bg-light border-0 mt-3">
                     <button type="button" class="btn btn-secondary px-4" data-bs-dismiss="modal">Cancelar</button>
                     <button type="button" id="btnGuardarCiudadano" class="btn btn-success px-4 fw-bold shadow-sm">
-                        <i class="bi bi-save-fill me-2"></i> Guardar Ciudadano
+                        <i class="bi bi-save-fill me-2"></i> Guardar Asiento
                     </button>
                 </div>
             </div>
@@ -183,8 +217,8 @@
                         <p class="text-muted mb-0">Recepción y emisión de documentos</p>
                     </div>
                     <div>
-                        <button class="btn btn-outline-primary fw-bold shadow-sm" data-bs-toggle="modal" data-bs-target="#modalCiudadano" style="border-color: var(--color-3); color: var(--color-3);">
-                            <i class="bi bi-person-plus-fill me-2"></i> Nuevo Ciudadano
+                        <button class="btn-asiento shadow-sm" data-bs-toggle="modal" data-bs-target="#modalCiudadano">
+                            <i class="bi bi-person-plus-fill me-2"></i> Nuevo Asiento
                         </button>
                     </div>
                 </div>
@@ -257,19 +291,17 @@
                             <div class="mb-3">
                                 <i class="bi bi-exclamation-circle text-danger" style="font-size: 3rem;"></i>
                             </div>
-                            <h4 class="fw-bold text-danger mb-2">Ciudadano no encontrado</h4>
+                            <h4 class="fw-bold text-danger mb-2">Asiento no encontrado</h4>
                             <p class="text-muted mb-4">No existen registros en el sistema para el documento ingresado.</p>
                             <button class="btn btn-danger btn-lg shadow-sm px-4" data-bs-toggle="modal" data-bs-target="#modalCiudadano">
-                                <i class="bi bi-person-plus-fill me-2"></i> Registrar Nuevo Ciudadano
+                                <i class="bi bi-person-plus-fill me-2"></i> Registrar Nuevo Asiento
                             </button>
                         </div>
                     </div>
 
                 </div>
-
-
-
             </div>
+            <?php include 'layouts/footer.php'; ?>
         </main>
     </div>
 
