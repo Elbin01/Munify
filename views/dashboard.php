@@ -1,3 +1,4 @@
+<?php session_start(); ?>
 <?php
 require_once __DIR__ . '/../models/CiudadanoModel.php';
 require_once __DIR__ . '/../models/PartidaModel.php';

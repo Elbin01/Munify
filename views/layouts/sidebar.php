@@ -1,5 +1,7 @@
 <?php
 $current_page = basename($_SERVER['PHP_SELF']);
+$nombre_usuario = $_SESSION['usuario'] ?? 'Usuario';
+$inicial_usuario = strtoupper(substr($nombre_usuario, 0, 1));
 ?>
 <div class="d-flex flex-column flex-shrink-0 p-3 custom-sidebar">
     <a href="principal.php" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none justify-content-center w-100">
@@ -20,13 +22,13 @@ $current_page = basename($_SERVER['PHP_SELF']);
             </a>
         </li>
         <li>
-            <a href="Carnet minoridad.php" class="nav-link <?= $current_page == 'Carnet minoridad.php' ? 'active' : 'text-white' ?>">
+            <a href="recepcion_minoridad.php" class="nav-link <?= $current_page == 'recepcion_minoridad.php' ? 'active' : 'text-white' ?>">
                 <i class="bi bi-person-badge me-2"></i>
                 Carnet Minoridad
             </a>
         </li>
         <li>
-            <a href="CartaDefuncion.php" class="nav-link <?= $current_page == 'CartaDefuncion.php' ? 'active' : 'text-white' ?>">
+            <a href="recepcion_defuncion.php" class="nav-link <?= $current_page == 'recepcion_defuncion.php' ? 'active' : 'text-white' ?>">
                 <i class="bi bi-file-earmark-x me-2"></i>
                 Carta de Defunción
             </a>
@@ -41,8 +43,8 @@ $current_page = basename($_SERVER['PHP_SELF']);
     <hr class="sidebar-divider">
     <div class="dropdown mt-auto">
         <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
-            <div class="user-avatar-placeholder me-2 d-flex align-items-center justify-content-center rounded-circle bg-white text-dark" style="width: 32px; height: 32px; font-weight: bold;">U</div>
-            <strong>Usuario</strong>
+            <div class="user-avatar-placeholder me-2 d-flex align-items-center justify-content-center rounded-circle bg-white text-dark" style="width: 32px; height: 32px; font-weight: bold;"><?= $inicial_usuario ?></div>
+            <strong><?= $nombre_usuario ?></strong>
         </a>
         <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
             <li><a class="dropdown-item" href="#">Configuración</a></li>

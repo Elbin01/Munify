@@ -1,14 +1,13 @@
 /* assets/Css/sidebar.css */
 :root {
-    --color-1: #40FFDC;
-    --color-2: #00A9D4;
-    --color-3: #1C3166;
-    --color-4: #240047;
-    --color-5: #1C0021;
+    --sidebar-bg: #1C3166;
+    --sidebar-hover: rgba(255, 255, 255, 0.1);
+    --sidebar-active: rgba(255, 255, 255, 0.2);
+    --sidebar-text: rgba(255, 255, 255, 0.8);
 }
 
 .custom-sidebar {
-    background-color: var(--color-3);
+    background-color: var(--sidebar-bg);
     color: white;
     box-shadow: 4px 0 15px rgba(0, 0, 0, 0.2);
     position: sticky;
@@ -27,23 +26,36 @@
 }
 
 .custom-sidebar .nav-link {
-    color: rgba(255, 255, 255, 0.85) !important;
-    border-radius: 8px;
-    margin-bottom: 0.5rem;
-    transition: all 0.3s ease;
+    color: var(--sidebar-text) !important;
+    border-radius: 12px;
+    margin-bottom: 0.6rem;
+    padding: 0.8rem 1.2rem;
+    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
     font-weight: 500;
+    display: flex;
+    align-items: center;
 }
 
 .custom-sidebar .nav-link:hover {
-    background: rgba(255, 255, 255, 0.1);
+    background: var(--sidebar-hover);
     color: white !important;
-    transform: translateX(5px);
+    transform: translateX(8px);
 }
 
 .custom-sidebar .nav-link.active {
-    background: rgba(255, 255, 255, 0.2) !important;
+    background: var(--sidebar-active) !important;
     color: white !important;
-    font-weight: 600;
+    font-weight: 700;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.custom-sidebar .nav-link i {
+    font-size: 1.2rem;
+    transition: transform 0.3s ease;
+}
+
+.custom-sidebar .nav-link:hover i {
+    transform: scale(1.1);
 }
 
 .custom-sidebar .nav-link.active i {
@@ -64,11 +76,11 @@
 }
 
 .custom-sidebar .dropdown-menu-dark {
-    background-color: var(--color-3);
+    background-color: var(--sidebar-bg);
     border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .custom-sidebar .dropdown-item:hover {
-    background-color: var(--color-4);
+    background-color: rgba(255, 255, 255, 0.1);
     color: white;
 }

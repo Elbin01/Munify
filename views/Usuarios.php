@@ -1,3 +1,4 @@
+<?php session_start(); ?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -5,8 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Munify - Gestión de Usuarios</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <link rel="stylesheet" href="../assets/Css/components.css">
+    <link rel="stylesheet" href="../assets/Css/sidebar.css">
     <style>
         :root {
             --color-1: #1C3166;
@@ -14,26 +18,35 @@
             --color-3: #FFFFFF;
             --color-4: #000000;
             --color-5: #FFFFFF;
+            --bg-light: #f4f7fb;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
         body { 
             font-family: 'Poppins', sans-serif; 
-            background: var(--color-5); 
+            background: var(--bg-light); 
             color: var(--color-4);
             min-height: 100vh;
+            display: block !important;
         }
 
-        .app-container {
+        .dashboard-container {
             display: flex;
             width: 100%;
             min-height: 100vh;
+            background-color: var(--bg-light);
         }
 
         /* ════════ MAIN CONTENT ════════ */
         .main-content {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;  
             flex: 1;
+            overflow-y: auto;
+            overflow-x: hidden;
+            background-color: var(--bg-light);
             padding: 2.5rem;
         }
 
@@ -195,21 +208,8 @@
 </head>
 <body>
 
-<div class="app-container">
-    <aside class="sidebar">
-        <div class="sidebar-header">
-            <div class="sidebar-logo">
-                <img src="../assets/Img/MUNIFY.jpeg" alt="Logo">
-            </div>
-            <h2>MUNIFY</h2>
-        </div>
-        <nav class="sidebar-nav">
-            <a href="../index.php"><i class="fas fa-home"></i> Inicio</a>
-            <a href="SolicitudCitas.php"><i class="fas fa-file-signature"></i> Trámites</a>
-            <a href="#" class="active"><i class="fas fa-users-cog"></i> Usuarios</a>
-            <a href="login.php"><i class="fas fa-sign-out-alt"></i> Salir</a>
-        </nav>
-    </aside>
+<div class="dashboard-container">
+    <?php include 'layouts/sidebar.php'; ?>
 
     <main class="main-content">
         <div class="header-section">
@@ -291,6 +291,8 @@
 <!-- NOTIFICATIONS CONTAINER -->
 <div id="notificationContainer" class="notification-container"></div>
 
+<!-- Bootstrap JS Bundle -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script src="../assets/Js/notifications.js"></script>
 <script>
     const usersBody = document.getElementById('usersBody');
