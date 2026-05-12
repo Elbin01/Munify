@@ -72,23 +72,28 @@ $datos_footer = [
         }
 
         /* Botón Flotante */
-        .btn-imprimir {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            padding: 12px 24px;
-            background: var(--negro);
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-family: 'Cinzel', serif;
-            font-size: 0.8rem;
-            z-index: 1000;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-            transition: 0.3s;
-        }
-        .btn-imprimir:hover { background: var(--azul-oscuro); }
+      .btn-imprimir {
+      position: fixed;
+      top: 1rem;
+      right: 1rem;
+      padding: 0.4rem 0.9rem;
+      background: var(--azul-oscuro);
+      color: var(--blanco);
+      border: 2px solid var(--negro);
+      border-radius: 3px;
+      cursor: pointer;
+      font-family: 'Cinzel', serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.08em;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+      z-index: 999;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: background 0.2s;
+    }
+
+    .btn-imprimir:hover { background: var(--negro); }
 
         .cara-label {
             font-family: 'Cinzel', serif;
@@ -125,7 +130,7 @@ $datos_footer = [
         /* Cuerpo Frontal */
         .frontal-body { padding: 15px 20px; display: flex; gap: 20px; }
         .foto-wrap { width: 130px; text-align: center; }
-        .foto-box { width: 130px; height: 160px; border: 2px solid #000; background: #eee; margin-bottom: 5px; overflow: hidden; }
+        .foto-box { width: 130px; height: 160px; border: 1px solid var(--gris-linea); background: #eee; margin-bottom: 5px; overflow: hidden; }
         .foto-box img { width: 100%; height: 100%; object-fit: cover; }
         .numero-carnet { font-weight: bold; font-family: 'Cinzel'; font-size: 0.8rem; }
 
@@ -139,8 +144,7 @@ $datos_footer = [
         .sello-wrap { text-align: center; }
         .firma-linea-sm { width: 140px; border-bottom: 1px solid #000; margin-bottom: 5px; }
         .firma-label { font-family: 'Cinzel'; font-size: 0.6rem; }
-        .sello-circulo { width: 65px; height: 65px; border: 2px solid #000; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.5rem; font-family: 'Cinzel'; }
-
+        .sello-circulo { width: 65px; height: 65px; border: 1px solid var(--gris-linea); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.5rem; font-family: 'Cinzel'; }
         /* Reverso */
         .reverso-body { padding: 15px 20px; display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
         .full-col { grid-column: 1 / -1; }
@@ -179,9 +183,6 @@ $datos_footer = [
         <div class="encabezado-texto">
             <h1>REPÚBLICA DE EL SALVADOR<br>DOCUMENTO DE IDENTIDAD PERSONAL<br><?= strtoupper($datos_municipio['alcaldia']) ?></h1>
             <div class="titulo-doc">Carnet de Minoridad</div>
-        </div>
-        <div class="logo-wrap">
-            <div style="font-size: 8px; text-align: center; padding: 5px;">LOGO ALCALDÍA</div>
         </div>
     </div>
 
@@ -249,7 +250,7 @@ $datos_footer = [
             icon: 'question',
             showCancelButton: true,
             confirmButtonColor: '#003366',
-            cancelButtonColor: '#d33',
+              cancelButtonColor: 'rgb(175, 158, 158)',
             confirmButtonText: 'Sí, imprimir',
             cancelButtonText: 'Cancelar'
         }).then((result) => {

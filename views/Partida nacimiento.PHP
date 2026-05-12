@@ -89,17 +89,19 @@ $datos_footer = [
 
     /* ── Hoja: ocupa exactamente el ancho visible sin scroll ── */
    .hoja {
-  width: 850px;
-  min-height: auto;
-  margin: 20px auto;
+  width: 100%;
+  max-width: 100%;
+  min-height: 100vh;
+  margin: 0;
   background: var(--blanco);
-  border: 1px solid var(--gris-linea);
-  box-shadow: 0 0 15px rgba(0,0,0,0.08);
+  border: none;
+  box-shadow: none;
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
   overflow: hidden;
-  border-radius: 4px;
+  border-radius: 0;
+
 }
 
     /* ── Banda decorativa ── */
@@ -337,7 +339,7 @@ $datos_footer = [
 
     .btn-imprimir:hover { background: var(--negro); }
 
-    /* ── Responsivo ── */
+   /* ── Responsivo ── */
     @media (max-width: 600px) {
       .encabezado {
         flex-direction: column;
@@ -368,25 +370,74 @@ $datos_footer = [
 
     /* ── Print ── */
     @media print {
-       body{
-    background: white;
-    padding: 0;
-  }
+      @page {
+        size: A4 portrait;
+        margin: 0;
+      }
 
-  .hoja{
-    width: 100%;
-    margin: 0;
-    border: none;
-    box-shadow: none;
-    border-radius: 0;
-  }
+      *, *::before, *::after {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+
+      body {
+        background: white;
+        padding: 0;
+        margin: 0;
+      }
 
       .btn-imprimir { display: none; }
 
+      .hoja {
+        width: 100%;
+        margin: 0;
+        border: none;
+        box-shadow: none;
+        border-radius: 0;
+        min-height: unset;
+        padding: 0.5cm;
+      }
+
+      .encabezado {
+        padding: 0.4rem 0.8rem;
+        gap: 0.6rem;
+      }
+
+      .logo-wrap {
+        width: 50px;
+        height: 50px;
+      }
+
+      .encabezado-texto h1    { font-size: 0.72rem; }
+      .encabezado-texto .titulo-doc { font-size: 0.9rem; }
+      .encabezado-texto .subtitulo  { font-size: 0.65rem; }
+
+      .cuerpo {
+        padding: 0.4rem 0.8rem;
+        gap: 0.4rem;
+      }
+
+      .card-header {
+        padding: 0.2rem 0.8rem;
+        font-size: 0.6rem;
+      }
+
+      .card-body { padding: 0.4rem 0.8rem; }
+
+      .campos { gap: 0.25rem 1rem; }
+
+      .campo label  { font-size: 0.52rem; }
+      .campo .valor { font-size: 0.72rem; }
+
       .card { page-break-inside: avoid; }
 
-      .cuerpo { padding: 0.8rem 1.5rem; }
-      .footer { padding: 0.8rem 1.5rem; }
+      .footer { padding: 0.4rem 0.8rem 0.5rem; }
+
+      .firmas       { gap: 1rem; margin-bottom: 0.5rem; }
+      .firma-linea  { height: 6px; }
+      .firma-titulo { font-size: 0.52rem; }
+      .firma-nombre { font-size: 0.65rem; }
+      .atendio-wrap { font-size: 0.6rem; padding-top: 0.3rem; }
     }
   </style>
 </head>
@@ -580,7 +631,7 @@ function confirmarImpresion(){
         icon: 'question',
         showCancelButton: true,
         confirmButtonColor: '#003366',
-        cancelButtonColor: '#d33',
+        cancelButtonColor: 'rgb(175, 158, 158)',
         confirmButtonText: 'Sí, imprimir',
         cancelButtonText: 'Cancelar'
 
