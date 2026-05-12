@@ -53,6 +53,7 @@ $datos_footer = [
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Partida de Nacimiento – <?= htmlspecialchars($datos_nacido['nombre']) ?></title>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap');
 
@@ -77,26 +78,29 @@ $datos_footer = [
     }
 
     body {
-      font-family: 'EB Garamond', Georgia, serif;
-      background: var(--blanco);
-      color: var(--texto);
-      display: block;
-      margin: 0;
-      padding: 0;
-      overflow-x: hidden;
-      width: 100vw;
-    }
+  font-family: 'EB Garamond', Georgia, serif;
+  background: #e9edf2;
+  color: var(--texto);
+  margin: 0;
+  padding: 20px;
+  overflow-x: hidden;
+}
+    
 
     /* ── Hoja: ocupa exactamente el ancho visible sin scroll ── */
-    .hoja {
-      width: 100vw;
-      min-height: 100vh;
-      background: var(--blanco);
-      border: none;
-      display: flex;
-      flex-direction: column;
-      box-sizing: border-box;
-    }
+   .hoja {
+  width: 850px;
+  min-height: auto;
+  margin: 20px auto;
+  background: var(--blanco);
+  border: 1px solid var(--gris-linea);
+  box-shadow: 0 0 15px rgba(0,0,0,0.08);
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  overflow: hidden;
+  border-radius: 4px;
+}
 
     /* ── Banda decorativa ── */
     .banda-top,
@@ -364,14 +368,18 @@ $datos_footer = [
 
     /* ── Print ── */
     @media print {
-      body { background: none; }
+       body{
+    background: white;
+    padding: 0;
+  }
 
-      .hoja {
-        box-shadow: none;
-        border-color: #999;
-        width: 100%;
-        min-height: auto;
-      }
+  .hoja{
+    width: 100%;
+    margin: 0;
+    border: none;
+    box-shadow: none;
+    border-radius: 0;
+  }
 
       .btn-imprimir { display: none; }
 
@@ -549,7 +557,54 @@ $datos_footer = [
 
 </div><!-- /hoja -->
 
-<button class="btn-imprimir" onclick="window.print()">&#128438; Imprimir</button>
+<button class="btn-imprimir" onclick="confirmarImpresion()">
+  &#128438; Imprimir
+</button>
 
+<script>
+
+const Toast = Swal.mixin({
+    toast: true,
+    position: 'top-end',
+    showConfirmButton: false,
+    timer: 2000,
+    timerProgressBar: true
+});
+
+function confirmarImpresion(){
+
+    Swal.fire({
+
+        title: '¿Imprimir Partida?',
+        text: 'Verifique que toda la información sea correcta.',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#003366',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Sí, imprimir',
+        cancelButtonText: 'Cancelar'
+
+    }).then((result) => {
+
+        if(result.isConfirmed){
+
+            Toast.fire({
+                icon:'info',
+                title:'Preparando documento...'
+            });
+
+            setTimeout(() => {
+
+                window.print();
+
+            },2000);
+
+        }
+
+    });
+
+}
+
+</script>
 </body>
 </html>
