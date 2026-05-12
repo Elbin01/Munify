@@ -11,34 +11,34 @@ $datos_municipio = [
 ];
 
 $datos_nacido = [
-    'nombre'    => 'María José Rodríguez López',
-    'lugar'     => 'Hospital Nacional de Ilobasco',
-    'hora'      => '03:45 PM',
-    'fecha'     => '14 de abril de 2005',
-    'sexo'      => 'Femenino',
+    'nombre'    => $_POST['p_nombre_inscrito'] ?? 'María José Rodríguez López',
+    'lugar'     => $_POST['p_lugar_nac'] ?? 'Hospital Nacional de Ilobasco',
+    'hora'      => $_POST['p_hora_nac'] ?? '03:45 PM',
+    'fecha'     => $_POST['p_fecha_nac'] ?? '14 de abril de 2005',
+    'sexo'      => $_POST['p_sexo'] ?? 'Femenino',
 ];
 
 $datos_padre = [
-    'nombre'    => 'Carlos Alberto Rodríguez Martínez',
+    'nombre'    => $_POST['p_nombre_padre'] ?? 'Carlos Alberto Rodríguez Martínez',
     'dui'       => '01234567-8',
-    'edad'      => '32',
+    'edad'      => $_POST['p_edad_padre'] ?? '32',
     'domicilio' => 'Colonia El Siete, Calle Principal #12, Ilobasco',
-    'profesion' => 'Mecánico Automotriz',
+    'profesion' => $_POST['p_profesion_padre'] ?? 'Mecánico Automotriz',
 ];
 
 $datos_madre = [
-    'nombre'    => 'Ana Sofía López de Rodríguez',
+    'nombre'    => $_POST['p_nombre_madre'] ?? 'Ana Sofía López de Rodríguez',
     'dui'       => '09876543-2',
-    'edad'      => '29',
+    'edad'      => $_POST['p_edad_madre'] ?? '29',
     'domicilio' => 'Colonia El Siete, Calle Principal #12, Ilobasco',
-    'profesion' => 'Maestra de Educación Básica',
+    'profesion' => $_POST['p_profesion_madre'] ?? 'Maestra de Educación Básica',
 ];
 
 $datos_certificacion = [
-    'informante'         => 'Carlos Alberto Rodríguez Martínez',
+    'informante'         => $_POST['p_nombre_padre'] ?? 'Carlos Alberto Rodríguez Martínez',
     'parentesco'         => 'Padre',
     'dui_informante'     => '05647382-9',
-    'fecha_inscripcion'  => '16 de abril de 2005',
+    'fecha_inscripcion'  => date('d de m de Y'),
 ];
 
 $datos_footer = [
