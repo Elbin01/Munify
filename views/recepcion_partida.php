@@ -12,11 +12,11 @@
     <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="../assets/Css/index.css">
-    <link rel="stylesheet" href="../assets/Css/sidebar.css">
-    <link rel="stylesheet" href="../assets/Css/recepcion_partida.css">
-    <link rel="stylesheet" href="../assets/Css/footer.css">
-    <link rel="stylesheet" href="../assets/Css/panel_ayuda.css">
+    <link rel="stylesheet" href="../assets/Css/index.css?v=<?= time() ?>">
+    <link rel="stylesheet" href="../assets/Css/sidebar.css?v=<?= time() ?>">
+    <link rel="stylesheet" href="../assets/Css/recepcion_partida.css?v=<?= time() ?>">
+    <link rel="stylesheet" href="../assets/Css/footer.css?v=<?= time() ?>">
+    <link rel="stylesheet" href="../assets/Css/panel_ayuda.css?v=<?= time() ?>">
 </head>
 <body>
 
@@ -78,7 +78,7 @@
                                             <label class="fw-bold form-label text-dark small"><i class="bi bi-person me-1"></i> Padre</label>
                                             <div class="input-group mb-2 shadow-sm">
                                                 <input type="text" class="form-control form-control-sm border-0 dui-mask" placeholder="Buscar DUI..." id="duiPadre" maxlength="10">
-                                                <button class="btn btn-sm text-white fw-bold" type="button" style="background-color: var(--color-3);">Buscar</button>
+                                                <button id="btnBuscarPadre" class="btn btn-sm text-white fw-bold" type="button" style="background-color: var(--color-3);">Buscar</button>
                                             </div>
                                             <input type="text" id="regNombrePadre" class="form-control form-control-sm border-secondary-subtle shadow-none" placeholder="Nombre completo">
                                         </div>
@@ -91,7 +91,7 @@
                                             <label class="fw-bold form-label text-dark small"><i class="bi bi-person me-1"></i> Madre</label>
                                             <div class="input-group mb-2 shadow-sm">
                                                 <input type="text" class="form-control form-control-sm border-0 dui-mask" placeholder="Buscar DUI..." id="duiMadre" maxlength="10">
-                                                <button class="btn btn-sm text-white fw-bold" type="button" style="background-color: var(--color-3);">Buscar</button>
+                                                <button id="btnBuscarMadre" class="btn btn-sm text-white fw-bold" type="button" style="background-color: var(--color-3);">Buscar</button>
                                             </div>
                                             <input type="text" id="regNombreMadre" class="form-control form-control-sm border-secondary-subtle shadow-none" placeholder="Nombre completo">
                                         </div>
@@ -226,15 +226,21 @@
         <!-- Main Content -->
         <main class="main-content">
             <div class="container-fluid py-4 px-4">
-                <div class="d-flex justify-content-between align-items-center mb-5">
+                <!-- Page Header -->
+                <div class="d-flex justify-content-between align-items-center mb-4">
                     <div>
-                        <h2 class="fw-bold mb-0" style="color: var(--color-3);">
-                            Trámite: Partida de Nacimiento
-                            <button class="btn btn-outline-secondary rounded-circle shadow-sm help-btn" data-bs-toggle="offcanvas" data-bs-target="#ayudaMunify">
+                        <h2 class="fw-bold mb-1" style="color: var(--color-3);">
+                            Partida de Nacimiento
+                            <button class="btn btn-sm btn-outline-secondary rounded-circle shadow-sm ms-2" data-bs-toggle="offcanvas" data-bs-target="#ayudaMunify" style="width: 24px; height: 24px; padding: 0; font-size: 0.75rem;">
                                 <i class="bi bi-info-lg"></i>
                             </button>
                         </h2>
-                        <p class="text-muted mb-0">Recepción y emisión de documentos</p>
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb mb-0">
+                                <li class="breadcrumb-item"><a href="dashboard.php" class="text-decoration-none text-muted small">Dashboard</a></li>
+                                <li class="breadcrumb-item active fw-semibold small" style="color: var(--color-3);">Partida de Nacimiento</li>
+                            </ol>
+                        </nav>
                     </div>
                     <div>
                         <button class="btn-asiento shadow-sm" data-bs-toggle="modal" data-bs-target="#modalCiudadano">
@@ -250,7 +256,7 @@
                         <span class="input-group-text bg-white border-0 text-muted px-4">
                             <i class="bi bi-search"></i>
                         </span>
-                        <input type="text" id="searchInput" class="form-control border-0 ps-0 shadow-none dui-mask" placeholder="Ingrese Nombres, Apellidos o DUI" autofocus autocomplete="off" style="outline: none; box-shadow: none;" maxlength="10">
+                        <input type="text" id="searchInput" class="form-control border-0 ps-0 shadow-none" placeholder="Ingrese Nombres, Apellidos o DUI" autofocus autocomplete="off" style="outline: none; box-shadow: none;">
                         <button class="btn border-0 text-white px-4" type="submit" id="btnBuscar" style="background-color: var(--color-3); font-weight: bold;">Buscar</button>
                     </form>
                 </div>

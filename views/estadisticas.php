@@ -61,9 +61,9 @@ foreach ($diasSemana as $index => $dia) {
     <?php include 'layouts/fonts.php'; ?>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-    <link rel="stylesheet" href="../assets/Css/index.css">
-    <link rel="stylesheet" href="../assets/Css/sidebar.css">
-    <link rel="stylesheet" href="../assets/Css/footer.css">
+    <link rel="stylesheet" href="../assets/Css/index.css?v=<?= time() ?>">
+    <link rel="stylesheet" href="../assets/Css/sidebar.css?v=<?= time() ?>">
+    <link rel="stylesheet" href="../assets/Css/footer.css?v=<?= time() ?>">
     <style>
         .chart-card {
             background: #fff;
@@ -89,13 +89,15 @@ foreach ($diasSemana as $index => $dia) {
         <main class="main-content flex-grow-1">
             <div class="container-fluid py-4 px-4">
                 <div class="d-flex justify-content-between align-items-center mb-4">
-                    <h2 class="fw-bold" style="color: var(--color-3);">Estadísticas Avanzadas</h2>
-                    <nav aria-label="breadcrumb">
-                        <ol class="breadcrumb mb-0">
-                            <li class="breadcrumb-item"><a href="dashboard.php">Inicio</a></li>
-                            <li class="breadcrumb-item active">Estadísticas</li>
-                        </ol>
-                    </nav>
+                    <div>
+                        <h2 class="fw-bold mb-1" style="color: var(--color-3);">Estadísticas Avanzadas</h2>
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb mb-0">
+                                <li class="breadcrumb-item"><a href="dashboard.php" class="text-decoration-none text-muted small">Dashboard</a></li>
+                                <li class="breadcrumb-item active fw-semibold small" style="color: var(--color-3);">Estadísticas</li>
+                            </ol>
+                        </nav>
+                    </div>
                 </div>
 
                 <div class="row g-4">

@@ -1,11 +1,22 @@
 $(document).ready(function() {
     // Inicializar DataTable
+    // Inicializar DataTable
     const table = $('#tablaCitas').DataTable({
         "ajax": {
             "url": "../controller/obtener_citas_controller.php",
             "dataSrc": ""
         },
         "columns": [
+            {
+                "data": null,
+                "orderable": false,
+                "render": function(data, type, row) {
+                    if (row.estado === 'pendiente') {
+                        return `<input type="checkbox" class="form-check-input row-checkbox" value="${row.id_cita}">`;
+                    }
+                    return '';
+                }
+            },
             { "data": "id_cita" },
             { 
                 "data": "usuario_nombre",
@@ -27,12 +38,19 @@ $(document).ready(function() {
             },
             {
                 "data": null,
+                "orderable": false,
+                "className": 'text-end',
                 "render": function(data, type, row) {
                     return `
-                        <div class="d-flex gap-2">
+                        <div class="d-flex gap-1 justify-content-end">
                             <button class="btn btn-sm btn-outline-primary" onclick="verDetalle(${row.id_cita})" title="Ver Detalles">
-                                <i class="bi bi-eye-fill"></i> Revisar
+                                <i class="bi bi-eye"></i>
                             </button>
+                            ${row.estado === 'pendiente' ? `
+                            <button class="btn btn-sm btn-outline-success" onclick="cambiarEstado(${row.id_cita}, 'confirmada')" title="Aceptar">
+                                <i class="bi bi-check-lg"></i>
+                            </button>
+                            ` : ''}
                         </div>
                     `;
                 }
@@ -44,16 +62,78 @@ $(document).ready(function() {
         "search": {
             "search": "Pendiente"
         },
-        "order": [[3, "asc"], [4, "asc"]],
+        "order": [[4, "asc"], [5, "asc"]],
         "dom": '<"row mb-3"<"col-md-6"l><"col-md-6"f>>rt<"row mt-3"<"col-md-6"i><"col-md-6"p>>',
         "initComplete": function(settings, json) {
-            $('.dataTables_filter input').addClass('form-control shadow-none border-secondary-subtle');
-            $('.dataTables_filter input').attr('placeholder', 'Buscar en toda la tabla...');
-            $('.dataTables_length select').addClass('form-select shadow-none border-secondary-subtle');
+            $('.dataTables_filter input').addClass('form-control form-control-sm shadow-none border-secondary-subtle');
+            $('.dataTables_filter input').attr('placeholder', 'Buscar...');
+            $('.dataTables_length select').addClass('form-select form-select-sm shadow-none border-secondary-subtle');
         }
     });
 
-    table.column(5).search($('#filterEstado').val()).draw();
+    // Seleccionar todos
+    $('#selectAll').on('change', function() {
+        $('.row-checkbox').prop('checked', this.checked);
+    });
+
+    // Aceptar Seleccionadas
+    $('#btnAceptarSeleccionadas').on('click', function() {
+        const selected = $('.row-checkbox:checked').map(function() {
+            return $(this).val();
+        }).get();
+
+        if (selected.length === 0) {
+            alert('Por favor, seleccione al menos una cita pendiente.');
+            return;
+        }
+
+        if (confirm(`¿Está seguro de que desea aceptar las ${selected.length} citas seleccionadas?`)) {
+            procesarBatch(selected, 'confirmada');
+        }
+    });
+
+    // Aceptar Todas (las que están en la vista actual / filtradas)
+    $('#btnAceptarTodas').on('click', function() {
+        const allIds = table.rows({ filter: 'applied' }).data().toArray()
+            .filter(row => row.estado === 'pendiente')
+            .map(row => row.id_cita);
+
+        if (allIds.length === 0) {
+            alert('No hay citas pendientes para aceptar en la vista actual.');
+            return;
+        }
+
+        if (confirm(`¿Está seguro de que desea aceptar TODAS las citas pendientes (${allIds.length})?`)) {
+            procesarBatch(allIds, 'confirmada');
+        }
+    });
+
+    // Función para procesar en lote
+    function procesarBatch(ids, nuevoEstado) {
+        // En un entorno real, enviaríamos un solo request con el array de IDs.
+        // Aquí lo haremos uno por uno por simplicidad si el backend no soporta arrays,
+        // pero lo ideal es un endpoint bulk.
+        
+        let promesas = ids.map(id => {
+            return $.ajax({
+                url: '../controller/actualizar_estado_cita.php',
+                type: 'POST',
+                data: { id: id, estado: nuevoEstado },
+                dataType: 'json'
+            });
+        });
+
+        Promise.all(promesas).then(() => {
+            alert('Proceso completado exitosamente.');
+            table.ajax.reload();
+            $('#selectAll').prop('checked', false);
+        }).catch(() => {
+            alert('Hubo un error al procesar algunas solicitudes.');
+            table.ajax.reload();
+        });
+    }
+
+    table.column(6).search($('#filterEstado').val()).draw();
 
     // Función para ver detalle en modal
     window.verDetalle = function(id) {
@@ -102,17 +182,17 @@ $(document).ready(function() {
 
     // Filtros personalizados
     $('#filterTramite').on('change', function() {
-        table.column(2).search(this.value).draw();
+        table.column(3).search(this.value).draw();
     });
 
     $('#filterEstado').on('change', function() {
-        table.column(5).search(this.value).draw();
+        table.column(6).search(this.value).draw();
     });
 
     $('#btnLimpiarFiltros').on('click', function() {
         $('#filterTramite').val('');
         $('#filterEstado').val('pendiente');
-        table.column(2).search('').column(5).search('pendiente').draw();
+        table.column(3).search('').column(6).search('pendiente').draw();
     });
 
     // Función para cambiar estado

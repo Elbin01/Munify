@@ -26,10 +26,10 @@ $citasSolicitadas = $citaModel->obtenerCitasSolicitadas(3);
     <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="../assets/Css/index.css">
-    <link rel="stylesheet" href="../assets/Css/sidebar.css">
-    <link rel="stylesheet" href="../assets/Css/footer.css">
-    <link rel="stylesheet" href="../assets/Css/dashboard.css">
+    <link rel="stylesheet" href="../assets/Css/index.css?v=<?= time() ?>">
+    <link rel="stylesheet" href="../assets/Css/sidebar.css?v=<?= time() ?>">
+    <link rel="stylesheet" href="../assets/Css/footer.css?v=<?= time() ?>">
+    <link rel="stylesheet" href="../assets/Css/dashboard.css?v=<?= time() ?>">
 </head>
 <body>
     <div class="dashboard-container">
@@ -40,9 +40,16 @@ $citasSolicitadas = $citaModel->obtenerCitasSolicitadas(3);
         <main class="main-content">
             <div class="container-fluid py-4 px-4">
                 <div class="d-flex justify-content-between align-items-center mb-4">
-                    <h2 class="fw-bold" style="color: var(--color-3);">Panel de Control</h2>
-                    <div class="user-info">
-                        <span class="text-muted">Bienvenido, <strong>Administrador</strong></span>
+                    <div>
+                        <h2 class="fw-bold mb-1" style="color: var(--color-3);">Panel de Control</h2>
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb mb-0">
+                                <li class="breadcrumb-item active fw-semibold small" style="color: var(--color-3);">Dashboard</li>
+                            </ol>
+                        </nav>
+                    </div>
+                    <div class="user-info text-end">
+                        <span class="text-muted small">Bienvenido, <strong>Administrador</strong></span>
                     </div>
                 </div>
 

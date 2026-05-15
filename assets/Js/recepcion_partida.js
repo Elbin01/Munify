@@ -168,6 +168,46 @@ $(document).ready(function() {
         $(this).val(val);
     });
 
+    // Buscar Padre por DUI
+    $('#btnBuscarPadre').on('click', function() {
+        const dui = $('#duiPadre').val().trim();
+        if (dui.length < 10) return alert('DUI inválido');
+        
+        $.ajax({
+            url: '../controller/buscar_ciudadano_controller.php',
+            type: 'GET',
+            data: { q: dui },
+            dataType: 'json',
+            success: function(data) {
+                if (data && data.length > 0) {
+                    $('#regNombrePadre').val(data[0].nombres + ' ' + data[0].apellidos);
+                } else {
+                    alert('Padre no encontrado');
+                }
+            }
+        });
+    });
+
+    // Buscar Madre por DUI
+    $('#btnBuscarMadre').on('click', function() {
+        const dui = $('#duiMadre').val().trim();
+        if (dui.length < 10) return alert('DUI inválido');
+        
+        $.ajax({
+            url: '../controller/buscar_ciudadano_controller.php',
+            type: 'GET',
+            data: { q: dui },
+            dataType: 'json',
+            success: function(data) {
+                if (data && data.length > 0) {
+                    $('#regNombreMadre').val(data[0].nombres + ' ' + data[0].apellidos);
+                } else {
+                    alert('Madre no encontrada');
+                }
+            }
+        });
+    });
+
     // Generar e imprimir partida
     $('#btnImprimirPartida').on('click', function() {
         if (!window.selectedCiudadanoId) {

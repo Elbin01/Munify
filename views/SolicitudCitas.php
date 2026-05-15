@@ -190,9 +190,14 @@ $tipos = $tramiteModel->obtenerTiposTramite();
         </a>
 
         <div class="modal-style-card">
-            <div class="modal-style-header">
-                <i class="bi bi-file-earmark-plus fs-3"></i>
-                <h5>SOLICITUD DE TRÁMITE INSTITUCIONAL</h5>
+            <div class="modal-style-header d-flex justify-content-between align-items-center">
+                <div class="d-flex align-items-center gap-3">
+                    <i class="bi bi-file-earmark-plus fs-3"></i>
+                    <h5>SOLICITUD DE TRÁMITE INSTITUCIONAL</h5>
+                </div>
+                <button type="button" class="btn btn-light rounded-circle p-0 d-flex align-items-center justify-content-center shadow-sm" data-bs-toggle="modal" data-bs-target="#modalAyudaHorarios" style="width: 32px; height: 32px; background-color: rgba(255,255,255,0.9); border: none;">
+                    <i class="bi bi-info-lg" style="color: var(--munify-blue); font-size: 1.1rem;"></i>
+                </button>
             </div>
 
         <div class="p-4 p-md-5">
@@ -252,6 +257,40 @@ $tipos = $tramiteModel->obtenerTiposTramite();
         </div>
     </div>
 </div>
+
+    <!-- Modal de Ayuda de Horarios -->
+    <div class="modal fade" id="modalAyudaHorarios" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content shadow-lg border-0" style="border-radius: 20px;">
+                <div class="modal-header border-0 pb-0 justify-content-center pt-4">
+                    <i class="bi bi-clock-history" style="color: var(--munify-blue); font-size: 3rem;"></i>
+                </div>
+                <div class="modal-body text-center p-4">
+                    <h5 class="fw-bold mb-3" style="color: var(--munify-blue);">Horarios de Atención</h5>
+                    <p class="text-muted">Para garantizar su atención, por favor tome en cuenta los siguientes horarios oficiales:</p>
+                    
+                    <div class="bg-light p-3 rounded-3 mb-3">
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="fw-bold">Días:</span>
+                            <span>Lunes a Viernes</span>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <span class="fw-bold">Horario:</span>
+                            <span>08:00 AM - 04:00 PM</span>
+                        </div>
+                    </div>
+                    
+                    <p class="small text-muted">
+                        <i class="bi bi-info-circle me-1"></i> No se procesan solicitudes los fines de semana o fuera de la jornada laboral.
+                    </p>
+                    
+                    <button type="button" class="btn btn-primary w-100 fw-bold mt-3 py-2" data-bs-dismiss="modal" style="background-color: var(--munify-blue); border-radius: 12px;">
+                        ENTENDIDO
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- JS Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
