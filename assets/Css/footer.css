@@ -1,0 +1,152 @@
+/* MUNIFY FOOTER STYLES */
+.munify-footer {
+    background: #1C3166;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 1.6rem 2.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+    position: relative;
+    font-family: "Outfit", sans-serif;
+    width: 100%;
+    box-sizing: border-box;
+    margin: 0;
+}
+
+.munify-footer::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: -1px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, #4a4a4a, transparent);
+}
+
+.munify-footer .footer-brand {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.munify-footer .footer-brand-name {
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--q-white, #ffffff);
+}
+
+.munify-footer .footer-copy,
+.munify-footer .footer-status,
+.munify-footer .footer-link,
+.munify-footer .footer-version {
+    font-size: 0.7rem;
+}
+
+.munify-footer .footer-copy,
+.munify-footer .footer-status,
+.munify-footer .footer-link {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.munify-footer .footer-status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.munify-footer .footer-status-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #40FFDC;
+    box-shadow: 0 0 8px rgba(64, 255, 220, 0.5);
+}
+
+.munify-footer .footer-right {
+    display: flex;
+    align-items: center;
+    gap: 1.4rem;
+    flex-wrap: wrap;
+}
+
+.munify-footer .footer-version {
+    color: rgba(255, 255, 255, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 3px 8px;
+    border-radius: 4px;
+}
+
+.munify-footer .footer-developer-text {
+    font-size: 0.62rem;
+    color: rgba(255, 255, 255, 0.5);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: 500;
+}
+
+.munify-footer .footer-developer-brand {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    opacity: 0.4;
+    filter: grayscale(100%);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+}
+
+.munify-footer .footer-developer-logo {
+    height: 22px;
+    width: auto;
+}
+
+.munify-footer .footer-developer-name {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--q-white, #ffffff);
+    letter-spacing: 0.02em;
+}
+
+.munify-footer .footer-developer:hover .footer-developer-brand {
+    opacity: 1;
+    filter: grayscale(0%);
+    transform: translateY(-2px);
+}
+
+.munify-footer .footer-developer:hover .footer-developer-name {
+    color: #FFD700;
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.4);
+}
+
+.munify-footer .footer-links {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.munify-footer .footer-link {
+    text-decoration: none;
+}
+
+.munify-footer .footer-link:hover {
+    color: var(--q-white, #ffffff);
+}
+
+/* Removed redundant width and box-sizing */
+
+@media (max-width: 768px) {
+    .munify-footer {
+        padding: 1.2rem;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1.5rem;
+    }
+
+    .munify-footer .footer-right {
+        width: 100%;
+        justify-content: space-between;
+    }
+}

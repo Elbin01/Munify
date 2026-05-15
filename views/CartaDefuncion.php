@@ -1,50 +1,49 @@
 <?php
 // =============================================
-//  DATOS DE EJEMPLO - Reemplazar con tus datos
-//  reales desde tu base de datos o formulario
+//  DATOS DEL MUNICIPIO - Ajusta según tu entorno
 // =============================================
 $datos_municipio = [
-    'alcaldia'      => 'Alcaldía Municipal de Ilobasco',
-    'departamento'  => 'Cabañas',
+    'alcaldia'      => $_POST['alcaldia'] ?? 'Alcaldía Municipal',
+    'departamento'  => $_POST['departamento'] ?? '',
     'pais'          => 'El Salvador',
     'escudo_nacion' => '../assets/Img/escudo.jpeg',
 ];
 
-$datos_nacido = [
-    'nombre'    => $_POST['p_nombre_inscrito'] ?? 'María José Rodríguez López',
-    'lugar'     => $_POST['p_lugar_nac'] ?? 'Hospital Nacional de Ilobasco',
-    'hora'      => $_POST['p_hora_nac'] ?? '03:45 PM',
-    'fecha'     => $_POST['p_fecha_nac'] ?? '14 de abril de 2005',
-    'sexo'      => $_POST['p_sexo'] ?? 'Femenino',
+// =============================================
+//  DATOS DEL FALLECIDO
+// =============================================
+$datos_fallecido = [
+    'nombre'       => $_POST['nombre_fallecido'] ?? '',
+    'dui'          => $_POST['dui_fallecido'] ?? '',
+    'fecha_def'    => $_POST['fecha_defuncion'] ?? '',
+    'hora_def'     => $_POST['hora_defuncion'] ?? '',
+    'nacionalidad' => $_POST['nacionalidad'] ?? 'Salvadoreña',
+    'causa'        => $_POST['causa_fallecimiento'] ?? '',
 ];
 
-$datos_padre = [
-    'nombre'    => $_POST['p_nombre_padre'] ?? 'Carlos Alberto Rodríguez Martínez',
-    'dui'       => '01234567-8',
-    'edad'      => $_POST['p_edad_padre'] ?? '32',
-    'domicilio' => 'Colonia El Siete, Calle Principal #12, Ilobasco',
-    'profesion' => $_POST['p_profesion_padre'] ?? 'Mecánico Automotriz',
+// =============================================
+//  DATOS DEL DECLARANTE
+// =============================================
+$datos_declarante = [
+    'nombre'     => $_POST['nombre_declarante'] ?? '',
+    'parentesco' => $_POST['parentesco_declarante'] ?? '',
+    'dui'        => $_POST['dui_declarante'] ?? '',
 ];
 
-$datos_madre = [
-    'nombre'    => $_POST['p_nombre_madre'] ?? 'Ana Sofía López de Rodríguez',
-    'dui'       => '09876543-2',
-    'edad'      => $_POST['p_edad_madre'] ?? '29',
-    'domicilio' => 'Colonia El Siete, Calle Principal #12, Ilobasco',
-    'profesion' => $_POST['p_profesion_madre'] ?? 'Maestra de Educación Básica',
+// =============================================
+//  FECHA DE REGISTRO (incluye hora)
+// =============================================
+$datos_registro = [
+    'fecha_hora' => $_POST['fecha_registro'] ?? '',
 ];
 
-$datos_certificacion = [
-    'informante'         => $_POST['p_nombre_padre'] ?? 'Carlos Alberto Rodríguez Martínez',
-    'parentesco'         => 'Padre',
-    'dui_informante'     => '05647382-9',
-    'fecha_inscripcion'  => date('d de m de Y'),
-];
-
+// =============================================
+//  DATOS DE FIRMAS (footer)
+// =============================================
 $datos_footer = [
-    'jefe_registros'  => 'Licda. Rosa Elena Méndez Castro',
-    'informante'      => 'Carlos Alberto Rodríguez Martínez',
-    'atendio'         => 'Asistente: María del Carmen Guevara',
+    'jefe_registros' => $_POST['jefe_registros'] ?? 'Licda. Rosa Elena Méndez Castro',
+    'atendio'        => $_POST['atendio'] ?? 'Asistente: María del Carmen Guevara',
+    'informante'     => $_POST['nombre_declarante'] ?? '', // nombre del declarante para la firma
 ];
 ?>
 <!DOCTYPE html>
@@ -52,7 +51,7 @@ $datos_footer = [
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Partida de Nacimiento – <?= htmlspecialchars($datos_nacido['nombre']) ?></title>
+  <title>Acta de Defunción</title>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap');
@@ -71,48 +70,30 @@ $datos_footer = [
       --sombra:      rgba(0, 51, 102, 0.15);
     }
 
-    html {
-      overflow-x: hidden;
-      margin: 0;
-      padding: 0;
-    }
+    html { overflow-x: hidden; margin: 0; padding: 0; }
 
     body {
-  font-family: 'EB Garamond', Georgia, serif;
-  background: #e9edf2;
-  color: var(--texto);
-  margin: 0;
-  padding: 20px;
-  overflow-x: hidden;
-}
-    
+      font-family: 'EB Garamond', Georgia, serif;
+      background: #e9edf2;
+      color: var(--texto);
+      margin: 0;
+      padding: 20px;
+      overflow-x: hidden;
+    }
 
-    /* ── Hoja: ocupa exactamente el ancho visible sin scroll ── */
-   .hoja {
-  width: 100%;
-  max-width: 100%;
-  min-height: 100vh;
-  margin: 0;
-  background: var(--blanco);
-  border: none;
-  box-shadow: none;
-  display: flex;
-  flex-direction: column;
-  box-sizing: border-box;
-  overflow: hidden;
-  border-radius: 0;
-
-}
-
-    /* ── Banda decorativa ── */
-    .banda-top,
-    .banda-bot 
-     {
-      display: none;
-      background: linear-gradient(90deg, var(--negro) 0%, var(--azul-oscuro) 40%, var(--azul-medio) 60%, var(--negro) 100%);
-      height: 8px;
-      flex-shrink: 0;
-      
+    /* ── Hoja principal ── */
+    .hoja {
+      width: 850px;
+      min-height: auto;
+      margin: 20px auto;
+      background: var(--blanco);
+      border: 1px solid var(--gris-linea);
+      box-shadow: 0 0 15px rgba(0,0,0,0.08);
+      display: flex;
+      flex-direction: column;
+      box-sizing: border-box;
+      overflow: hidden;
+      border-radius: 4px;
     }
 
     /* ── Encabezado ── */
@@ -195,7 +176,7 @@ $datos_footer = [
       overflow-x: hidden;
     }
 
-    /* ── Cards ── */
+    /* ── Tarjetas (cards) ── */
     .card {
       border: 1px solid var(--gris-linea);
       border-radius: 3px;
@@ -339,7 +320,7 @@ $datos_footer = [
 
     .btn-imprimir:hover { background: var(--negro); }
 
-   /* ── Responsivo ── */
+    /* ── Responsivo ── */
     @media (max-width: 600px) {
       .encabezado {
         flex-direction: column;
@@ -347,20 +328,13 @@ $datos_footer = [
         padding: 1rem;
         gap: 0.6rem;
       }
-
       .logo-wrap { width: 55px; height: 55px; }
-
       .encabezado-texto h1 { font-size: 0.75rem; }
       .encabezado-texto .titulo-doc { font-size: 0.95rem; }
-
       .cuerpo { padding: 0.8rem 0.8rem 0.6rem; gap: 0.8rem; }
-
       .campos { grid-template-columns: 1fr 1fr; }
-
       .campo .valor { font-size: 0.78rem; }
-
       .firmas { grid-template-columns: 1fr; gap: 1rem; }
-
       .footer { padding: 0.4rem 1.5rem 1rem; }
     }
 
@@ -368,76 +342,23 @@ $datos_footer = [
       .campos { grid-template-columns: 1fr; }
     }
 
-    /* ── Print ── */
+    /* ── Impresión ── */
     @media print {
-      @page {
-        size: A4 portrait;
-        margin: 0;
-      }
-
-      *, *::before, *::after {
-        -webkit-print-color-adjust: exact !important;
-        print-color-adjust: exact !important;
-      }
-
       body {
         background: white;
         padding: 0;
-        margin: 0;
       }
-
-      .btn-imprimir { display: none; }
-
       .hoja {
         width: 100%;
         margin: 0;
         border: none;
         box-shadow: none;
         border-radius: 0;
-        min-height: unset;
-        padding: 0.5cm;
       }
-
-      .encabezado {
-        padding: 0.4rem 0.8rem;
-        gap: 0.6rem;
-      }
-
-      .logo-wrap {
-        width: 50px;
-        height: 50px;
-      }
-
-      .encabezado-texto h1    { font-size: 0.72rem; }
-      .encabezado-texto .titulo-doc { font-size: 0.9rem; }
-      .encabezado-texto .subtitulo  { font-size: 0.65rem; }
-
-      .cuerpo {
-        padding: 0.4rem 0.8rem;
-        gap: 0.4rem;
-      }
-
-      .card-header {
-        padding: 0.2rem 0.8rem;
-        font-size: 0.6rem;
-      }
-
-      .card-body { padding: 0.4rem 0.8rem; }
-
-      .campos { gap: 0.25rem 1rem; }
-
-      .campo label  { font-size: 0.52rem; }
-      .campo .valor { font-size: 0.72rem; }
-
+      .btn-imprimir { display: none; }
       .card { page-break-inside: avoid; }
-
-      .footer { padding: 0.4rem 0.8rem 0.5rem; }
-
-      .firmas       { gap: 1rem; margin-bottom: 0.5rem; }
-      .firma-linea  { height: 6px; }
-      .firma-titulo { font-size: 0.52rem; }
-      .firma-nombre { font-size: 0.65rem; }
-      .atendio-wrap { font-size: 0.6rem; padding-top: 0.3rem; }
+      .cuerpo { padding: 0.8rem 1.5rem; }
+      .footer { padding: 0.8rem 1.5rem; }
     }
   </style>
 </head>
@@ -447,7 +368,6 @@ $datos_footer = [
 
   <!-- ENCABEZADO -->
   <div class="encabezado">
-
     <div class="logo-wrap">
       <?php if (!empty($datos_municipio['escudo_nacion'])): ?>
         <img src="<?= htmlspecialchars($datos_municipio['escudo_nacion']) ?>" alt="Escudo Nacional de El Salvador">
@@ -455,7 +375,6 @@ $datos_footer = [
         <div class="logo-placeholder">ESCUDO<br>NACIONAL</div>
       <?php endif; ?>
     </div>
-
     <div class="encabezado-texto">
       <h1>
         <?= htmlspecialchars($datos_municipio['alcaldia']) ?><br>
@@ -463,121 +382,75 @@ $datos_footer = [
         – <?= htmlspecialchars($datos_municipio['pais']) ?>
       </h1>
       <div class="subtitulo">Registro del Estado Familiar</div>
-      <div class="titulo-doc">Partida de Nacimiento</div>
+      <div class="titulo-doc">Acta de Defunción</div>
     </div>
-
   </div>
 
   <!-- CUERPO -->
   <div class="cuerpo">
 
-    <!-- DATOS DEL NACIDO -->
+    <!-- DATOS DEL FALLECIDO -->
     <div class="card">
-      <div class="card-header">Datos del Nacido</div>
+      <div class="card-header">Datos del Fallecido</div>
       <div class="card-body">
         <div class="campos">
           <div class="campo full">
             <label>Nombre completo</label>
-            <div class="valor"><?= htmlspecialchars($datos_nacido['nombre']) ?></div>
-          </div>
-          <div class="campo">
-            <label>Lugar de nacimiento</label>
-            <div class="valor"><?= htmlspecialchars($datos_nacido['lugar']) ?></div>
-          </div>
-          <div class="campo">
-            <label>Fecha de nacimiento</label>
-            <div class="valor"><?= htmlspecialchars($datos_nacido['fecha']) ?></div>
-          </div>
-          <div class="campo">
-            <label>Hora de nacimiento</label>
-            <div class="valor"><?= htmlspecialchars($datos_nacido['hora']) ?></div>
-          </div>
-          <div class="campo">
-            <label>Sexo</label>
-            <div class="valor"><?= htmlspecialchars($datos_nacido['sexo']) ?></div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- DATOS DEL PADRE -->
-    <div class="card">
-      <div class="card-header">Datos del Padre</div>
-      <div class="card-body">
-        <div class="campos">
-          <div class="campo full">
-            <label>Nombre completo</label>
-            <div class="valor"><?= htmlspecialchars($datos_padre['nombre']) ?></div>
+            <div class="valor"><?= htmlspecialchars($datos_fallecido['nombre']) ?></div>
           </div>
           <div class="campo">
             <label>DUI</label>
-            <div class="valor"><?= htmlspecialchars($datos_padre['dui']) ?></div>
+            <div class="valor"><?= htmlspecialchars($datos_fallecido['dui']) ?></div>
           </div>
           <div class="campo">
-            <label>Edad</label>
-            <div class="valor"><?= htmlspecialchars($datos_padre['edad']) ?> años</div>
+            <label>Fecha de defunción</label>
+            <div class="valor"><?= htmlspecialchars($datos_fallecido['fecha_def']) ?></div>
           </div>
           <div class="campo">
-            <label>Profesión u oficio</label>
-            <div class="valor"><?= htmlspecialchars($datos_padre['profesion']) ?></div>
+            <label>Hora de defunción</label>
+            <div class="valor"><?= htmlspecialchars($datos_fallecido['hora_def']) ?></div>
+          </div>
+          <div class="campo">
+            <label>Nacionalidad</label>
+            <div class="valor"><?= htmlspecialchars($datos_fallecido['nacionalidad']) ?></div>
           </div>
           <div class="campo full">
-            <label>Domicilio</label>
-            <div class="valor"><?= htmlspecialchars($datos_padre['domicilio']) ?></div>
+            <label>Causa del fallecimiento</label>
+            <div class="valor"><?= htmlspecialchars($datos_fallecido['causa']) ?></div>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- DATOS DE LA MADRE -->
+    <!-- DATOS DEL DECLARANTE -->
     <div class="card">
-      <div class="card-header">Datos de la Madre</div>
+      <div class="card-header">Datos del Declarante</div>
       <div class="card-body">
         <div class="campos">
           <div class="campo full">
-            <label>Nombre completo</label>
-            <div class="valor"><?= htmlspecialchars($datos_madre['nombre']) ?></div>
-          </div>
-          <div class="campo">
-            <label>DUI</label>
-            <div class="valor"><?= htmlspecialchars($datos_madre['dui']) ?></div>
-          </div>
-          <div class="campo">
-            <label>Edad</label>
-            <div class="valor"><?= htmlspecialchars($datos_madre['edad']) ?> años</div>
-          </div>
-          <div class="campo">
-            <label>Profesión u oficio</label>
-            <div class="valor"><?= htmlspecialchars($datos_madre['profesion']) ?></div>
-          </div>
-          <div class="campo full">
-            <label>Domicilio</label>
-            <div class="valor"><?= htmlspecialchars($datos_madre['domicilio']) ?></div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- CERTIFICACIÓN -->
-    <div class="card">
-      <div class="card-header">Certificación</div>
-      <div class="card-body">
-        <div class="campos">
-          <div class="campo">
-            <label>Informante</label>
-            <div class="valor"><?= htmlspecialchars($datos_certificacion['informante']) ?></div>
+            <label>Nombre del declarante</label>
+            <div class="valor"><?= htmlspecialchars($datos_declarante['nombre']) ?></div>
           </div>
           <div class="campo">
             <label>Parentesco</label>
-            <div class="valor"><?= htmlspecialchars($datos_certificacion['parentesco']) ?></div>
+            <div class="valor"><?= htmlspecialchars($datos_declarante['parentesco']) ?></div>
           </div>
           <div class="campo">
-            <label>DUI del informante</label>
-            <div class="valor"><?= htmlspecialchars($datos_certificacion['dui_informante']) ?></div>
+            <label>DUI del declarante</label>
+            <div class="valor"><?= htmlspecialchars($datos_declarante['dui']) ?></div>
           </div>
-          <div class="campo">
-            <label>Fecha de inscripción</label>
-            <div class="valor"><?= htmlspecialchars($datos_certificacion['fecha_inscripcion']) ?></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FECHA DE REGISTRO -->
+    <div class="card">
+      <div class="card-header">Registro</div>
+      <div class="card-body">
+        <div class="campos">
+          <div class="campo full">
+            <label>Fecha de registro</label>
+            <div class="valor"><?= htmlspecialchars($datos_registro['fecha_hora']) ?></div>
           </div>
         </div>
       </div>
@@ -595,7 +468,7 @@ $datos_footer = [
       </div>
       <div class="firma-bloque">
         <div class="firma-linea"></div>
-        <div class="firma-titulo">Firma del Informante</div>
+        <div class="firma-titulo">Firma del Declarante</div>
         <div class="firma-nombre"><?= htmlspecialchars($datos_footer['informante']) ?></div>
       </div>
     </div>
@@ -604,16 +477,13 @@ $datos_footer = [
     </div>
   </div>
 
-  <div class="banda-bot"></div>
-
 </div><!-- /hoja -->
 
 <button class="btn-imprimir" onclick="confirmarImpresion()">
-  &#128438; Imprimir
+  🖨️ Imprimir
 </button>
 
 <script>
-
 const Toast = Swal.mixin({
     toast: true,
     position: 'top-end',
@@ -631,7 +501,7 @@ function confirmarImpresion(){
         icon: 'question',
         showCancelButton: true,
         confirmButtonColor: '#003366',
-        cancelButtonColor: 'rgb(175, 158, 158)',
+        cancelButtonColor: '#d33',
         confirmButtonText: 'Sí, imprimir',
         cancelButtonText: 'Cancelar'
 

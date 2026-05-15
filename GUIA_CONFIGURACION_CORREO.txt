@@ -1,0 +1,49 @@
+========================================================================
+             GUÍA DE CONFIGURACIÓN DE CORREO - SISTEMA MUNIFY
+========================================================================
+
+IMPORTANTE: Antes de empezar, necesitas generar una CONTRASEÑA DE APLICACIÓN
+en Google para que el sistema pueda enviar correos en tu nombre.
+
+PASOS PARA OBTENER LA CONTRASEÑA (Síguelos en orden):
+-----------------------------------------------------
+1. Entra a tu cuenta de Google (Gmail).
+2. Ve al apartado de 'Seguridad' (en el menú de la izquierda).
+3. Asegúrate de tener activada la "Verificación en 2 pasos".
+4. En el buscador de la parte superior de tu cuenta de Google, escribe: 
+   "Contraseñas de aplicaciones" y selecciona esa opción.
+5. En "Nombre de la aplicación", escribe un nombre (ej: 'Munify') y dale a 'Crear'.
+6. Google te mostrará un código de 16 letras en un cuadro amarillo. 
+7. COPIA ese código y pégalo en el archivo 'config/mail.php' (ver más abajo).
+
+------------------------------------------------------------------------
+
+1. ESTRUCTURA DEL SISTEMA
+-------------------------
+- config/mail.php: Contiene las credenciales del servidor SMTP (Gmail).
+- helpers/EmailHelper.php: Clase principal que construye y envía el correo.
+- vendor/: Carpeta generada por Composer que contiene la librería PHPMailer.
+
+2. CÓMO CONFIGURAR EL ARCHIVO MAIL.PHP
+-----------------------------------
+Debes editar 'config/mail.php' con los siguientes datos:
+
+1. SMTP_USER: Ingresa el correo de Gmail de la institución.
+2. SMTP_PASS: Pega aquí el código de 16 letras que generaste en el paso anterior.
+3. SMTP_FROM_EMAIL: Repite el correo de la institución.
+4. SMTP_FROM_NAME: El nombre que verán los ciudadanos (Ej: 'Alcaldía Municipal').
+
+3. REQUISITOS TÉCNICOS Y LIBRERÍAS
+----------------------------------
+Este sistema utiliza 'PHPMailer' para el envío de correos. Para no tener que
+compartir carpetas pesadas, usamos 'Composer'.
+
+Si clonas el proyecto u si vas a subir cambios a un repositorio (asegúrate de que la carpeta 
+'vendor/' esté en el archivo .gitignore):
+1. Asegúrate de que el proyecto tenga los archivos 'composer.json' y 'composer.lock'.
+2. Asegúrate de tener instalado Composer (https://getcomposer.org/).
+3. Abre una terminal en la carpeta del proyecto y ejecuta:
+   
+   composer install
+
+4. Esto descargará automáticamente la carpeta 'vendor' y PHPMailer estará listo.
