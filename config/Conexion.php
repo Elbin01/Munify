@@ -1,6 +1,6 @@
 <?php
 class Conexion {
-    private $host = '127.0.0.1:3308'; //127.0.0.1:3308 Marcos
+    private $host = 'localhost'; //127.0.0.1:3308 Marcos
     private $db_name = 'bdd_munify';
     private $username = 'root';
     private $password = '';
