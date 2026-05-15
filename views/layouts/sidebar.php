@@ -39,6 +39,12 @@ $inicial_usuario = strtoupper(substr($nombre_usuario, 0, 1));
                 Partida de Nacimiento
             </a>
         </li>
+        <li>
+            <a href="estadisticas.php" class="nav-link <?= $current_page == 'estadisticas.php' ? 'active' : 'text-white' ?>">
+                <i class="bi bi-bar-chart-line me-2"></i>
+                Estadísticas
+            </a>
+        </li>
     </ul>
     <hr class="sidebar-divider">
     <div class="dropdown mt-auto">
