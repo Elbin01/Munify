@@ -1,0 +1,109 @@
+/* assets/Css/recepcion_partida.css */
+
+body { 
+    width: 100%; 
+    overflow-x: hidden; 
+    display: block !important; 
+}
+
+.dashboard-container { 
+    display: flex; 
+    width: 100%; 
+    min-height: 100vh; 
+    background-color: var(--bg-light); 
+}
+
+.main-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    overflow-x: hidden;
+    overflow-y: auto;
+    background-color: var(--bg-light);
+}
+
+.main-content > .container-fluid {
+    flex: 1;
+}
+
+.btn-asiento {
+    background-color: var(--color-3);
+    color: white !important;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 10px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    align-items: center;
+    font-weight: 600;
+}
+
+.btn-asiento:hover {
+    background-color: var(--color-4);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(28, 49, 102, 0.25);
+    color: white !important;
+}
+
+.btn-asiento:active {
+    transform: translateY(0);
+}
+
+/* Styles merged from partida.css */
+.search-container {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.result-card {
+    max-width: 700px;
+    margin: 0 auto;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+    border: none;
+    overflow: hidden;
+    animation: fadeIn 0.4s ease-out;
+}
+.result-card-success {
+    border-top: 5px solid #10B981;
+}
+.result-card-error {
+    border-top: 5px solid #EF4444;
+}
+.avatar-circle {
+    width: 60px;
+    height: 60px;
+    background-color: rgba(28, 49, 102, 0.1);
+    color: var(--color-3);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.8rem;
+}
+.btn-action-primary {
+    background-color: #10B981;
+    color: white;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    border-radius: 8px;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+.btn-action-primary:hover {
+    background-color: #059669;
+    color: white;
+    transform: translateY(-2px);
+}
+.table-container {
+    background: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}

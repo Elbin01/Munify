@@ -16,6 +16,7 @@
     <link rel="stylesheet" href="../assets/Css/sidebar.css">
     <link rel="stylesheet" href="../assets/Css/partida.css">
     <link rel="stylesheet" href="../assets/Css/footer.css">
+    <link rel="stylesheet" href="../assets/Css/panel_ayuda.css">
     <style>
         body { width: 100%; overflow-x: hidden; display: block !important; }
         .dashboard-container { display: flex; width: 100%; min-height: 100vh; background-color: var(--bg-light); }
@@ -75,7 +76,7 @@
                                 </div>
                                 <div class="col-md-4">
                                     <label class="form-label fw-bold text-dark small">DUI del Fallecido</label>
-                                    <input type="text" id="modalRegDui" class="form-control border-secondary-subtle shadow-none" placeholder="00000000-0">
+                                    <input type="text" id="modalRegDui" class="form-control border-secondary-subtle shadow-none dui-mask" placeholder="00000000-0" maxlength="10">
                                 </div>
                                 <div class="col-md-4">
                                     <label class="form-label fw-bold text-dark small">Fecha de Defunción</label>
@@ -102,7 +103,7 @@
                                                 <div class="col-md-4">
                                                     <label class="fw-bold form-label text-dark small">DUI Declarante</label>
                                                     <div class="input-group mb-2 shadow-sm">
-                                                        <input type="text" class="form-control form-control-sm border-0" placeholder="Buscar DUI..." id="duiDeclarante">
+                                                        <input type="text" class="form-control form-control-sm border-0 dui-mask" placeholder="Buscar DUI..." id="duiDeclarante" maxlength="10">
                                                         <button class="btn btn-sm text-white fw-bold" type="button" style="background-color: var(--color-3);">Buscar</button>
                                                     </div>
                                                 </div>
@@ -182,6 +183,55 @@
         </div>
     </div>
 
+        </div>
+    </div>
+
+    <!-- PANEL DE AYUDA (OFFCANVAS) -->
+    <div class="offcanvas offcanvas-end help-panel" tabindex="-1" id="ayudaMunify" aria-labelledby="ayudaLabel">
+        <div class="offcanvas-header help-header shadow-sm">
+            <h5 class="offcanvas-title" id="ayudaLabel">
+                <i class="bi bi-patch-question-fill me-2"></i> Guía de Usuario
+            </h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"></button>
+        </div>
+        <div class="offcanvas-body p-4">
+            <div class="help-section-title">Pasos del Trámite</div>
+            
+            <div class="help-card d-flex align-items-start shadow-sm">
+                <div class="help-step-badge me-3">1</div>
+                <div>
+                    <p class="small text-dark mb-0"><strong>Localización:</strong> Busque al fallecido por nombre o DUI para verificar si el acta ya ha sido iniciada.</p>
+                </div>
+            </div>
+
+            <div class="help-card d-flex align-items-start shadow-sm">
+                <div class="help-step-badge me-3">2</div>
+                <div>
+                    <p class="small text-dark mb-0"><strong>Nueva Acta:</strong> Si no hay registros, use <strong>"Registrar Defunción"</strong> e ingrese los datos del certificado médico.</p>
+                </div>
+            </div>
+
+            <div class="help-card d-flex align-items-start shadow-sm">
+                <div class="help-step-badge me-3">3</div>
+                <div>
+                    <p class="small text-dark mb-0"><strong>Declarante:</strong> Registre el DUI y nombre de la persona que reporta el hecho como responsable legal.</p>
+                </div>
+            </div>
+
+            <div class="help-card d-flex align-items-start shadow-sm">
+                <div class="help-step-badge me-3">4</div>
+                <div>
+                    <p class="small text-dark mb-0"><strong>Impresión:</strong> Complete el folio y libro físico, luego presione <strong>"Imprimir Documento"</strong>.</p>
+                </div>
+            </div>
+
+            <div class="mt-5 pt-4 text-center border-top">
+                <img src="../assets/Img/escudo.jpeg" alt="Escudo" style="width: 30px; opacity: 0.3; filter: grayscale(1);">
+                <p class="text-muted mt-2" style="font-size: 0.65rem; font-weight: bold;">SISTEMA MUNIFY v1.0</p>
+            </div>
+        </div>
+    </div>
+
     <div class="dashboard-container">
         <?php include 'layouts/sidebar.php'; ?>
 
@@ -189,7 +239,12 @@
             <div class="container-fluid py-4 px-4">
                 <div class="d-flex justify-content-between align-items-center mb-5">
                     <div>
-                        <h2 class="fw-bold mb-0" style="color: var(--color-3);">Trámite: Carta de Defunción</h2>
+                        <h2 class="fw-bold mb-0" style="color: var(--color-3);">
+                            Trámite: Carta de Defunción
+                            <button class="btn btn-outline-secondary rounded-circle shadow-sm help-btn" data-bs-toggle="offcanvas" data-bs-target="#ayudaMunify">
+                                <i class="bi bi-info-lg"></i>
+                            </button>
+                        </h2>
                         <p class="text-muted mb-0">Recepción y emisión de actas de defunción</p>
                     </div>
                     <div>
@@ -205,7 +260,7 @@
                         <span class="input-group-text bg-white border-0 text-muted px-4">
                             <i class="bi bi-search"></i>
                         </span>
-                        <input type="text" id="searchInput" class="form-control border-0 ps-0 shadow-none" placeholder="Ingrese Nombres, Apellidos o DUI del fallecido" autofocus autocomplete="off">
+                        <input type="text" id="searchInput" class="form-control border-0 ps-0 shadow-none dui-mask" placeholder="Ingrese Nombres, Apellidos o DUI del fallecido" autofocus autocomplete="off" maxlength="10">
                         <button class="btn border-0 text-white px-4" type="submit" id="btnBuscar" style="background-color: var(--color-3); font-weight: bold;">Buscar</button>
                     </form>
                 </div>

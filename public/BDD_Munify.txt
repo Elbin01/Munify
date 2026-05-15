@@ -45,12 +45,16 @@ CREATE TABLE Cita (
     id_cita INT AUTO_INCREMENT PRIMARY KEY,
     id_usuario INT NOT NULL,
     id_tipo INT NOT NULL,
+    id_ciudadano INT,
     fecha_creacion DATE DEFAULT CURRENT_DATE,
     fecha_cita DATE NOT NULL,
     hora_cita TIME NOT NULL,
+    nombre_contacto VARCHAR(150),
+    correo_contacto VARCHAR(100),
     estado ENUM('pendiente','confirmada','denegada'),
     FOREIGN KEY (id_usuario) REFERENCES Usuario(id_usuario),
-    FOREIGN KEY (id_tipo) REFERENCES Tipo_Tramite(id_tipo)
+    FOREIGN KEY (id_tipo) REFERENCES Tipo_Tramite(id_tipo),
+    FOREIGN KEY (id_ciudadano) REFERENCES Ciudadano(id_ciudadano)
 );
 
 CREATE TABLE Partida_Nacimiento (

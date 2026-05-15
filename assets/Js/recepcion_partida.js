@@ -157,6 +157,17 @@ $(document).ready(function() {
         });
     });
 
+    // Máscara para DUI (00000000-0)
+    $('.dui-mask').on('input', function() {
+        let val = $(this).val().replace(/\D/g, ''); // Solo números
+        if (val.length > 9) val = val.slice(0, 9); // Máximo 9 dígitos
+        
+        if (val.length > 8) {
+            val = val.slice(0, 8) + '-' + val.slice(8);
+        }
+        $(this).val(val);
+    });
+
     // Generar e imprimir partida
     $('#btnImprimirPartida').on('click', function() {
         if (!window.selectedCiudadanoId) {
@@ -230,9 +241,6 @@ window.seleccionarCiudadano = function(index) {
         btnAccion.off('click').on('click', function() {
             window.open(`../reportes/partida_nacimiento.php?id=${ciudadano.id_partida}`, '_blank');
         });
-
-        // "De un solo a imprimir"
-        window.open(`../reportes/partida_nacimiento.php?id=${ciudadano.id_partida}`, '_blank');
     } else {
         // No tiene partida -> Modo Generar (abrir modal)
         btnAccion.html('<i class="bi bi-printer-fill me-2"></i> Generar Partida');

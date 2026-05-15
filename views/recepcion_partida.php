@@ -14,44 +14,9 @@
     <!-- Custom CSS -->
     <link rel="stylesheet" href="../assets/Css/index.css">
     <link rel="stylesheet" href="../assets/Css/sidebar.css">
-    <link rel="stylesheet" href="../assets/Css/partida.css">
+    <link rel="stylesheet" href="../assets/Css/recepcion_partida.css">
     <link rel="stylesheet" href="../assets/Css/footer.css">
-    <style>
-        body { width: 100%; overflow-x: hidden; display: block !important; }
-        .dashboard-container { display: flex; width: 100%; min-height: 100vh; background-color: var(--bg-light); }
-        .main-content {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-            overflow-x: hidden;
-            overflow-y: auto;
-            background-color: var(--bg-light);
-        }
-        .main-content > .container-fluid {
-            flex: 1;
-        }
-        .btn-asiento {
-            background-color: var(--color-3);
-            color: white !important;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 10px;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            display: flex;
-            align-items: center;
-            font-weight: 600;
-        }
-        .btn-asiento:hover {
-            background-color: var(--color-4);
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(28, 49, 102, 0.25);
-            color: white !important;
-        }
-        .btn-asiento:active {
-            transform: translateY(0);
-        }
-    </style>
+    <link rel="stylesheet" href="../assets/Css/panel_ayuda.css">
 </head>
 <body>
 
@@ -90,7 +55,7 @@
                                 </div>
                                 <div class="col-md-4">
                                     <label class="form-label fw-bold text-dark small">DUI (Si aplica)</label>
-                                    <input type="text" id="modalRegDui" class="form-control border-secondary-subtle shadow-none" placeholder="00000000-0">
+                                    <input type="text" id="modalRegDui" class="form-control border-secondary-subtle shadow-none dui-mask" placeholder="00000000-0" maxlength="10">
                                 </div>
                                 <div class="col-md-4">
                                     <label class="form-label fw-bold text-dark small">Lugar Nacimiento</label>
@@ -112,7 +77,7 @@
                                         <div class="card-body p-3">
                                             <label class="fw-bold form-label text-dark small"><i class="bi bi-person me-1"></i> Padre</label>
                                             <div class="input-group mb-2 shadow-sm">
-                                                <input type="text" class="form-control form-control-sm border-0" placeholder="Buscar DUI..." id="duiPadre">
+                                                <input type="text" class="form-control form-control-sm border-0 dui-mask" placeholder="Buscar DUI..." id="duiPadre" maxlength="10">
                                                 <button class="btn btn-sm text-white fw-bold" type="button" style="background-color: var(--color-3);">Buscar</button>
                                             </div>
                                             <input type="text" id="regNombrePadre" class="form-control form-control-sm border-secondary-subtle shadow-none" placeholder="Nombre completo">
@@ -125,7 +90,7 @@
                                         <div class="card-body p-3">
                                             <label class="fw-bold form-label text-dark small"><i class="bi bi-person me-1"></i> Madre</label>
                                             <div class="input-group mb-2 shadow-sm">
-                                                <input type="text" class="form-control form-control-sm border-0" placeholder="Buscar DUI..." id="duiMadre">
+                                                <input type="text" class="form-control form-control-sm border-0 dui-mask" placeholder="Buscar DUI..." id="duiMadre" maxlength="10">
                                                 <button class="btn btn-sm text-white fw-bold" type="button" style="background-color: var(--color-3);">Buscar</button>
                                             </div>
                                             <input type="text" id="regNombreMadre" class="form-control form-control-sm border-secondary-subtle shadow-none" placeholder="Nombre completo">
@@ -206,6 +171,55 @@
         </div>
     </div>
 
+        </div>
+    </div>
+
+    <!-- PANEL DE AYUDA (OFFCANVAS) -->
+    <div class="offcanvas offcanvas-end help-panel" tabindex="-1" id="ayudaMunify" aria-labelledby="ayudaLabel">
+        <div class="offcanvas-header help-header shadow-sm">
+            <h5 class="offcanvas-title" id="ayudaLabel">
+                <i class="bi bi-patch-question-fill me-2"></i> Guía de Usuario
+            </h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"></button>
+        </div>
+        <div class="offcanvas-body p-4">
+            <div class="help-section-title">Pasos del Trámite</div>
+            
+            <div class="help-card d-flex align-items-start shadow-sm">
+                <div class="help-step-badge me-3">1</div>
+                <div>
+                    <p class="small text-dark mb-0"><strong>Búsqueda:</strong> Ingrese el DUI (con guion) o el nombre completo del ciudadano para verificar su existencia.</p>
+                </div>
+            </div>
+
+            <div class="help-card d-flex align-items-start shadow-sm">
+                <div class="help-step-badge me-3">2</div>
+                <div>
+                    <p class="small text-dark mb-0"><strong>Nuevo Registro:</strong> Si no hay resultados, use <strong>"Nuevo Asiento"</strong> para crear el perfil básico del ciudadano.</p>
+                </div>
+            </div>
+
+            <div class="help-card d-flex align-items-start shadow-sm">
+                <div class="help-step-badge me-3">3</div>
+                <div>
+                    <p class="small text-dark mb-0"><strong>Selección:</strong> Una vez localizado, haga clic en <strong>"Seleccionar"</strong> para cargar los datos en el panel de emisión.</p>
+                </div>
+            </div>
+
+            <div class="help-card d-flex align-items-start shadow-sm">
+                <div class="help-step-badge me-3">4</div>
+                <div>
+                    <p class="small text-dark mb-0"><strong>Impresión:</strong> Verifique el número de partida, tomo y folio. Finalmente presione <strong>"Imprimir Partida"</strong>.</p>
+                </div>
+            </div>
+
+            <div class="mt-5 pt-4 text-center border-top">
+                <img src="../assets/Img/escudo.jpeg" alt="Escudo" style="width: 30px; opacity: 0.3; filter: grayscale(1);">
+                <p class="text-muted mt-2" style="font-size: 0.65rem; font-weight: bold;">SISTEMA MUNIFY v1.0</p>
+            </div>
+        </div>
+    </div>
+
     <div class="dashboard-container">
         <?php include 'layouts/sidebar.php'; ?>
 
@@ -214,7 +228,12 @@
             <div class="container-fluid py-4 px-4">
                 <div class="d-flex justify-content-between align-items-center mb-5">
                     <div>
-                        <h2 class="fw-bold mb-0" style="color: var(--color-3);">Trámite: Partida de Nacimiento</h2>
+                        <h2 class="fw-bold mb-0" style="color: var(--color-3);">
+                            Trámite: Partida de Nacimiento
+                            <button class="btn btn-outline-secondary rounded-circle shadow-sm help-btn" data-bs-toggle="offcanvas" data-bs-target="#ayudaMunify">
+                                <i class="bi bi-info-lg"></i>
+                            </button>
+                        </h2>
                         <p class="text-muted mb-0">Recepción y emisión de documentos</p>
                     </div>
                     <div>
@@ -231,7 +250,7 @@
                         <span class="input-group-text bg-white border-0 text-muted px-4">
                             <i class="bi bi-search"></i>
                         </span>
-                        <input type="text" id="searchInput" class="form-control border-0 ps-0 shadow-none" placeholder="Ingrese Nombres, Apellidos o DUI" autofocus autocomplete="off" style="outline: none; box-shadow: none;">
+                        <input type="text" id="searchInput" class="form-control border-0 ps-0 shadow-none dui-mask" placeholder="Ingrese Nombres, Apellidos o DUI" autofocus autocomplete="off" style="outline: none; box-shadow: none;" maxlength="10">
                         <button class="btn border-0 text-white px-4" type="submit" id="btnBuscar" style="background-color: var(--color-3); font-weight: bold;">Buscar</button>
                     </form>
                 </div>
@@ -311,6 +330,6 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     
-    <script src="../assets/Js/recepcion_partida.js"></script>
+    <script src="../assets/Js/recepcion_partida.js?v=<?php echo time(); ?>"></script>
 </body>
 </html>

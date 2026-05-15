@@ -13,7 +13,7 @@
         <div class="login-sidebar">
             <div class="sidebar-content">
                 <div class="logo-container">
-                    <img src="../assets/Img/MUNIFY.jpeg" alt="Logo Alcaldía" onerror="this.style.display='none';this.parentElement.innerHTML='🏛️'">
+                    <img src="../assets/Img/logo_munify/isotipo_negativo.png" alt="Munify Isotipo" style="width: 120px; height: auto;">
                 </div>
                 <h2>MUNIFY</h2>
                 <p>Sistema Integrado de Registro Civil Municipal</p>
@@ -26,7 +26,7 @@
         <div class="login-main">
             <div class="login-form-container">
                 <div class="mobile-logo">
-                    <img src="../assets/Img/MUNIFY.jpeg" alt="Logo Alcaldía" onerror="this.style.display='none'">
+                    <img src="../assets/Img/logo_munify/isotipo_negativo.png" alt="Munify Isotipo" style="width: 80px; height: auto;">
                     <h2>MUNIFY</h2>
                 </div>
                 <div id="loginSection">

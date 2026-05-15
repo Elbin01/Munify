@@ -2,12 +2,16 @@
 <?php
 require_once __DIR__ . '/../models/CiudadanoModel.php';
 require_once __DIR__ . '/../models/PartidaModel.php';
+require_once __DIR__ . '/../models/CitaModel.php';
 
 $ciudadanoModel = new CiudadanoModel();
 $partidaModel = new PartidaModel();
+$citaModel = new CitaModel();
 
 $totalCiudadanos = $ciudadanoModel->contarCiudadanos();
 $totalPartidas = $partidaModel->contarPartidas();
+$totalPendientes = $citaModel->contarPendientes();
+$citasSolicitadas = $citaModel->obtenerCitasSolicitadas(3);
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -25,57 +29,7 @@ $totalPartidas = $partidaModel->contarPartidas();
     <link rel="stylesheet" href="../assets/Css/index.css">
     <link rel="stylesheet" href="../assets/Css/sidebar.css">
     <link rel="stylesheet" href="../assets/Css/footer.css">
-    <style>
-        body {
-            width: 100%;
-            overflow-x: hidden;
-            display: block !important;
-        }
-        .dashboard-container {
-            display: flex;
-            width: 100%;
-            min-height: 100vh;
-            background-color: var(--bg-light);
-        }
-        .main-content {
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;  
-            flex: 1;
-            overflow-y: auto;
-            overflow-x: hidden;
-            background-color: var(--bg-light);
-        }
-
-        .main-content > .container-fluid {
-    flex: 1;
-}
-        .stat-card {
-            border: none;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-            transition: transform 0.3s ease;
-        }
-        .stat-card:hover {
-            transform: translateY(-5px);
-        }
-        .stat-card .card-body {
-            padding: 1.5rem;
-        }
-        .stat-icon {
-            width: 48px;
-            height: 48px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-        }
-        .bg-primary-soft { background-color: rgba(28, 49, 102, 0.1); color: var(--color-3); }
-        .bg-success-soft { background-color: rgba(64, 255, 220, 0.1); color: #00A9D4; }
-        .bg-warning-soft { background-color: rgba(255, 193, 7, 0.1); color: #ffc107; }
-        .bg-danger-soft { background-color: rgba(220, 53, 69, 0.1); color: #dc3545; }
-    </style>
+    <link rel="stylesheet" href="../assets/Css/dashboard.css">
 </head>
 <body>
     <div class="dashboard-container">
@@ -128,7 +82,7 @@ $totalPartidas = $partidaModel->contarPartidas();
                             </div>
                             <div>
                                 <h6 class="card-title text-muted mb-1">Trámites Pendientes</h6>
-                                <h3 class="mb-0 fw-bold">18</h3>
+                                <h3 class="mb-0 fw-bold"><?= number_format($totalPendientes) ?></h3>
                             </div>
                         </div>
                     </div>
@@ -187,38 +141,32 @@ $totalPartidas = $partidaModel->contarPartidas();
                         <div class="card-body">
                             <h5 class="card-title fw-bold mb-4" style="color: var(--color-3);">Citas Solicitadas</h5>
                             
+                            <?php 
+                            if (!empty($citasSolicitadas)):
+                                foreach ($citasSolicitadas as $cita):
+                                    $dia = date('d', strtotime($cita['fecha_cita']));
+                                    $mes = strtoupper(date('M', strtotime($cita['fecha_cita'])));
+                                    $hora = date('h:i A', strtotime($cita['hora_cita']));
+                            ?>
                             <div class="d-flex align-items-start mb-3 pb-3 border-bottom">
                                 <div class="bg-primary-soft p-2 rounded me-3 text-center" style="min-width: 55px;">
-                                    <div class="fw-bold" style="font-size: 1.1rem; line-height: 1;">12</div>
-                                    <small style="font-size: 0.75rem; opacity: 0.8;">MAY</small>
+                                    <div class="fw-bold" style="font-size: 1.1rem; line-height: 1;"><?= $dia ?></div>
+                                    <small style="font-size: 0.75rem; opacity: 0.8;"><?= $mes ?></small>
                                 </div>
                                 <div>
-                                    <h6 class="mb-1 fw-bold" style="font-size: 0.95rem;">Carnet de Minoridad</h6>
-                                    <p class="mb-0 text-muted small">Luis Mendoza • 09:00 AM</p>
+                                    <h6 class="mb-1 fw-bold" style="font-size: 0.95rem;"><?= htmlspecialchars($cita['tramite_nombre']) ?></h6>
+                                    <p class="mb-0 text-muted small"><?= htmlspecialchars($cita['usuario_nombre']) ?> • <?= $hora ?></p>
                                 </div>
                             </div>
-                            
-                            <div class="d-flex align-items-start mb-3 pb-3 border-bottom">
-                                <div class="bg-primary-soft p-2 rounded me-3 text-center" style="min-width: 55px;">
-                                    <div class="fw-bold" style="font-size: 1.1rem; line-height: 1;">12</div>
-                                    <small style="font-size: 0.75rem; opacity: 0.8;">MAY</small>
-                                </div>
-                                <div>
-                                    <h6 class="mb-1 fw-bold" style="font-size: 0.95rem;">Carta de Defunción</h6>
-                                    <p class="mb-0 text-muted small">Ana Suárez • 10:30 AM</p>
-                                </div>
+                            <?php 
+                                endforeach;
+                            else:
+                            ?>
+                            <div class="text-center py-4">
+                                <i class="bi bi-calendar-x text-muted mb-2" style="font-size: 2rem;"></i>
+                                <p class="text-muted small">No hay citas pendientes para los próximos días.</p>
                             </div>
-                            
-                            <div class="d-flex align-items-start">
-                                <div class="bg-primary-soft p-2 rounded me-3 text-center" style="min-width: 55px;">
-                                    <div class="fw-bold" style="font-size: 1.1rem; line-height: 1;">13</div>
-                                    <small style="font-size: 0.75rem; opacity: 0.8;">MAY</small>
-                                </div>
-                                <div>
-                                    <h6 class="mb-1 fw-bold" style="font-size: 0.95rem;">Partida de Nacimiento</h6>
-                                    <p class="mb-0 text-muted small">Pedro Gómez • 08:15 AM</p>
-                                </div>
-                            </div>
+                            <?php endif; ?>
                             
                             <div class="mt-4 text-center">
                                 <a href="SolicitudCitas.php" class="btn btn-sm btn-outline-primary w-100" style="color: var(--color-3); border-color: var(--color-3);">Ver todas las citas</a>

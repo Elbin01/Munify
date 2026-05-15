@@ -4,7 +4,7 @@ $nombre_usuario = $_SESSION['usuario'] ?? 'Usuario';
 $inicial_usuario = strtoupper(substr($nombre_usuario, 0, 1));
 ?>
 <div class="d-flex flex-column flex-shrink-0 p-3 custom-sidebar">
-    <a href="principal.php" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none justify-content-center w-100">
+    <a href="../views/dashboard.php" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none justify-content-center w-100">
         <img src="../assets/Img/logo_munify/logo_negativo.png" alt="Munify Logo" style="width: 180px; height: auto;">
     </a>
     <hr class="sidebar-divider">
@@ -16,7 +16,7 @@ $inicial_usuario = strtoupper(substr($nombre_usuario, 0, 1));
             </a>
         </li>
         <li>
-            <a href="SolicitudCitas.php" class="nav-link <?= $current_page == 'SolicitudCitas.php' ? 'active' : 'text-white' ?>">
+            <a href="recepcion_citas.php" class="nav-link <?= $current_page == 'SolicitudCitas.php' ? 'active' : 'text-white' ?>">
                 <i class="bi bi-calendar-check me-2"></i>
                 Citas
             </a>

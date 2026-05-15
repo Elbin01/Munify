@@ -23,6 +23,17 @@ $(document).ready(function() {
         }
     });
 
+    // Máscara para DUI (00000000-0)
+    $('.dui-mask').on('input', function() {
+        let val = $(this).val().replace(/\D/g, ''); // Solo números
+        if (val.length > 9) val = val.slice(0, 9); // Máximo 9 dígitos
+        
+        if (val.length > 8) {
+            val = val.slice(0, 8) + '-' + val.slice(8);
+        }
+        $(this).val(val);
+    });
+
     $('#btnImprimirDefuncion').on('click', function() {
         window.open('CartaDefuncion.php', '_blank');
     });

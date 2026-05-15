@@ -22,7 +22,7 @@ $anio = date('Y');
       <span class="footer-developer-text">Desarrollado por</span>
       <div class="footer-developer-brand">
         <img src="../assets/img/BlackRoseSystems.png" alt="Blackrose Logo" class="footer-developer-logo">
-        <span class="footer-developer-name">blackrose</span>
+        <span class="footer-developer-name">BlackRose Systems</span>
       </div>
     </div>
 

@@ -5,20 +5,18 @@ class CiudadanoModel {
     private $conn;
 
     public function __construct() {
-        global $conn;
-        $this->conn = $conn;
+        $database = new Conexion();
+        $this->conn = $database->conectar();
     }
 
     public function obtenerTodos() {
         $sql = "SELECT * FROM Ciudadano";
-        $result = $this->conn->query($sql);
-        $ciudadanos = array();
-        if ($result && $result->num_rows > 0) {
-            while($row = $result->fetch_assoc()) {
-                $ciudadanos[] = $row;
-            }
+        try {
+            $stmt = $this->conn->query($sql);
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            return array();
         }
-        return $ciudadanos;
     }
     
     public function buscar($query) {
@@ -26,54 +24,64 @@ class CiudadanoModel {
         $sql = "SELECT c.*, p.id_partida 
                 FROM Ciudadano c 
                 LEFT JOIN Partida_Nacimiento p ON c.id_ciudadano = p.id_ciudadano 
-                WHERE c.nombres LIKE ? OR c.apellidos LIKE ? OR c.DUI LIKE ?";
-        $stmt = $this->conn->prepare($sql);
-        if ($stmt) {
-            $stmt->bind_param("sss", $queryParam, $queryParam, $queryParam);
+                WHERE c.nombres LIKE :query OR c.apellidos LIKE :query OR c.DUI LIKE :query";
+        try {
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bindParam(':query', $queryParam);
             $stmt->execute();
-            $result = $stmt->get_result();
-            $ciudadanos = array();
-            while($row = $result->fetch_assoc()) {
-                $ciudadanos[] = $row;
-            }
-            return $ciudadanos;
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            return array();
         }
-        return array();
     }
     
     public function obtenerPorId($id) {
-        $sql = "SELECT * FROM Ciudadano WHERE id_ciudadano = ?";
-        $stmt = $this->conn->prepare($sql);
-        if ($stmt) {
-            $stmt->bind_param("i", $id);
+        $sql = "SELECT * FROM Ciudadano WHERE id_ciudadano = :id";
+        try {
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
             $stmt->execute();
-            $result = $stmt->get_result();
-            if ($row = $result->fetch_assoc()) {
-                return $row;
-            }
+            return $stmt->fetch(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            return null;
         }
-        return null;
     }
     
     public function insertar($nombres, $apellidos, $sexo, $fecha_nacimiento, $dui, $hospital, $lugar_nacimiento, $hora_nacimiento, $nombre_padre, $nombre_madre) {
-        $sql = "INSERT INTO Ciudadano (nombres, apellidos, sexo, fecha_nacimiento, DUI, hospital, lugar_nacimiento, hora_nacimiento, nombre_padre, nombre_madre) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        $stmt = $this->conn->prepare($sql);
-        if ($stmt) {
-            $stmt->bind_param("ssssssssss", $nombres, $apellidos, $sexo, $fecha_nacimiento, $dui, $hospital, $lugar_nacimiento, $hora_nacimiento, $nombre_padre, $nombre_madre);
+        $sql = "INSERT INTO Ciudadano (nombres, apellidos, sexo, fecha_nacimiento, DUI, hospital, lugar_nacimiento, hora_nacimiento, nombre_padre, nombre_madre) 
+                VALUES (:nombres, :apellidos, :sexo, :fecha_nacimiento, :dui, :hospital, :lugar_nacimiento, :hora_nacimiento, :nombre_padre, :nombre_madre)";
+        try {
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bindParam(':nombres', $nombres);
+            $stmt->bindParam(':apellidos', $apellidos);
+            $stmt->bindParam(':sexo', $sexo);
+            $stmt->bindParam(':fecha_nacimiento', $fecha_nacimiento);
+            $stmt->bindParam(':dui', $dui);
+            $stmt->bindParam(':hospital', $hospital);
+            $stmt->bindParam(':lugar_nacimiento', $lugar_nacimiento);
+            $stmt->bindParam(':hora_nacimiento', $hora_nacimiento);
+            $stmt->bindParam(':nombre_padre', $nombre_padre);
+            $stmt->bindParam(':nombre_madre', $nombre_madre);
+            
             if ($stmt->execute()) {
-                return $this->conn->insert_id;
+                return $this->conn->lastInsertId();
             }
+        } catch (PDOException $e) {
+            return false;
         }
         return false;
     }
 
     public function contarCiudadanos() {
         $sql = "SELECT COUNT(*) as total FROM Ciudadano";
-        $result = $this->conn->query($sql);
-        if ($result && $row = $result->fetch_assoc()) {
-            return $row['total'];
+        try {
+            $stmt = $this->conn->query($sql);
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+            return $row['total'] ?? 0;
+        } catch (PDOException $e) {
+            return 0;
         }
-        return 0;
     }
 }
 ?>
+

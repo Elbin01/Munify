@@ -4,8 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Alcaldía Municipal — MUNIFY</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,700;1,700&family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="assets/Css/footer.css">
         <style>
         :root {
             --color-1: #1C3166;
@@ -312,7 +313,7 @@
         .fl { display: flex; gap: 2rem; }
         .fl a { font-size: 0.85rem; font-weight: 500; color: rgba(255,255,255,0.8); text-decoration: none; transition: color 0.2s; }
         .fl a:hover { color: #ffffff; text-decoration: underline; }
-        .copy { font-size: 0.8rem; color: rgba(255,255,255,0.5); width: 100%; text-align: center; margin-top: 1rem; }
+        .copy { font-size: 0.8rem; color: rgba(255,255,255,0.5); text-align: center; margin: 0; }
 
         /* ══════════════ RESPONSIVE ══════════════ */
         @media (max-width: 900px) {
@@ -560,16 +561,27 @@
 </section>
 
 <!-- FOOTER -->
-<footer>
-    <div class="fb">
-        <img src="assets/Img/logo_munify/logo_negativo.png" alt="Munify Logo" style="height: 35px; width: auto;">
+<footer class="munify-footer" style="padding: 2rem 4rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 2rem;">
+    <div class="footer-left" style="display: flex; align-items: center; gap: 2rem; flex-wrap: wrap;">
+        <div class="fb">
+            <img src="assets/Img/logo_munify/logo_negativo.png" alt="Munify Logo" style="height: 35px; width: auto;">
+        </div>
+        <p class="copy" style="font-size: 0.8rem; color: rgba(255,255,255,0.5); margin: 0; border-left: 1px solid rgba(255,255,255,0.1); padding-left: 2rem;">&copy; <?= date('Y') ?> Alcaldía Municipal. Todos los derechos reservados.</p>
     </div>
-    <div class="fl">
+
+    <div class="fl" style="display: flex; gap: 2rem;">
         <a href="#nosotros">Institución</a>
         <a href="#servicios">Servicios</a>
         <a href="#ubicacion">Contacto</a>
     </div>
-    <p class="copy">&copy; <?= date('Y') ?> Alcaldía Municipal. Todos los derechos reservados.</p>
+
+    <div class="footer-developer">
+      <span class="footer-developer-text">Desarrollado por</span>
+      <div class="footer-developer-brand">
+        <img src="assets/Img/BlackRoseSystems.png" alt="Blackrose Logo" class="footer-developer-logo">
+        <span class="footer-developer-name">BlackRose Systems</span>
+      </div>
+    </div>
 </footer>
 <script src="assets/Js/principal.js"></script>
 
