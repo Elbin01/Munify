@@ -21,9 +21,11 @@ class CiudadanoModel {
     
     public function buscar($query) {
         $queryParam = "%" . $query . "%";
-        $sql = "SELECT c.*, p.id_partida 
-                FROM Ciudadano c 
-                LEFT JOIN Partida_Nacimiento p ON c.id_ciudadano = p.id_ciudadano 
+        $sql = "SELECT c.*, p.id_partida, d.id_carta, m.id_carnet, d.fecha_defuncion, d.nombre_declarante
+                FROM ciudadano c 
+                LEFT JOIN partida_nacimiento p ON c.id_ciudadano = p.id_ciudadano 
+                LEFT JOIN carta_defuncion d ON c.id_ciudadano = d.id_ciudadano
+                LEFT JOIN carnet_menoridad m ON c.id_ciudadano = m.id_ciudadano
                 WHERE c.nombres LIKE :query OR c.apellidos LIKE :query OR c.DUI LIKE :query";
         try {
             $stmt = $this->conn->prepare($sql);

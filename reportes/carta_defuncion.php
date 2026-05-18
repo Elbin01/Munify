@@ -1,50 +1,83 @@
 <?php
-// =============================================
-//  DATOS DEL MUNICIPIO - Ajusta según tu entorno
-// =============================================
-$datos_municipio = [
-    'alcaldia'      => $_POST['alcaldia'] ?? 'Alcaldía Municipal',
-    'departamento'  => $_POST['departamento'] ?? '',
-    'pais'          => 'El Salvador',
-    'escudo_nacion' => '../assets/Img/escudo.jpeg',
-];
+require_once __DIR__ . '/../models/DefuncionModel.php';
 
-// =============================================
-//  DATOS DEL FALLECIDO
-// =============================================
-$datos_fallecido = [
-    'nombre'       => $_POST['nombre_fallecido'] ?? '',
-    'dui'          => $_POST['dui_fallecido'] ?? '',
-    'fecha_def'    => $_POST['fecha_defuncion'] ?? '',
-    'hora_def'     => $_POST['hora_defuncion'] ?? '',
-    'nacionalidad' => $_POST['nacionalidad'] ?? 'Salvadoreña',
-    'causa'        => $_POST['causa_fallecimiento'] ?? '',
-];
+// Si viene un ID por GET, cargamos de la base de datos (Comportamiento de Reporte)
+// Si no, usamos los datos por POST (Comportamiento de Vista/Preview)
+$id_carta = $_GET['id'] ?? null;
 
-// =============================================
-//  DATOS DEL DECLARANTE
-// =============================================
-$datos_declarante = [
-    'nombre'     => $_POST['nombre_declarante'] ?? '',
-    'parentesco' => $_POST['parentesco_declarante'] ?? '',
-    'dui'        => $_POST['dui_declarante'] ?? '',
-];
+if ($id_carta) {
+    $modelo = new DefuncionModel();
+    $datos_db = $modelo->obtenerPorId($id_carta);
 
-// =============================================
-//  FECHA DE REGISTRO (incluye hora)
-// =============================================
-$datos_registro = [
-    'fecha_hora' => $_POST['fecha_registro'] ?? '',
-];
+    if (!$datos_db) {
+        die("Error: No se encontró el acta con el ID proporcionado.");
+    }
 
-// =============================================
-//  DATOS DE FIRMAS (footer)
-// =============================================
-$datos_footer = [
-    'jefe_registros' => $_POST['jefe_registros'] ?? 'Licda. Rosa Elena Méndez Castro',
-    'atendio'        => $_POST['atendio'] ?? 'Asistente: María del Carmen Guevara',
-    'informante'     => $_POST['nombre_declarante'] ?? '', // nombre del declarante para la firma
-];
+    $datos_municipio = [
+        'alcaldia'      => 'Alcaldía Municipal de Ilobasco',
+        'departamento'  => 'Cabañas',
+        'pais'          => 'El Salvador',
+        'escudo_nacion' => '../assets/Img/escudo.jpeg',
+    ];
+
+    $datos_fallecido = [
+        'nombre'       => $datos_db['nombres'] . ' ' . $datos_db['apellidos'],
+        'dui'          => $datos_db['DUI'] ?: '---',
+        'fecha_def'    => $datos_db['fecha_defuncion'],
+        'hora_def'     => '---', // No estaba en el modelo original del reporte, pero se puede agregar si existe en DB
+        'nacionalidad' => 'Salvadoreña',
+        'causa'        => $datos_db['causa'] ?: 'Natural',
+    ];
+
+    $datos_declarante = [
+        'nombre'     => $datos_db['nombre_declarante'] ?: '---',
+        'parentesco' => 'Familiar',
+        'dui'        => '---',
+    ];
+
+    $datos_registro = [
+        'fecha_hora' => $datos_db['fecha_emision'],
+    ];
+
+    $datos_footer = [
+        'jefe_registros' => 'Licda. Rosa Elena Méndez Castro',
+        'atendio'        => 'Sistema Munify',
+        'informante'     => $datos_db['nombre_declarante'] ?: '---',
+    ];
+} else {
+    // Lógica original de la vista (POST)
+    $datos_municipio = [
+        'alcaldia'      => $_POST['alcaldia'] ?? 'Alcaldía Municipal',
+        'departamento'  => $_POST['departamento'] ?? '',
+        'pais'          => 'El Salvador',
+        'escudo_nacion' => '../assets/Img/escudo.jpeg',
+    ];
+
+    $datos_fallecido = [
+        'nombre'       => $_POST['nombre_fallecido'] ?? '',
+        'dui'          => $_POST['dui_fallecido'] ?? '',
+        'fecha_def'    => $_POST['fecha_defuncion'] ?? '',
+        'hora_def'     => $_POST['hora_defuncion'] ?? '',
+        'nacionalidad' => $_POST['nacionalidad'] ?? 'Salvadoreña',
+        'causa'        => $_POST['causa_fallecimiento'] ?? '',
+    ];
+
+    $datos_declarante = [
+        'nombre'     => $_POST['nombre_declarante'] ?? '',
+        'parentesco' => $_POST['parentesco_declarante'] ?? '',
+        'dui'        => $_POST['dui_declarante'] ?? '',
+    ];
+
+    $datos_registro = [
+        'fecha_hora' => $_POST['fecha_registro'] ?? '',
+    ];
+
+    $datos_footer = [
+        'jefe_registros' => $_POST['jefe_registros'] ?? 'Licda. Rosa Elena Méndez Castro',
+        'atendio'        => $_POST['atendio'] ?? 'Asistente: María del Carmen Guevara',
+        'informante'     => $_POST['nombre_declarante'] ?? '',
+    ];
+}
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -81,7 +114,6 @@ $datos_footer = [
       overflow-x: hidden;
     }
 
-    /* ── Hoja principal ── */
     .hoja {
       width: 850px;
       min-height: auto;
@@ -96,7 +128,6 @@ $datos_footer = [
       border-radius: 4px;
     }
 
-    /* ── Encabezado ── */
     .encabezado {
       padding: 1.2rem 1.5rem 1rem;
       display: flex;
@@ -122,15 +153,6 @@ $datos_footer = [
     }
 
     .logo-wrap img { width: 100%; height: 100%; object-fit: contain; }
-
-    .logo-placeholder {
-      font-size: 9px;
-      color: var(--azul-oscuro);
-      text-align: center;
-      line-height: 1.3;
-      padding: 0.2rem;
-      font-family: 'Cinzel', serif;
-    }
 
     .encabezado-texto {
       flex: 1;
@@ -164,7 +186,6 @@ $datos_footer = [
       display: inline-block;
     }
 
-    /* ── Cuerpo ── */
     .cuerpo {
       padding: 1.2rem 1.5rem 1rem;
       display: flex;
@@ -176,7 +197,6 @@ $datos_footer = [
       overflow-x: hidden;
     }
 
-    /* ── Tarjetas (cards) ── */
     .card {
       border: 1px solid var(--gris-linea);
       border-radius: 3px;
@@ -214,7 +234,6 @@ $datos_footer = [
       background: var(--gris-claro);
     }
 
-    /* ── Grid de campos ── */
     .campos {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
@@ -242,7 +261,6 @@ $datos_footer = [
 
     .campo.full { grid-column: 1 / -1; }
 
-    /* ── Footer: Firmas ── */
     .footer {
       padding: 1rem 1.5rem 1.2rem;
       border-top: 2px solid var(--azul-oscuro);
@@ -256,6 +274,7 @@ $datos_footer = [
       grid-template-columns: 1fr 1fr;
       gap: 2rem;
       margin-bottom: 1rem;
+      margin-top: 3.5rem; /* Separación extra solicitada */
     }
 
     .firma-bloque {
@@ -296,7 +315,6 @@ $datos_footer = [
       padding-top: 0.6rem;
     }
 
-    /* ── Botón imprimir ── */
     .btn-imprimir {
       position: fixed;
       top: 1rem;
@@ -320,29 +338,33 @@ $datos_footer = [
 
     .btn-imprimir:hover { background: var(--negro); }
 
-    /* ── Responsivo ── */
-    @media (max-width: 600px) {
-      .encabezado {
-        flex-direction: column;
-        text-align: center;
-        padding: 1rem;
-        gap: 0.6rem;
-      }
-      .logo-wrap { width: 55px; height: 55px; }
-      .encabezado-texto h1 { font-size: 0.75rem; }
-      .encabezado-texto .titulo-doc { font-size: 0.95rem; }
-      .cuerpo { padding: 0.8rem 0.8rem 0.6rem; gap: 0.8rem; }
-      .campos { grid-template-columns: 1fr 1fr; }
-      .campo .valor { font-size: 0.78rem; }
-      .firmas { grid-template-columns: 1fr; gap: 1rem; }
-      .footer { padding: 0.4rem 1.5rem 1rem; }
+    /* ── Botón Volver ── */
+    .btn-volver {
+      position: fixed;
+      bottom: 1rem;
+      left: 1rem;
+      padding: 0.4rem 0.9rem;
+      background: var(--azul-oscuro);
+      color: var(--blanco);
+      border: 2px solid var(--negro);
+      border-radius: 3px;
+      cursor: pointer;
+      font-family: 'Cinzel', serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.08em;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+      z-index: 999;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .btn-volver:hover { 
+      background: var(--negro); 
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(28, 49, 102, 0.4);
     }
 
-    @media (max-width: 400px) {
-      .campos { grid-template-columns: 1fr; }
-    }
-
-    /* ── Impresión ── */
     @media print {
       /* Ocultar elementos de SweetAlert en la impresión y evitar que interfieran con el layout */
       .swal2-container, .swal2-backdrop, .swal2-popup, .swal2-overlay, .swal2-modal {
@@ -353,18 +375,9 @@ $datos_footer = [
         height: auto !important;
       }
 
-      body {
-        background: white;
-        padding: 0;
-      }
-      .hoja {
-        width: 100%;
-        margin: 0;
-        border: none;
-        box-shadow: none;
-        border-radius: 0;
-      }
-      .btn-imprimir { display: none; }
+      body { background: white; padding: 0; }
+      .hoja { width: 100%; margin: 0; border: none; box-shadow: none; border-radius: 0; }
+      .btn-imprimir, .btn-volver { display: none; }
       .card { page-break-inside: avoid; }
       .cuerpo { padding: 0.8rem 1.5rem; }
       .footer { padding: 0.8rem 1.5rem; }
@@ -374,14 +387,10 @@ $datos_footer = [
 <body>
 
 <div class="hoja">
-
-  <!-- ENCABEZADO -->
   <div class="encabezado">
     <div class="logo-wrap">
       <?php if (!empty($datos_municipio['escudo_nacion'])): ?>
-        <img src="<?= htmlspecialchars($datos_municipio['escudo_nacion']) ?>" alt="Escudo Nacional de El Salvador">
-      <?php else: ?>
-        <div class="logo-placeholder">ESCUDO<br>NACIONAL</div>
+        <img src="<?= htmlspecialchars($datos_municipio['escudo_nacion']) ?>" alt="Escudo Nacional">
       <?php endif; ?>
     </div>
     <div class="encabezado-texto">
@@ -395,10 +404,7 @@ $datos_footer = [
     </div>
   </div>
 
-  <!-- CUERPO -->
   <div class="cuerpo">
-
-    <!-- DATOS DEL FALLECIDO -->
     <div class="card">
       <div class="card-header">Datos del Fallecido</div>
       <div class="card-body">
@@ -431,7 +437,6 @@ $datos_footer = [
       </div>
     </div>
 
-    <!-- DATOS DEL DECLARANTE -->
     <div class="card">
       <div class="card-header">Datos del Declarante</div>
       <div class="card-body">
@@ -452,7 +457,6 @@ $datos_footer = [
       </div>
     </div>
 
-    <!-- FECHA DE REGISTRO -->
     <div class="card">
       <div class="card-header">Registro</div>
       <div class="card-body">
@@ -464,71 +468,57 @@ $datos_footer = [
         </div>
       </div>
     </div>
+  </div>
 
-  </div><!-- /cuerpo -->
-
-  <!-- FOOTER: FIRMAS -->
   <div class="footer">
     <div class="firmas">
       <div class="firma-bloque">
-        <div class="firma-linea"></div>
+        <div style="height: 50px; display: flex; align-items: flex-end; justify-content: center; margin-bottom: -22px; position: relative; z-index: 5; pointer-events: none;">
+            <img src="../assets/uploads/firmas/firma1.png" style="height: 100%; max-width: 130px; object-fit: contain;">
+        </div>
+        <div class="firma-linea" style="position: relative; z-index: 1;"></div>
         <div class="firma-titulo">Jefe de Registros Familiares</div>
         <div class="firma-nombre"><?= htmlspecialchars($datos_footer['jefe_registros']) ?></div>
       </div>
       <div class="firma-bloque">
-        <div class="firma-linea"></div>
+        <div style="height: 50px; margin-bottom: -22px; position: relative; z-index: 5; pointer-events: none;"></div>
+        <div class="firma-linea" style="position: relative; z-index: 1;"></div>
         <div class="firma-titulo">Firma del Declarante</div>
         <div class="firma-nombre"><?= htmlspecialchars($datos_footer['informante']) ?></div>
       </div>
     </div>
-    <div class="atendio-wrap">
-      <?= htmlspecialchars($datos_footer['atendio']) ?>
-    </div>
+    <div class="atendio-wrap"><?= htmlspecialchars($datos_footer['atendio']) ?></div>
   </div>
+</div>
 
-</div><!-- /hoja -->
+<button class="btn-volver" onclick="window.close() || (window.location.href = '../views/recepcion_defuncion.php')">&#11013; Volver</button>
+<button class="btn-imprimir" onclick="confirmarImpresion()">🖨️ Imprimir</button>
 
-<button class="btn-imprimir" onclick="confirmarImpresion()">
-  🖨️ Imprimir
-</button>
-
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
-const Toast = Swal.mixin({
-    toast: true,
-    position: 'top-end',
-    showConfirmButton: false,
-    timer: 2000,
-    timerProgressBar: true
-});
-
 function confirmarImpresion(){
-
     Swal.fire({
-
-        title: '¿Imprimir Partida?',
+        title: '¿Imprimir Acta?',
         text: 'Verifique que toda la información sea correcta.',
         icon: 'question',
         showCancelButton: true,
-        confirmButtonColor: '#003366',
+        confirmButtonColor: '#1C3166',
         cancelButtonColor: '#d33',
         confirmButtonText: 'Sí, imprimir',
         cancelButtonText: 'Cancelar'
-
     }).then((result) => {
-
         if(result.isConfirmed){
-
             Swal.close();
-            setTimeout(() => {
+            setTimeout(function() {
                 window.print();
             }, 350);
-
         }
-
     });
-
 }
 
+<?php if ($id_carta): ?>
+window.onload = function() { setTimeout(function() { confirmarImpresion(); }, 500); };
+<?php endif; ?>
 </script>
 </body>
 </html>

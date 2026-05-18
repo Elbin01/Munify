@@ -30,10 +30,15 @@ class EstadisticaModel {
      * Obtiene la distribución de trámites por tipo
      */
     public function getDistribucionTramites() {
-        $sql = "SELECT t.nombre as tramite, COUNT(c.id_cita) as total 
-                FROM Tipo_Tramite t
-                LEFT JOIN Cita c ON t.id_tipo = c.id_tipo
-                GROUP BY t.id_tipo";
+        $sql = "SELECT 
+                    t.nombre AS tramite,
+                    CASE 
+                        WHEN t.id_tipo = 1 THEN (SELECT COUNT(*) FROM Partida_Nacimiento)
+                        WHEN t.id_tipo = 2 THEN (SELECT COUNT(*) FROM Carta_Defuncion)
+                        WHEN t.id_tipo = 3 THEN (SELECT COUNT(*) FROM Carnet_Menoridad)
+                        ELSE 0
+                    END AS total
+                FROM Tipo_Tramite t";
         try {
             $stmt = $this->conn->query($sql);
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -72,6 +77,26 @@ class EstadisticaModel {
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
             return array();
+        }
+    }
+    /**
+     * Obtiene demografía de ciudadanos (Adultos vs Menores)
+     */
+    public function getDemografiaCiudadanos() {
+        $sql = "SELECT 
+                    SUM(CASE WHEN TIMESTAMPDIFF(YEAR, fecha_nacimiento, CURDATE()) >= 18 THEN 1 ELSE 0 END) AS adultos,
+                    SUM(CASE WHEN TIMESTAMPDIFF(YEAR, fecha_nacimiento, CURDATE()) < 18 THEN 1 ELSE 0 END) AS menores
+                FROM Ciudadano
+                WHERE fecha_nacimiento IS NOT NULL";
+        try {
+            $stmt = $this->conn->query($sql);
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+            return [
+                'Adultos' => (int)($result['adultos'] ?? 0),
+                'Menores' => (int)($result['menores'] ?? 0)
+            ];
+        } catch (PDOException $e) {
+            return ['Adultos' => 0, 'Menores' => 0];
         }
     }
 }

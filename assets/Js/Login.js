@@ -57,9 +57,13 @@
                     welcomeUser.innerText = data.usuario || user;
                     welcomeModal.classList.add('show');
 
-                    // 3. Redirección exitosa
+                    // 3. Redirección basada en rol
                     setTimeout(() => {
-                        window.location.href = 'SolicitudCitas.php';
+                        if (data.rol == 1) {
+                            window.location.href = 'dashboard.php';
+                        } else {
+                            window.location.href = '../index.php';
+                        }
                     }, 2500);
                 } else {
                     showError();
@@ -113,14 +117,14 @@
                     recoverBtn.classList.remove('loading');
                     recoverBtn.disabled = false;
                     recoveryEmail.value = '';
-                    alert('Se han enviado las instrucciones a su correo electrónico.');
+                    window.showToast('Se han enviado las instrucciones a su correo electrónico.');
 
                     // Volver al login
                     forgotSection.style.display = 'none';
                     loginSection.style.display = 'block';
                 }, 1500);
             } else {
-                alert('Por favor ingrese un correo válido.');
+                window.showToast('Por favor ingrese un correo válido.');
             }
         });
     }

@@ -12,13 +12,13 @@
     <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="../assets/Css/index.css">
-    <link rel="stylesheet" href="../assets/Css/sidebar.css">
-    <link rel="stylesheet" href="../assets/Css/partida.css">
-    <link rel="stylesheet" href="../assets/Css/footer.css">
-    <link rel="stylesheet" href="../assets/Css/panel_ayuda.css">
+    <link rel="stylesheet" href="../assets/Css/index.css?v=<?= time() ?>">
+    <link rel="stylesheet" href="../assets/Css/sidebar.css?v=<?= time() ?>">
+    <link rel="stylesheet" href="../assets/Css/partida.css?v=<?= time() ?>">
+    <link rel="stylesheet" href="../assets/Css/footer.css?v=<?= time() ?>">
+    <link rel="stylesheet" href="../assets/Css/panel_ayuda.css?v=<?= time() ?>">
     <style>
-        body { width: 100%; overflow-x: hidden; display: block !important; }
+        body { width: 100%; overflow-x: hidden; }
         .dashboard-container { display: flex; width: 100%; min-height: 100vh; background-color: var(--bg-light); }
         .main-content {
             flex: 1;
@@ -112,6 +112,40 @@
                                             <option>Femenino</option>
                                         </select>
                                     </div>
+                                    <div class="col-md-12">
+                                        <label class="form-label fw-bold text-dark small">Lugar de Nacimiento</label>
+                                        <input type="text" id="regLugarNac" class="form-control border-secondary-subtle shadow-none" placeholder="Ciudad, Departamento">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-bold text-dark small">Nombre del Padre</label>
+                                        <input type="text" id="regNombrePadre" class="form-control border-secondary-subtle shadow-none">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-bold text-dark small">Nombre de la Madre</label>
+                                        <input type="text" id="regNombreMadre" class="form-control border-secondary-subtle shadow-none">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <h6 class="border-bottom pb-2 text-muted fw-bold"><i class="bi bi-body-text me-2"></i>Descripción Física</h6>
+                            <div class="row g-3 mt-1">
+                                <div class="col-md-4">
+                                    <label class="form-label fw-bold text-dark small">Color de Piel</label>
+                                    <input type="text" id="regColorPiel" class="form-control border-secondary-subtle shadow-none" placeholder="Ej: Trigueño, Blanco">
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label fw-bold text-dark small">Color de Ojos</label>
+                                    <input type="text" id="regColorOjos" class="form-control border-secondary-subtle shadow-none" placeholder="Ej: Café, Negro">
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label fw-bold text-dark small">Color de Cabello</label>
+                                    <input type="text" id="regColorCabello" class="form-control border-secondary-subtle shadow-none" placeholder="Ej: Negro, Castaño">
+                                </div>
+                                <div class="col-md-12">
+                                    <label class="form-label fw-bold text-dark small">Señas Especiales</label>
+                                    <input type="text" id="regSenales" class="form-control border-secondary-subtle shadow-none" placeholder="Cicatrices, lunares, etc.">
                                 </div>
                             </div>
                         </div>
@@ -123,7 +157,7 @@
                                     <label class="form-label fw-bold text-dark small">DUI Responsable</label>
                                     <div class="input-group mb-2 shadow-sm">
                                         <input type="text" class="form-control border-0 dui-mask" placeholder="00000000-0" id="duiResponsable" maxlength="10">
-                                        <button class="btn btn-sm text-white fw-bold" type="button" style="background-color: var(--color-3);">Buscar</button>
+                                        <button id="btnBuscarResponsable" class="btn btn-sm text-white fw-bold" type="button" style="background-color: var(--color-3);">Buscar</button>
                                     </div>
                                 </div>
                                 <div class="col-md-8">
@@ -136,9 +170,13 @@
                         <div>
                             <h6 class="border-bottom pb-2 text-muted fw-bold"><i class="bi bi-geo-alt-fill me-2"></i>Información Adicional</h6>
                             <div class="row g-3 mt-1">
-                                <div class="col-md-12">
+                                <div class="col-md-6">
                                     <label class="form-label fw-bold text-dark small">Dirección Residencial</label>
                                     <input type="text" id="regDireccion" class="form-control border-secondary-subtle shadow-none">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-bold text-dark small">Centro de Estudios</label>
+                                    <input type="text" id="regLugarEstudio" class="form-control border-secondary-subtle shadow-none">
                                 </div>
                             </div>
                         </div>
@@ -237,15 +275,21 @@
 
         <main class="main-content">
             <div class="container-fluid py-4 px-4">
-                <div class="d-flex justify-content-between align-items-center mb-5">
+                <!-- Page Header -->
+                <div class="d-flex justify-content-between align-items-center mb-4">
                     <div>
-                        <h2 class="fw-bold mb-0" style="color: var(--color-3);">
-                            Trámite: Carnet de Minoridad
-                            <button class="btn btn-outline-secondary rounded-circle shadow-sm help-btn" data-bs-toggle="offcanvas" data-bs-target="#ayudaMunify">
+                        <h2 class="fw-bold mb-1" style="color: var(--color-3);">
+                            Carnet de Minoridad
+                            <button class="btn btn-sm btn-outline-secondary rounded-circle shadow-sm ms-2" data-bs-toggle="offcanvas" data-bs-target="#ayudaMunify" style="width: 24px; height: 24px; padding: 0; font-size: 0.75rem;">
                                 <i class="bi bi-info-lg"></i>
                             </button>
                         </h2>
-                        <p class="text-muted mb-0">Emisión de identificación para menores de edad</p>
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb mb-0">
+                                <li class="breadcrumb-item"><a href="dashboard.php" class="text-decoration-none text-muted small">Dashboard</a></li>
+                                <li class="breadcrumb-item active fw-semibold small" style="color: var(--color-3);">Minoridad</li>
+                            </ol>
+                        </nav>
                     </div>
                     <div>
                         <button class="btn-asiento shadow-sm" data-bs-toggle="modal" data-bs-target="#modalMinoridad">
@@ -260,7 +304,7 @@
                         <span class="input-group-text bg-white border-0 text-muted px-4">
                             <i class="bi bi-search"></i>
                         </span>
-                        <input type="text" id="searchInput" class="form-control border-0 ps-0 shadow-none dui-mask" placeholder="Ingrese Nombres o Apellidos del menor" autofocus autocomplete="off" maxlength="10">
+                        <input type="text" id="searchInput" class="form-control border-0 ps-0 shadow-none" placeholder="Ingrese Nombres o Apellidos del menor" autofocus autocomplete="off">
                         <button class="btn border-0 text-white px-4" type="submit" id="btnBuscar" style="background-color: var(--color-3); font-weight: bold;">Buscar</button>
                     </form>
                 </div>
@@ -269,9 +313,9 @@
                     <!-- Éxito -->
                     <div id="cardSuccess" class="card result-card result-card-success d-none">
                         <div class="card-body p-4">
-                            <div class="d-flex align-items-center justify-content-between flex-wrap gap-3">
-                                <div class="d-flex align-items-center gap-4">
-                                    <div class="avatar-circle">
+                            <div class="row align-items-center">
+                                <div class="col-md-8 d-flex align-items-center gap-4">
+                                    <div class="avatar-circle flex-shrink-0">
                                         <i class="bi bi-person-vcard-fill"></i>
                                     </div>
                                     <div>
@@ -281,7 +325,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div>
+                                <div class="col-md-4 text-md-end mt-3 mt-md-0">
                                     <button id="btnAccionPartida" class="btn-action-primary btn-lg shadow-sm" data-bs-toggle="modal" data-bs-target="#modalPartida">
                                         <i class="bi bi-printer-fill me-2"></i> Generar Carnet
                                     </button>
@@ -328,6 +372,6 @@
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="../assets/Js/recepcion_minoridad.js"></script>
+    <script src="../assets/Js/recepcion_minoridad.js?v=<?php echo time(); ?>"></script>
 </body>
 </html>

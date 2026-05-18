@@ -1,5 +1,5 @@
 <?php
-require_once '../config/Conexion.php';
+require_once __DIR__ . '/../config/Conexion.php';
 
 class Usuario {
     private $conn;
@@ -34,7 +34,7 @@ class Usuario {
     }
 
     public function obtenerPorId($id) {
-        $sql = "SELECT * FROM Usuario WHERE id_usuario = :id";
+        $sql = "SELECT u.*, r.nombre as rol_nombre FROM usuario u LEFT JOIN rol r ON u.id_rol = r.id_rol WHERE u.id_usuario = :id";
         $stmt = $this->conn->prepare($sql);
         $stmt->bindParam(':id', $id);
         $stmt->execute();

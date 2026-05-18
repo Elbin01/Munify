@@ -232,6 +232,14 @@ $datos_footer = [
       width: 100%;
     }
 
+    /* ── Contenedor Padres (Lado a Lado) ── */
+    .padres-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      width: 100%;
+    }
+
     .card-header {
       background: var(--azul-oscuro);
       color: var(--blanco);
@@ -301,7 +309,8 @@ $datos_footer = [
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 2rem;
-      margin-bottom: 1rem;
+      margin-top: 2.2rem;
+      margin-bottom: 1.2rem;
     }
 
     .firma-bloque {
@@ -309,12 +318,34 @@ $datos_footer = [
       flex-direction: column;
       align-items: center;
       gap: 0.3rem;
+      position: relative;
+    }
+
+    .firma-imagen-wrap {
+      height: 65px;
+      margin-bottom: -65px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 5;
+      pointer-events: none;
+      position: relative;
+      top: -25px;
+    }
+
+    .firma-imagen-wrap img {
+      height: 100%;
+      max-width: 180px;
+      object-fit: contain;
     }
 
     .firma-linea {
-      width: 50%;
+      width: 60%;
       border-bottom: 1.5px solid var(--negro);
-      height: 10px;
+      margin-top: 2.8rem;
+      margin-bottom: 0.3rem;
+      position: relative;
+      z-index: 1;
     }
 
     .firma-titulo {
@@ -366,6 +397,33 @@ $datos_footer = [
 
     .btn-imprimir:hover { background: var(--negro); }
 
+    /* ── Botón Volver ── */
+    .btn-volver {
+      position: fixed;
+      bottom: 1rem;
+      left: 1rem;
+      padding: 0.4rem 0.9rem;
+      background: var(--azul-oscuro);
+      color: var(--blanco);
+      border: 2px solid var(--negro);
+      border-radius: 3px;
+      cursor: pointer;
+      font-family: 'Cinzel', serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.08em;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+      z-index: 999;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .btn-volver:hover { 
+      background: var(--negro); 
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(28, 49, 102, 0.4);
+    }
+
     /* ── Responsivo ── */
     @media (max-width: 600px) {
       .encabezado {
@@ -386,6 +444,11 @@ $datos_footer = [
 
       .campo .valor { font-size: 0.78rem; }
 
+      .padres-container {
+        grid-template-columns: 1fr;
+        gap: 0.8rem;
+      }
+
       .firmas { grid-template-columns: 1fr; gap: 1rem; }
 
       .footer { padding: 0.4rem 1.5rem 1rem; }
@@ -397,6 +460,15 @@ $datos_footer = [
 
     /* ── Print ── */
     @media print {
+      /* Ocultar elementos de SweetAlert en la impresión y evitar que interfieran con el layout */
+      .swal2-container, .swal2-backdrop, .swal2-popup, .swal2-overlay, .swal2-modal {
+        display: none !important;
+      }
+      body.swal2-shown, html.swal2-shown {
+        overflow: visible !important;
+        height: auto !important;
+      }
+
       @page {
         margin: 0.5cm;
         size: letter;
@@ -411,7 +483,7 @@ $datos_footer = [
         max-width: none;
       }
 
-      .btn-imprimir { display: none; }
+      .btn-imprimir, .btn-volver { display: none; }
 
       .card { page-break-inside: avoid; }
 
@@ -424,6 +496,10 @@ $datos_footer = [
       .encabezado-texto .titulo-doc { font-size: 1.05rem; margin-top: 0.35rem; }
       .campo label { font-size: 0.6rem; }
       .campo .valor { font-size: 0.88rem; }
+      .padres-container {
+        grid-template-columns: 1fr 1fr !important;
+        gap: 0.8rem;
+      }
       .card-header { padding: 0.35rem 1.1rem; font-size: 0.8rem; }
       .firmas { gap: 1.8rem; margin-bottom: 0.7rem; }
       .atendio-wrap { padding-top: 0.45rem; font-size: 0.75rem; }
@@ -510,59 +586,62 @@ $datos_footer = [
       </div>
     </div>
 
-    <!-- DATOS DEL PADRE -->
-    <div class="card">
-      <div class="card-header">Datos del Padre</div>
-      <div class="card-body">
-        <div class="campos">
-          <div class="campo full">
-            <label>Nombre completo</label>
-            <div class="valor"><?= htmlspecialchars((string)$datos_padre['nombre']) ?></div>
-          </div>
-          <div class="campo">
-            <label>DUI</label>
-            <div class="valor"><?= htmlspecialchars((string)$datos_padre['dui']) ?></div>
-          </div>
-          <div class="campo">
-            <label>Edad</label>
-            <div class="valor"><?= htmlspecialchars((string)$datos_padre['edad']) ?> años</div>
-          </div>
-          <div class="campo">
-            <label>Profesión u oficio</label>
-            <div class="valor"><?= htmlspecialchars((string)$datos_padre['profesion']) ?></div>
-          </div>
-          <div class="campo full">
-            <label>Domicilio</label>
-            <div class="valor"><?= htmlspecialchars((string)$datos_padre['domicilio']) ?></div>
+    <!-- SECCIÓN DE LOS PADRES -->
+    <div class="padres-container">
+      <!-- DATOS DEL PADRE -->
+      <div class="card">
+        <div class="card-header">Datos del Padre</div>
+        <div class="card-body">
+          <div class="campos">
+            <div class="campo full">
+              <label>Nombre completo</label>
+              <div class="valor"><?= htmlspecialchars((string)$datos_padre['nombre']) ?></div>
+            </div>
+            <div class="campo">
+              <label>DUI</label>
+              <div class="valor"><?= htmlspecialchars((string)$datos_padre['dui']) ?></div>
+            </div>
+            <div class="campo">
+              <label>Edad</label>
+              <div class="valor"><?= htmlspecialchars((string)$datos_padre['edad']) ?> años</div>
+            </div>
+            <div class="campo">
+              <label>Profesión u oficio</label>
+              <div class="valor"><?= htmlspecialchars((string)$datos_padre['profesion']) ?></div>
+            </div>
+            <div class="campo full">
+              <label>Domicilio</label>
+              <div class="valor"><?= htmlspecialchars((string)$datos_padre['domicilio']) ?></div>
+            </div>
           </div>
         </div>
       </div>
-    </div>
 
-    <!-- DATOS DE LA MADRE -->
-    <div class="card">
-      <div class="card-header">Datos de la Madre</div>
-      <div class="card-body">
-        <div class="campos">
-          <div class="campo full">
-            <label>Nombre completo</label>
-            <div class="valor"><?= htmlspecialchars((string)$datos_madre['nombre']) ?></div>
-          </div>
-          <div class="campo">
-            <label>DUI</label>
-            <div class="valor"><?= htmlspecialchars((string)$datos_madre['dui']) ?></div>
-          </div>
-          <div class="campo">
-            <label>Edad</label>
-            <div class="valor"><?= htmlspecialchars((string)$datos_madre['edad']) ?> años</div>
-          </div>
-          <div class="campo">
-            <label>Profesión u oficio</label>
-            <div class="valor"><?= htmlspecialchars((string)$datos_madre['profesion']) ?></div>
-          </div>
-          <div class="campo full">
-            <label>Domicilio</label>
-            <div class="valor"><?= htmlspecialchars((string)$datos_madre['domicilio']) ?></div>
+      <!-- DATOS DE LA MADRE -->
+      <div class="card">
+        <div class="card-header">Datos de la Madre</div>
+        <div class="card-body">
+          <div class="campos">
+            <div class="campo full">
+              <label>Nombre completo</label>
+              <div class="valor"><?= htmlspecialchars((string)$datos_madre['nombre']) ?></div>
+            </div>
+            <div class="campo">
+              <label>DUI</label>
+              <div class="valor"><?= htmlspecialchars((string)$datos_madre['dui']) ?></div>
+            </div>
+            <div class="campo">
+              <label>Edad</label>
+              <div class="valor"><?= htmlspecialchars((string)$datos_madre['edad']) ?> años</div>
+            </div>
+            <div class="campo">
+              <label>Profesión u oficio</label>
+              <div class="valor"><?= htmlspecialchars((string)$datos_madre['profesion']) ?></div>
+            </div>
+            <div class="campo full">
+              <label>Domicilio</label>
+              <div class="valor"><?= htmlspecialchars((string)$datos_madre['domicilio']) ?></div>
+            </div>
           </div>
         </div>
       </div>
@@ -599,6 +678,9 @@ $datos_footer = [
   <div class="footer">
     <div class="firmas">
       <div class="firma-bloque">
+        <div class="firma-imagen-wrap">
+          <img src="../assets/uploads/firmas/firma1.png" alt="Firma Jefe de Distrito">
+        </div>
         <div class="firma-linea"></div>
         <div class="firma-titulo">Jefe de Registros Familiares</div>
         <div class="firma-nombre"><?= htmlspecialchars((string)$datos_footer['jefe_registros']) ?></div>
@@ -618,13 +700,35 @@ $datos_footer = [
 
 </div><!-- /hoja -->
 
-<button class="btn-imprimir" onclick="window.print()">&#128438; Imprimir</button>
+<button class="btn-volver" onclick="window.close() || (window.location.href = '../views/recepcion_partida.php')">&#11013; Volver</button>
+<button class="btn-imprimir" onclick="confirmarImpresion()">&#128438; Imprimir</button>
 
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
+    function confirmarImpresion() {
+        Swal.fire({
+            title: '¿Imprimir Partida?',
+            text: 'Verifique que toda la información sea correcta antes de imprimir.',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#1C3166',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sí, imprimir',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Swal.close();
+                setTimeout(function() {
+                    window.print();
+                }, 350);
+            }
+        });
+    }
+
     // Disparar el diálogo de impresión automáticamente al cargar la página
     window.onload = function() {
         setTimeout(function() {
-            window.print();
+            confirmarImpresion();
         }, 500);
     };
 </script>

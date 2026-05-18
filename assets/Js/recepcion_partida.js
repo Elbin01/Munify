@@ -109,7 +109,7 @@ $(document).ready(function() {
                 }
             },
             error: function() {
-                alert("Hubo un error al conectar con la base de datos.");
+                window.showToast("Hubo un error al conectar con la base de datos.");
             }
         });
     });
@@ -130,29 +130,41 @@ $(document).ready(function() {
         };
 
         if (data.nombres === '' || data.apellidos === '') {
-            alert('Los campos Nombres y Apellidos son obligatorios.');
+            window.showToast('Los campos Nombres y Apellidos son obligatorios.');
             return;
         }
 
-        $.ajax({
-            url: '../controller/guardar_ciudadano_controller.php',
-            type: 'POST',
-            data: data,
-            dataType: 'json',
-            success: function(response) {
-                if (response.success) {
-                    alert(response.message);
-                    $('#modalCiudadano').modal('hide');
-                    $('#formCiudadano')[0].reset();
-                    // Opcional: buscar automáticamente el ciudadano recién creado
-                    $('#searchInput').val(data.dui || data.nombres);
-                    $('#searchForm').submit();
-                } else {
-                    alert('Error: ' + response.message);
-                }
-            },
-            error: function() {
-                alert('Hubo un error al procesar la solicitud.');
+        Swal.fire({
+            title: '¿Guardar ciudadano?',
+            text: "Verifique que los datos ingresados sean correctos.",
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#1C3166',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sí, guardar',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: '../controller/guardar_ciudadano_controller.php',
+                    type: 'POST',
+                    data: data,
+                    dataType: 'json',
+                    success: function(response) {
+                        if (response.success) {
+                            window.showToast(response.message);
+                            $('#modalCiudadano').modal('hide');
+                            $('#formCiudadano')[0].reset();
+                            $('#searchInput').val(data.dui || data.nombres);
+                            $('#searchForm').submit();
+                        } else {
+                            window.showToast('Error: ' + response.message);
+                        }
+                    },
+                    error: function() {
+                        window.showToast('Hubo un error al procesar la solicitud.');
+                    }
+                });
             }
         });
     });
@@ -168,10 +180,74 @@ $(document).ready(function() {
         $(this).val(val);
     });
 
+    // Validar mayoría de edad para habilitar/deshabilitar DUI
+    $('#regFechaNac').on('change', function() {
+        const fechaVal = $(this).val();
+        if (!fechaVal) {
+            $('#modalRegDui').prop('disabled', false);
+            return;
+        }
+
+        const fechaNac = new Date(fechaVal);
+        const hoy = new Date();
+        let edad = hoy.getFullYear() - fechaNac.getFullYear();
+        const m = hoy.getMonth() - fechaNac.getMonth();
+        
+        if (m < 0 || (m === 0 && hoy.getDate() < fechaNac.getDate())) {
+            edad--;
+        }
+
+        if (edad >= 18) {
+            $('#modalRegDui').prop('disabled', false);
+        } else {
+            $('#modalRegDui').prop('disabled', true).val(''); // Deshabilitar y limpiar campo
+        }
+    });
+
+    // Buscar Padre por DUI
+    $('#btnBuscarPadre').on('click', function() {
+        const dui = $('#duiPadre').val().trim();
+        if (dui.length < 10) return window.showToast('DUI inválido');
+        
+        $.ajax({
+            url: '../controller/buscar_ciudadano_controller.php',
+            type: 'GET',
+            data: { q: dui },
+            dataType: 'json',
+            success: function(data) {
+                if (data && data.length > 0) {
+                    $('#regNombrePadre').val(data[0].nombres + ' ' + data[0].apellidos);
+                } else {
+                    window.showToast('Padre no encontrado');
+                }
+            }
+        });
+    });
+
+    // Buscar Madre por DUI
+    $('#btnBuscarMadre').on('click', function() {
+        const dui = $('#duiMadre').val().trim();
+        if (dui.length < 10) return window.showToast('DUI inválido');
+        
+        $.ajax({
+            url: '../controller/buscar_ciudadano_controller.php',
+            type: 'GET',
+            data: { q: dui },
+            dataType: 'json',
+            success: function(data) {
+                if (data && data.length > 0) {
+                    $('#regNombreMadre').val(data[0].nombres + ' ' + data[0].apellidos);
+                } else {
+                    window.showToast('Madre no encontrada');
+                }
+            }
+        });
+    });
+
     // Generar e imprimir partida
     $('#btnImprimirPartida').on('click', function() {
         if (!window.selectedCiudadanoId) {
-            alert('Error: No se ha seleccionado un ciudadano.');
+            window.showToast('Error: No se ha seleccionado un ciudadano.');
             return;
         }
 
@@ -183,29 +259,49 @@ $(document).ready(function() {
         };
 
         if (data.numero_partida === '') {
-            alert('El número de partida es obligatorio.');
+            window.showToast('El número de partida es obligatorio.');
             return;
         }
 
-        $.ajax({
-            url: '../controller/guardar_partida_controller.php',
-            type: 'POST',
-            data: data,
-            dataType: 'json',
-            success: function(response) {
-                if (response.success) {
-                    $('#modalPartida').modal('hide');
-                    $('#formGenerarPartida')[0].reset();
-                    // Abrir el reporte en una nueva pestaña
-                    window.open(`../reportes/partida_nacimiento.php?id=${response.id_partida}`, '_blank');
-                    // Recargar la tabla de últimas partidas
-                    cargarUltimasPartidas();
-                } else {
-                    alert('Error: ' + response.message);
-                }
-            },
-            error: function() {
-                alert('Hubo un error al procesar la solicitud.');
+        Swal.fire({
+            title: '¿Generar Partida?',
+            text: "Se registrará oficialmente en el tomo y folio indicados.",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#1C3166',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sí, generar e imprimir',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: '../controller/guardar_partida_controller.php',
+                    type: 'POST',
+                    data: data,
+                    dataType: 'json',
+                    success: function(response) {
+                        if (response.success) {
+                            $('#modalPartida').modal('hide');
+                            $('#formGenerarPartida')[0].reset();
+                            cargarUltimasPartidas();
+                            
+                            Swal.fire({
+                                icon: 'success',
+                                title: '¡Partida Generada!',
+                                text: 'El documento ha sido registrado y está listo para imprimir.',
+                                confirmButtonColor: '#1C3166',
+                                confirmButtonText: '<i class="bi bi-printer-fill"></i> Abrir Documento'
+                            }).then(() => {
+                                window.open(`../reportes/partida_nacimiento.php?id=${response.id_partida}`, '_blank');
+                            });
+                        } else {
+                            window.showToast('Error: ' + response.message);
+                        }
+                    },
+                    error: function() {
+                        window.showToast('Hubo un error al procesar la solicitud.');
+                    }
+                });
             }
         });
     });
@@ -239,7 +335,15 @@ window.seleccionarCiudadano = function(index) {
         
         // Acción de imprimir directamente
         btnAccion.off('click').on('click', function() {
-            window.open(`../reportes/partida_nacimiento.php?id=${ciudadano.id_partida}`, '_blank');
+            Swal.fire({
+                icon: 'info',
+                title: 'Documento Existente',
+                text: 'La Partida de Nacimiento ya está generada en el sistema.',
+                confirmButtonColor: '#1C3166',
+                confirmButtonText: '<i class="bi bi-printer-fill"></i> Imprimir Documento'
+            }).then(() => {
+                window.open(`../reportes/partida_nacimiento.php?id=${ciudadano.id_partida}`, '_blank');
+            });
         });
     } else {
         // No tiene partida -> Modo Generar (abrir modal)

@@ -4,8 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Iniciar Sesión - MUNIFY</title>
+    <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <!-- Custom CSS -->
     <link rel="stylesheet" href="../assets/Css/index.css?v=<?php echo time(); ?>">
 </head>
 <body>
@@ -109,6 +115,60 @@
             <p class="redirect-text">Redirigiendo al panel de control...</p>
         </div>
     </div>
+
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+    window.showToast = function(message, type = 'auto') {
+        if (!message) return;
+        
+        if (type === 'auto' || type === 'info') {
+            const lower = message.toLowerCase();
+            if (lower.includes('error') || lower.includes('incorrecto') || lower.includes('inválido') || lower.includes('invalido') || lower.includes('no encontrado') || lower.includes('no encontrada') || lower.includes('obligatorio') || lower.includes('obligatorios') || lower.includes('falló') || lower.includes('fallo') || lower.includes('no se ha seleccionado') || lower.includes('inválida') || lower.includes('invalidas')) {
+                type = 'danger';
+            } else if (lower.includes('correcto') || lower.includes('correctamente') || lower.includes('exitosamente') || lower.includes('guardado') || lower.includes('éxito') || lower.includes('exito') || lower.includes('completado') || lower.includes('aceptadas') || lower.includes('actualizado') || lower.includes('completo')) {
+                type = 'success';
+            } else if (lower.includes('advertencia') || lower.includes('atención') || lower.includes('atencion') || lower.includes('cuidado') || lower.includes('pendiente') || lower.includes('ingrese') || lower.includes('seleccione') || lower.includes('favor')) {
+                type = 'warning';
+            } else {
+                type = 'info';
+            }
+        }
+
+        let swalIcon = 'info';
+        let swalTitle = 'Información';
+        
+        if (type === 'success') {
+            swalIcon = 'success';
+            swalTitle = 'Éxito';
+        } else if (type === 'danger' || type === 'error') {
+            swalIcon = 'error';
+            swalTitle = 'Error';
+        } else if (type === 'warning') {
+            swalIcon = 'warning';
+            swalTitle = 'Advertencia';
+        }
+
+        if (typeof Swal !== 'undefined') {
+            Swal.fire({
+                icon: swalIcon,
+                title: swalTitle,
+                text: message,
+                confirmButtonColor: '#1C3166',
+                confirmButtonText: 'Aceptar'
+            });
+        } else {
+            console.log(swalTitle + ": " + message);
+        }
+    };
+
+    window.alert = function(message) {
+        window.showToast(message, 'auto');
+    };
+    </script>
 
     <script src="../assets/Js/Login.js?v=<?php echo time(); ?>"></script>
 </body>

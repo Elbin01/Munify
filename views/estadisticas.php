@@ -8,6 +8,7 @@ $estadisticaModel = new EstadisticaModel();
 $citasMes = $estadisticaModel->getCitasPorMes();
 $distribucion = $estadisticaModel->getDistribucionTramites();
 $partidasMes = $estadisticaModel->getPartidasPorMes();
+$demografia = $estadisticaModel->getDemografiaCiudadanos();
 
 // Preparar arrays para Tendencia
 $mesesNombres = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
@@ -61,9 +62,9 @@ foreach ($diasSemana as $index => $dia) {
     <?php include 'layouts/fonts.php'; ?>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-    <link rel="stylesheet" href="../assets/Css/index.css">
-    <link rel="stylesheet" href="../assets/Css/sidebar.css">
-    <link rel="stylesheet" href="../assets/Css/footer.css">
+    <link rel="stylesheet" href="../assets/Css/index.css?v=<?= time() ?>">
+    <link rel="stylesheet" href="../assets/Css/sidebar.css?v=<?= time() ?>">
+    <link rel="stylesheet" href="../assets/Css/footer.css?v=<?= time() ?>">
     <style>
         .chart-card {
             background: #fff;
@@ -89,13 +90,15 @@ foreach ($diasSemana as $index => $dia) {
         <main class="main-content flex-grow-1">
             <div class="container-fluid py-4 px-4">
                 <div class="d-flex justify-content-between align-items-center mb-4">
-                    <h2 class="fw-bold" style="color: var(--color-3);">Estadísticas Avanzadas</h2>
-                    <nav aria-label="breadcrumb">
-                        <ol class="breadcrumb mb-0">
-                            <li class="breadcrumb-item"><a href="dashboard.php">Inicio</a></li>
-                            <li class="breadcrumb-item active">Estadísticas</li>
-                        </ol>
-                    </nav>
+                    <div>
+                        <h2 class="fw-bold mb-1" style="color: var(--color-3);">Estadísticas Avanzadas</h2>
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb mb-0">
+                                <li class="breadcrumb-item"><a href="dashboard.php" class="text-decoration-none text-muted small">Dashboard</a></li>
+                                <li class="breadcrumb-item active fw-semibold small" style="color: var(--color-3);">Estadísticas</li>
+                            </ol>
+                        </nav>
+                    </div>
                 </div>
 
                 <div class="row g-4">
@@ -112,6 +115,22 @@ foreach ($diasSemana as $index => $dia) {
                         <div class="chart-card">
                             <h5 class="fw-bold mb-4">Distribución de Trámites</h5>
                             <div id="chart-distribucion"></div>
+                        </div>
+                    </div>
+
+                    <!-- Gráfico de Barras -->
+                    <div class="col-12 col-lg-6">
+                        <div class="chart-card">
+                            <h5 class="fw-bold mb-4">Comparativa de Documentos Emitidos</h5>
+                            <div id="chart-barras"></div>
+                        </div>
+                    </div>
+
+                    <!-- Gráfico de Demografía (Menores vs Adultos) -->
+                    <div class="col-12 col-lg-6">
+                        <div class="chart-card">
+                            <h5 class="fw-bold mb-4">Demografía (Adultos vs Menores)</h5>
+                            <div id="chart-demografia"></div>
                         </div>
                     </div>
 
@@ -240,6 +259,82 @@ foreach ($diasSemana as $index => $dia) {
             }
         };
         new ApexCharts(document.querySelector("#chart-heatmap"), optionsHeatmap).render();
+
+        // 4. Gráfico de Barras (Comparativa)
+        var optionsBarras = {
+            series: [{
+                name: 'Total Emitidos',
+                data: <?= json_encode($distValues) ?>
+            }],
+            chart: {
+                type: 'bar',
+                height: 350,
+                toolbar: { show: false }
+            },
+            plotOptions: {
+                bar: {
+                    borderRadius: 6,
+                    distributed: true,
+                    columnWidth: '55%',
+                }
+            },
+            dataLabels: {
+                enabled: true,
+                style: {
+                    fontSize: '12px',
+                    fontWeight: 'bold'
+                }
+            },
+            stroke: {
+                show: true,
+                width: 2,
+                colors: ['transparent']
+            },
+            xaxis: {
+                categories: <?= json_encode($distLabels) ?>,
+                labels: {
+                    style: {
+                        fontSize: '12px',
+                        fontWeight: 600
+                    }
+                }
+            },
+            colors: [primaryColor, '#27ae60', '#f39c12'],
+            tooltip: {
+                y: {
+                    formatter: function (val) {
+                        return val + " Documentos"
+                    }
+                }
+            }
+        };
+        new ApexCharts(document.querySelector("#chart-barras"), optionsBarras).render();
+
+        // 5. Gráfico de Demografía (Pie)
+        var optionsDemografia = {
+            series: [<?= $demografia['Adultos'] ?>, <?= $demografia['Menores'] ?>],
+            chart: {
+                type: 'pie',
+                height: 350
+            },
+            labels: ['Adultos (+18)', 'Menores (-18)'],
+            colors: ['#34495e', '#3498db'],
+            legend: { position: 'bottom' },
+            dataLabels: {
+                enabled: true,
+                formatter: function (val) {
+                    return val.toFixed(1) + "%"
+                }
+            },
+            tooltip: {
+                y: {
+                    formatter: function(val) {
+                        return val + " Ciudadanos"
+                    }
+                }
+            }
+        };
+        new ApexCharts(document.querySelector("#chart-demografia"), optionsDemografia).render();
     </script>
 </body>
 </html>

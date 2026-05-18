@@ -20,7 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $_SESSION['usuario'] = $user['nombre'] ?? '';
             $_SESSION['rol'] = $user['rol'] ?? $user['id_rol'] ?? null;
             
-            echo json_encode(['success' => true, 'mensaje' => 'Login exitoso', 'usuario' => $user['nombre'] ?? '']);
+            echo json_encode(['success' => true, 'mensaje' => 'Login exitoso', 'usuario' => $user['nombre'] ?? '', 'rol' => $_SESSION['rol']]);
         } else {
             echo json_encode(['success' => false, 'mensaje' => 'Credenciales inválidas']);
         }
