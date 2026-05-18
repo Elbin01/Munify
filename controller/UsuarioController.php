@@ -18,13 +18,15 @@ try {
             $id = $_POST['id_usuario'] ?? null;
             $nombre = $_POST['nombre'] ?? '';
             $correo = $_POST['correo'] ?? '';
-            $password = $_POST['password'] ?? null;
+            $password = !empty($_POST['password']) ? $_POST['password'] : null;
+            $id_rol = $_POST['id_rol'] ?? null;
             
             if ($id) {
-                $resultado = $usuarioModel->actualizar($id, $nombre, $correo, $password);
+                $resultado = $usuarioModel->actualizar($id, $nombre, $correo, $password, $id_rol);
                 echo json_encode(['success' => $resultado, 'message' => 'Usuario actualizado correctamente']);
             } else {
-                $resultado = $usuarioModel->crear($nombre, $correo, $password);
+                $id_rol = $id_rol ?: 2; // Ciudadano por defecto
+                $resultado = $usuarioModel->crear($nombre, $correo, $password, $id_rol);
                 echo json_encode(['success' => $resultado, 'message' => 'Usuario creado correctamente']);
             }
             break;

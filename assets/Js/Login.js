@@ -8,10 +8,21 @@
     // Elementos para cambio de vista
     const loginSection = document.getElementById('loginSection');
     const forgotSection = document.getElementById('forgotSection');
+    const registerSection = document.getElementById('registerSection');
     const showForgotBtn = document.getElementById('showForgotBtn');
-    const backToLoginBtn = document.getElementById('backToLoginBtn');
+    const showRegisterBtn = document.getElementById('showRegisterBtn');
+    const backToLoginBtns = document.querySelectorAll('.backToLoginBtn');
+    
+    // Elementos Recovery
     const recoverBtn = document.getElementById('recoverBtn');
     const recoveryEmail = document.getElementById('recoveryEmail');
+
+    // Elementos Register
+    const registerBtn = document.getElementById('registerBtn');
+    const regNombre = document.getElementById('regNombre');
+    const regEmail = document.getElementById('regEmail');
+    const regPassword = document.getElementById('regPassword');
+    const regPasswordConfirm = document.getElementById('regPasswordConfirm');
 
     // Función para manejar el error de autenticación
     function showError() {
@@ -94,37 +105,116 @@
         showForgotBtn.addEventListener('click', (e) => {
             e.preventDefault();
             loginSection.style.display = 'none';
+            registerSection.style.display = 'none';
             forgotSection.style.display = 'block';
         });
     }
 
-    if (backToLoginBtn) {
-        backToLoginBtn.addEventListener('click', (e) => {
+    if (showRegisterBtn) {
+        showRegisterBtn.addEventListener('click', (e) => {
             e.preventDefault();
+            loginSection.style.display = 'none';
             forgotSection.style.display = 'none';
-            loginSection.style.display = 'block';
+            registerSection.style.display = 'block';
         });
     }
 
+    backToLoginBtns.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            forgotSection.style.display = 'none';
+            registerSection.style.display = 'none';
+            loginSection.style.display = 'block';
+        });
+    });
+
     if (recoverBtn) {
-        recoverBtn.addEventListener('click', () => {
+        recoverBtn.addEventListener('click', async () => {
             const email = recoveryEmail.value.trim();
             if (email !== '') {
                 recoverBtn.classList.add('loading');
                 recoverBtn.disabled = true;
 
-                setTimeout(() => {
+                try {
+                    const response = await fetch('../controller/RecoveryController.php', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ correo: email })
+                    });
+                    
+                    const data = await response.json();
+                    
                     recoverBtn.classList.remove('loading');
                     recoverBtn.disabled = false;
-                    recoveryEmail.value = '';
-                    window.showToast('Se han enviado las instrucciones a su correo electrónico.');
-
-                    // Volver al login
-                    forgotSection.style.display = 'none';
-                    loginSection.style.display = 'block';
-                }, 1500);
+                    
+                    if(data.success) {
+                        recoveryEmail.value = '';
+                        window.showToast(data.mensaje, 'success');
+                        forgotSection.style.display = 'none';
+                        loginSection.style.display = 'block';
+                    } else {
+                        window.showToast(data.mensaje, 'error');
+                    }
+                } catch (error) {
+                    console.error("Error en recuperación:", error);
+                    recoverBtn.classList.remove('loading');
+                    recoverBtn.disabled = false;
+                    window.showToast('Error al procesar la solicitud', 'error');
+                }
             } else {
-                window.showToast('Por favor ingrese un correo válido.');
+                window.showToast('Por favor ingrese un correo válido.', 'warning');
+            }
+        });
+    }
+
+    if (registerBtn) {
+        registerBtn.addEventListener('click', async () => {
+            const nombre = regNombre.value.trim();
+            const email = regEmail.value.trim();
+            const pass = regPassword.value.trim();
+            const passConfirm = regPasswordConfirm.value.trim();
+
+            if (nombre === '' || email === '' || pass === '' || passConfirm === '') {
+                window.showToast('Por favor complete todos los campos.', 'warning');
+                return;
+            }
+
+            if (pass !== passConfirm) {
+                window.showToast('Las contraseñas no coinciden.', 'warning');
+                return;
+            }
+
+            registerBtn.classList.add('loading');
+            registerBtn.disabled = true;
+
+            try {
+                const response = await fetch('../controller/RegisterController.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ nombre: nombre, correo: email, password: pass })
+                });
+
+                const data = await response.json();
+                
+                registerBtn.classList.remove('loading');
+                registerBtn.disabled = false;
+
+                if (data.success) {
+                    window.showToast(data.mensaje, 'success');
+                    regNombre.value = '';
+                    regEmail.value = '';
+                    regPassword.value = '';
+                    regPasswordConfirm.value = '';
+                    registerSection.style.display = 'none';
+                    loginSection.style.display = 'block';
+                } else {
+                    window.showToast(data.mensaje, 'error');
+                }
+            } catch (error) {
+                console.error("Error en registro:", error);
+                registerBtn.classList.remove('loading');
+                registerBtn.disabled = false;
+                window.showToast('Error al procesar la solicitud', 'error');
             }
         });
     }

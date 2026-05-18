@@ -84,7 +84,7 @@ session_start();
             border: 1px solid rgba(0,0,0,0.08);
             text-align: left;
         }
-        .nav-dropdown:hover .nav-dropdown-content {
+        .nav-dropdown.active .nav-dropdown-content {
             display: block;
         }
         .nav-dropdown-content a {
@@ -120,14 +120,19 @@ session_start();
             min-height: 100vh;
             display: flex; align-items: center;
             overflow: hidden;
-            background: var(--color-1);
+            background-color: var(--color-1);
+            background-image: url('https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');
+            background-size: cover;
+            background-position: center;
+            background-blend-mode: overlay;
         }
 
         /* Efecto de malla luminosa simplificado para estilo flat */
         .hero::before {
             content: '';
             position: absolute; inset: 0;
-            background: rgba(0, 0, 0, 0.05);
+            background: linear-gradient(to right, rgba(28, 49, 102, 0.95) 0%, rgba(28, 49, 102, 0.4) 100%);
+            z-index: 0;
         }
 
         /* Partículas */
@@ -439,7 +444,7 @@ session_start();
             <?php endif; ?>
             
             <div class="nav-dropdown" style="margin-left: 1rem;">
-                <a href="javascript:void(0)" class="nav-username" style="text-decoration: none; display: flex; align-items: center; gap: 8px;">
+                <a href="javascript:void(0)" class="nav-username" style="text-decoration: none; display: flex; align-items: center; gap: 8px;" onclick="event.stopPropagation(); this.parentElement.classList.toggle('active')">
                     <i class="bi bi-person-circle" style="font-size: 1.1rem; color: #fff;"></i>
                     <strong style="color: #fff; font-weight: 600; font-size: 0.85rem;"><?php echo htmlspecialchars($_SESSION['usuario']); ?></strong>
                     <i class="bi bi-chevron-down" style="font-size: 0.7rem; color: rgba(255,255,255,0.7);"></i>
@@ -630,11 +635,11 @@ session_start();
                 </div>
             </div>
 
-            <!-- ✏️ Reemplaza el src con el embed real de tu alcaldía en Google Maps -->
+            <!-- Mapa de la Universidad Católica de El Salvador | Ilobasco -->
             <div class="map-box">
                 <iframe
-                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3875.46074128565!2d-88.8576484!3d13.8413998!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8f63567840130001%3A0x8f63567840130001!2sUniversidad%20Cat%C3%B3lica%20de%20El%20Salvador%2C%20Centro%20Regional%20de%20Ilobasco!5e0!3m2!1ses-419!2ssv!4v1715442800000!5m2!1ses-419!2ssv"
-                    allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+                    src="https://maps.google.com/maps?q=Universidad%20Cat%C3%B3lica%20de%20El%20Salvador%20Ilobasco&t=&z=16&ie=UTF8&iwloc=&output=embed"
+                    allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade" style="width: 100%; height: 100%; border: 0;">
                 </iframe>
             </div>
         </div>
@@ -788,6 +793,12 @@ function closeBlackRose() {
     document.getElementById('coPanelBlackRose').classList.remove('show');
     document.body.style.overflow = 'auto';
 }
+
+document.addEventListener('click', function(e) {
+    if (!e.target.closest('.nav-dropdown')) {
+        document.querySelectorAll('.nav-dropdown').forEach(d => d.classList.remove('active'));
+    }
+});
 </script>
 
 </body>

@@ -207,7 +207,7 @@
         <div class="modal-content shadow-lg border-0">
             <div class="modal-header" style="background-color: var(--primary); color: white;">
                 <h5 class="modal-title fw-bold" id="modalTitle"><i class="bi bi-person-plus-fill me-2"></i>Nuevo Usuario</h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close" onclick="closeModal()"></button>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body p-4">
                 <form id="userForm">
@@ -234,8 +234,18 @@
                         </div>
                         <div class="form-text mt-2 small text-muted">Dejar en blanco para mantener la contraseña actual.</div>
                     </div>
+                    <div class="mb-4">
+                        <label class="form-label fw-bold small">Rol del Sistema</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light"><i class="bi bi-shield-lock text-muted"></i></span>
+                            <select name="id_rol" id="userRole" class="form-select shadow-none">
+                                <option value="1">Administrador</option>
+                                <option value="2">Ciudadano</option>
+                            </select>
+                        </div>
+                    </div>
                     <div class="d-flex gap-2">
-                        <button type="button" class="btn btn-light w-100 fw-bold" data-bs-dismiss="modal" onclick="closeModal()">Cancelar</button>
+                        <button type="button" class="btn btn-light w-100 fw-bold" data-bs-dismiss="modal">Cancelar</button>
                         <button type="submit" class="btn btn-primary w-100 fw-bold" style="background-color: var(--primary);">Guardar Cambios</button>
                     </div>
                 </form>
@@ -318,11 +328,14 @@
     }
 
     // Modal Helpers
+    let bsUserModal = new bootstrap.Modal(document.getElementById('userModal'));
+
     function openModal() {
         userForm.reset();
         document.getElementById('userId').value = '';
+        document.getElementById('userRole').value = '2'; // default ciudadano
         document.getElementById('modalTitle').innerText = 'Nuevo Usuario';
-        userModal.style.display = 'flex';
+        bsUserModal.show();
     }
 
     function editUser(u) {
@@ -330,12 +343,13 @@
         document.getElementById('userName').value = u.nombre;
         document.getElementById('userEmail').value = u.correo;
         document.getElementById('userPass').value = '';
+        document.getElementById('userRole').value = u.id_rol;
         document.getElementById('modalTitle').innerText = 'Editar Usuario';
-        userModal.style.display = 'flex';
+        bsUserModal.show();
     }
 
     function closeModal() {
-        userModal.style.display = 'none';
+        bsUserModal.hide();
     }
 
     loadUsers();

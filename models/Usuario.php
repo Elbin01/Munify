@@ -41,6 +41,14 @@ class Usuario {
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
+    public function obtenerPorCorreo($correo) {
+        $sql = "SELECT * FROM Usuario WHERE correo = :correo";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bindParam(':correo', $correo);
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
     public function crear($nombre, $correo, $password, $id_rol = 2) {
         $sql = "INSERT INTO Usuario (nombre, correo, password, id_rol) VALUES (:nombre, :correo, :password, :id_rol)";
         $stmt = $this->conn->prepare($sql);
@@ -52,16 +60,29 @@ class Usuario {
         ]);
     }
 
-    public function actualizar($id, $nombre, $correo, $password = null) {
-        if ($password) {
-            $sql = "UPDATE Usuario SET nombre = :nombre, correo = :correo, password = :password WHERE id_usuario = :id";
-            $stmt = $this->conn->prepare($sql);
-            return $stmt->execute([':nombre' => $nombre, ':correo' => $correo, ':password' => $password, ':id' => $id]);
-        } else {
-            $sql = "UPDATE Usuario SET nombre = :nombre, correo = :correo WHERE id_usuario = :id";
-            $stmt = $this->conn->prepare($sql);
-            return $stmt->execute([':nombre' => $nombre, ':correo' => $correo, ':id' => $id]);
+    public function actualizar($id, $nombre, $correo, $password = null, $id_rol = null) {
+        $params = [':nombre' => $nombre, ':correo' => $correo, ':id' => $id];
+        $sql = "UPDATE Usuario SET nombre = :nombre, correo = :correo";
+        
+        if (!empty($password)) {
+            $sql .= ", password = :password";
+            $params[':password'] = $password;
         }
+        
+        if ($id_rol) {
+            $sql .= ", id_rol = :id_rol";
+            $params[':id_rol'] = $id_rol;
+        }
+        
+        $sql .= " WHERE id_usuario = :id";
+        $stmt = $this->conn->prepare($sql);
+        return $stmt->execute($params);
+    }
+
+    public function actualizarFoto($id, $foto_perfil) {
+        $sql = "UPDATE Usuario SET foto_perfil = :foto_perfil WHERE id_usuario = :id";
+        $stmt = $this->conn->prepare($sql);
+        return $stmt->execute([':foto_perfil' => $foto_perfil, ':id' => $id]);
     }
 
     public function eliminar($id) {

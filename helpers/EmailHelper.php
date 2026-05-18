@@ -122,5 +122,60 @@ class EmailHelper {
             return false;
         }
     }
+
+    public static function enviarRecuperacionPassword($correo, $nombreUsuario, $nuevaContrasena) {
+        $mail = new PHPMailer(true);
+
+        try {
+            $mail->isSMTP();
+            $mail->Host       = SMTP_HOST;
+            $mail->SMTPAuth   = true;
+            $mail->Username   = SMTP_USER;
+            $mail->Password   = SMTP_PASS;
+            $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+            $mail->Port       = SMTP_PORT;
+            $mail->CharSet    = 'UTF-8';
+
+            $mail->setFrom(SMTP_FROM_EMAIL, SMTP_FROM_NAME);
+            $mail->addAddress($correo, $nombreUsuario);
+
+            $img1 = __DIR__ . '/../assets/Img/logo_munify/isotipo_negativo.png';
+            $img2 = __DIR__ . '/../assets/Img/escuedo_gobierno.png';
+            
+            if (file_exists($img1)) $mail->addEmbeddedImage($img1, 'logo_munify');
+            if (file_exists($img2)) $mail->addEmbeddedImage($img2, 'escudo_gobierno');
+
+            $mail->isHTML(true);
+            $mail->Subject = 'Recuperación de Contraseña - Munify';
+            
+            $cuerpo = "
+            <div style='font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; border: 1px solid #e2e8f0; border-radius: 10px; overflow: hidden;'>
+                <div style='background-color: #1C3166; padding: 20px; text-align: center;'>
+                    <img src='cid:logo_munify' alt='Munify' style='height: 50px; margin-right: 20px; vertical-align: middle;'>
+                    <img src='cid:escudo_gobierno' alt='Gobierno' style='height: 40px; vertical-align: middle; border-left: 1px solid rgba(255,255,255,0.3); padding-left: 20px;'>
+                </div>
+                <div style='padding: 30px;'>
+                    <h3 style='color: #1C3166; text-align: center;'>¡Hola, $nombreUsuario!</h3>
+                    <p>Has solicitado recuperar tu contraseña en el sistema Munify.</p>
+                    <hr style='border: 0; border-top: 1px solid #eee;'>
+                    <p style='text-align: center;'>Se ha generado una nueva contraseña temporal para tu cuenta:</p>
+                    <div style='background-color: #f8fafc; padding: 15px; border-radius: 8px; text-align: center; margin: 20px 0;'>
+                        <strong style='font-size: 24px; color: #1C3166; letter-spacing: 2px;'>$nuevaContrasena</strong>
+                    </div>
+                    <p>Te recomendamos iniciar sesión con esta contraseña y cambiarla por una nueva desde tu perfil lo antes posible por motivos de seguridad.</p>
+                </div>
+                <div style='background-color: #f1f5f9; padding: 15px; text-align: center;'>
+                    <p style='font-size: 12px; color: #64748b; margin: 0;'>Alcaldía Municipal - Munify</p>
+                </div>
+            </div>";
+
+            $mail->Body = $cuerpo;
+            $mail->send();
+            return true;
+        } catch (Exception $e) {
+            error_log('Error enviando recuperación: ' . $mail->ErrorInfo);
+            return false;
+        }
+    }
 }
 ?>

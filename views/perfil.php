@@ -114,9 +114,21 @@ $inicial = strtoupper(substr($nombre_usuario, 0, 1));
                 <div class="row justify-content-center">
                     <div class="col-12 col-lg-8">
                         <div class="profile-header text-center mb-4">
-                            <div class="profile-avatar">
-                                <?= $inicial ?>
+                            <div class="profile-avatar position-relative mx-auto mb-3" style="width: 120px; height: 120px; cursor: pointer; border-radius: 50%;" onclick="document.getElementById('fotoInput').click()" title="Cambiar foto de perfil">
+                                <?php if(!empty($userData['foto_perfil'])): ?>
+                                    <img src="../assets/Img/profiles/<?= $userData['foto_perfil'] ?>" alt="Perfil" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
+                                <?php else: ?>
+                                    <div class="d-flex align-items-center justify-content-center w-100 h-100 fs-1">
+                                        <?= $inicial ?>
+                                    </div>
+                                <?php endif; ?>
+                                <div class="position-absolute bottom-0 end-0 bg-light text-primary rounded-circle p-2" style="width: 35px; height: 35px; display:flex; align-items:center; justify-content:center; transform: translate(10%, 10%); box-shadow: 0 2px 5px rgba(0,0,0,0.3); z-index: 10;">
+                                    <i class="bi bi-camera-fill fs-6"></i>
+                                </div>
                             </div>
+                            <form id="fotoForm" style="display: none;">
+                                <input type="file" id="fotoInput" name="foto" accept="image/png, image/jpeg, image/jpg" onchange="uploadFoto()">
+                            </form>
                             <h2 class="fw-bold mb-1"><?= htmlspecialchars($nombre_usuario) ?></h2>
                             <p class="mb-0 opacity-75"><i class="bi bi-shield-check me-2"></i><?= htmlspecialchars($rol) ?></p>
                         </div>
@@ -162,5 +174,30 @@ $inicial = strtoupper(substr($nombre_usuario, 0, 1));
     </div>
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+    async function uploadFoto() {
+        const input = document.getElementById('fotoInput');
+        if (input.files.length === 0) return;
+        
+        const formData = new FormData();
+        formData.append('foto', input.files[0]);
+        
+        try {
+            const resp = await fetch('../controller/UploadFotoController.php', {
+                method: 'POST',
+                body: formData
+            });
+            const data = await resp.json();
+            if (data.success) {
+                location.reload(); // Recargar para ver la nueva foto
+            } else {
+                alert(data.message || 'Error al subir la imagen');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            alert('Error de conexión');
+        }
+    }
+    </script>
 </body>
 </html>

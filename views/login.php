@@ -58,8 +58,9 @@
                         </div>
                     </div>
 
-                    <div class="form-actions">
+                    <div class="form-actions" style="justify-content: space-between; align-items: center;">
                         <a href="#" class="forgot-link" id="showForgotBtn">¿Olvidó su contraseña?</a>
+                        <a href="#" class="forgot-link" id="showRegisterBtn">Crear una cuenta nueva</a>
                     </div>
 
                     <button type="button" id="loginBtn" class="btn-flat">
@@ -78,7 +79,7 @@
                 <div id="forgotSection" style="display: none;">
                     <div class="form-header">
                         <h1>Recuperar Contraseña</h1>
-                        <p>Ingrese su correo institucional para recibir instrucciones</p>
+                        <p>Ingrese su correo institucional o personal para recibir instrucciones</p>
                     </div>
                     
                     <form action="#" method="POST" id="forgotForm" class="flat-form">
@@ -86,7 +87,7 @@
                             <label for="recoveryEmail">Correo Electrónico</label>
                             <div class="input-wrapper">
                                 <i class="fas fa-envelope"></i>
-                                <input type="email" id="recoveryEmail" placeholder="ejemplo@alcaldia.gob.sv" required>
+                                <input type="email" id="recoveryEmail" placeholder="ejemplo@correo.com" required>
                             </div>
                         </div>
 
@@ -98,7 +99,59 @@
                         </button>
                         
                         <div class="back-link-container">
-                             <a href="#" class="back-link" id="backToLoginBtn"><i class="fas fa-arrow-left"></i> Volver a Iniciar Sesión</a>
+                             <a href="#" class="back-link backToLoginBtn"><i class="fas fa-arrow-left"></i> Volver a Iniciar Sesión</a>
+                        </div>
+                    </form>
+                </div>
+
+                <div id="registerSection" style="display: none;">
+                    <div class="form-header">
+                        <h1>Registrarse</h1>
+                        <p>Cree una cuenta para solicitar trámites</p>
+                    </div>
+                    
+                    <form action="#" method="POST" id="registerForm" class="flat-form">
+                        <div class="form-group">
+                            <label for="regNombre">Nombre Completo</label>
+                            <div class="input-wrapper">
+                                <i class="fas fa-user"></i>
+                                <input type="text" id="regNombre" placeholder="Ej: Juan Pérez" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="regEmail">Correo Electrónico</label>
+                            <div class="input-wrapper">
+                                <i class="fas fa-envelope"></i>
+                                <input type="email" id="regEmail" placeholder="ejemplo@correo.com" required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="regPassword">Contraseña</label>
+                            <div class="input-wrapper">
+                                <i class="fas fa-key"></i>
+                                <input type="password" id="regPassword" placeholder="••••••••" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="regPasswordConfirm">Confirmar Contraseña</label>
+                            <div class="input-wrapper">
+                                <i class="fas fa-key"></i>
+                                <input type="password" id="regPasswordConfirm" placeholder="••••••••" required>
+                            </div>
+                        </div>
+
+                        <button type="button" id="registerBtn" class="btn-flat">
+                            <span class="btn-text">Crear Cuenta</span>
+                            <div class="loader" style="display: none;">
+                                <i class="fas fa-circle-notch fa-spin"></i>
+                            </div>
+                        </button>
+                        
+                        <div class="back-link-container">
+                             <a href="#" class="back-link backToLoginBtn"><i class="fas fa-arrow-left"></i> Volver a Iniciar Sesión</a>
                         </div>
                     </form>
                 </div>
