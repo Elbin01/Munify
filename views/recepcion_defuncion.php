@@ -275,9 +275,9 @@
                     <!-- Éxito -->
                     <div id="cardSuccess" class="card result-card result-card-success d-none">
                         <div class="card-body p-4">
-                            <div class="d-flex align-items-center justify-content-between flex-wrap gap-3">
-                                <div class="d-flex align-items-center gap-4">
-                                    <div class="avatar-circle">
+                            <div class="row align-items-center">
+                                <div class="col-md-8 d-flex align-items-center gap-4">
+                                    <div class="avatar-circle flex-shrink-0">
                                         <i class="bi bi-person-check-fill"></i>
                                     </div>
                                     <div>
@@ -288,7 +288,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div>
+                                <div class="col-md-4 text-md-end mt-3 mt-md-0">
                                     <button id="btnAccionPartida" class="btn-action-primary btn-lg shadow-sm" data-bs-toggle="modal" data-bs-target="#modalPartida">
                                         <i class="bi bi-printer-fill me-2"></i> Generar Carta
                                     </button>

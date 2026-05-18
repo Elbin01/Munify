@@ -51,7 +51,7 @@ $tipos = $tramiteModel->obtenerTiposTramite();
 
         .modal-style-header {
             background-color: var(--munify-blue);
-            padding: 1.8rem 2rem;
+            padding: 1.2rem 2rem;
             color: white;
             display: flex;
             align-items: center;
@@ -87,8 +87,8 @@ $tipos = $tramiteModel->obtenerTiposTramite();
 
         .form-section-divider {
             border-bottom: 2px solid #eef2f7;
-            padding-bottom: 0.6rem;
-            margin-bottom: 1.8rem;
+            padding-bottom: 0.4rem;
+            margin-bottom: 1.2rem;
             color: var(--munify-blue);
             font-weight: 800;
             font-size: 0.8rem;
@@ -125,13 +125,13 @@ $tipos = $tramiteModel->obtenerTiposTramite();
             background-color: var(--munify-blue);
             color: white;
             border: none;
-            padding: 1rem 2rem;
+            padding: 0.8rem 2rem;
             border-radius: 10px;
             font-weight: 700;
             font-size: 1.05rem;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             width: 100%;
-            margin-top: 1.5rem;
+            margin-top: 1rem;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -179,7 +179,10 @@ $tipos = $tramiteModel->obtenerTiposTramite();
             color: var(--munify-blue);
         }
 
-
+        /* Toast Container */
+        .toast-container {
+            z-index: 1055 !important;
+        }
     </style>
 </head>
 <body>
@@ -200,7 +203,7 @@ $tipos = $tramiteModel->obtenerTiposTramite();
                 </button>
             </div>
 
-        <div class="p-4 p-md-5">
+        <div class="p-4 p-md-4">
             <form id="formCita" action="../controller/GuardarTramite.php" method="POST" enctype="multipart/form-data">
                 
                 <!-- Sección 1: Selección Global y Fecha -->
@@ -294,7 +297,66 @@ $tipos = $tramiteModel->obtenerTiposTramite();
 
     <!-- JS Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
+        // Definir sistema de Toasts (ahora usa SweetAlert)
+        window.showToast = function(message, type = 'auto') {
+            if (!message) return;
+            
+            if (type === 'auto' || type === 'info') {
+                const lower = message.toLowerCase();
+                if (lower.includes('error') || lower.includes('incorrecto') || lower.includes('inválido') || lower.includes('invalido') || lower.includes('no encontrado') || lower.includes('no encontrada') || lower.includes('obligatorio') || lower.includes('obligatorios') || lower.includes('falló') || lower.includes('fallo') || lower.includes('no se ha seleccionado') || lower.includes('inválida') || lower.includes('invalidas')) {
+                    type = 'danger';
+                } else if (lower.includes('correcto') || lower.includes('correctamente') || lower.includes('exitosamente') || lower.includes('guardado') || lower.includes('éxito') || lower.includes('exito') || lower.includes('completado') || lower.includes('aceptadas') || lower.includes('actualizado') || lower.includes('completo')) {
+                    type = 'success';
+                } else if (lower.includes('advertencia') || lower.includes('atención') || lower.includes('atencion') || lower.includes('cuidado') || lower.includes('pendiente') || lower.includes('ingrese') || lower.includes('seleccione') || lower.includes('favor') || lower.includes('disponibles') || lower.includes('horario')) {
+                    type = 'warning';
+                } else {
+                    type = 'info';
+                }
+            }
+
+            let swalIcon = 'info';
+            let swalTitle = 'Información';
+            
+            if (type === 'success') {
+                swalIcon = 'success';
+                swalTitle = 'Éxito';
+            } else if (type === 'danger' || type === 'error') {
+                swalIcon = 'error';
+                swalTitle = 'Error';
+            } else if (type === 'warning') {
+                swalIcon = 'warning';
+                swalTitle = 'Advertencia';
+            }
+
+            if (typeof Swal !== 'undefined') {
+                const Toast = Swal.mixin({
+                    toast: true,
+                    position: 'top-end',
+                    showConfirmButton: false,
+                    timer: 3500,
+                    timerProgressBar: true,
+                    didOpen: (toast) => {
+                        toast.addEventListener('mouseenter', Swal.stopTimer)
+                        toast.addEventListener('mouseleave', Swal.resumeTimer)
+                    }
+                });
+
+                Toast.fire({
+                    icon: swalIcon,
+                    title: message
+                });
+            } else {
+                console.log(swalTitle + ": " + message);
+            }
+        };
+
+        // Sobrescribir el alert nativo para redireccionar a SweetAlert
+        window.alert = function(message) {
+            window.showToast(message, 'auto');
+        };
+
         document.addEventListener('DOMContentLoaded', function() {
             const form = document.getElementById('formCita');
             const telefono = document.querySelector('input[name="telefono"]');
@@ -312,6 +374,8 @@ $tipos = $tramiteModel->obtenerTiposTramite();
             });
 
             form.addEventListener('submit', function(e) {
+                e.preventDefault();
+
                 const dateVal = new Date(fechaCita.value + 'T00:00:00');
                 const day = dateVal.getUTCDay(); // 0=Dom, 1=Lun, ..., 6=Sab
                 const timeVal = horaCita.value;
@@ -319,24 +383,75 @@ $tipos = $tramiteModel->obtenerTiposTramite();
 
                 // Validar Teléfono
                 if (!/^\d{4}-\d{4}$/.test(phoneVal)) {
-                    alert('Por favor, ingrese un número de teléfono válido (0000-0000).');
-                    e.preventDefault();
+                    window.showToast('Por favor, ingrese un número de teléfono válido (0000-0000).');
                     return;
                 }
 
                 // Validar Días (Lunes a Viernes)
                 if (day === 0 || day === 6) {
-                    alert('Las citas solo están disponibles de Lunes a Viernes.');
-                    e.preventDefault();
+                    window.showToast('Las citas solo están disponibles de Lunes a Viernes.');
                     return;
                 }
 
                 // Validar Horas (08:00 - 16:00)
                 if (timeVal < "08:00" || timeVal > "16:00") {
-                    alert('El horario de atención es de 8:00 AM a 4:00 PM.');
-                    e.preventDefault();
+                    window.showToast('El horario de atención es de 8:00 AM a 4:00 PM.');
                     return;
                 }
+
+                // Deshabilitar botón para evitar envíos múltiples
+                const submitBtn = form.querySelector('.btn-modal-action');
+                if (submitBtn.disabled) return;
+                submitBtn.disabled = true;
+                
+                // Guardar contenido original y mostrar cargando
+                const originalContent = submitBtn.innerHTML;
+                submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>PROCESANDO SOLICITUD...';
+
+                // Mostrar alerta de carga
+                Swal.fire({
+                    title: 'Procesando Solicitud',
+                    text: 'Estamos registrando su cita y enviando la confirmación, por favor espere...',
+                    icon: 'info',
+                    allowOutsideClick: false,
+                    showConfirmButton: false,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
+
+                // Enviar datos vía AJAX/fetch
+                const formData = new FormData(form);
+                fetch(form.action, {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => {
+                    // Mostrar SweetAlert de éxito y redirigir
+                    Swal.fire({
+                        title: '¡Solicitud Enviada!',
+                        text: 'Su solicitud de cita ha sido registrada exitosamente. Se ha enviado una notificación de recibido a su correo electrónico.',
+                        icon: 'success',
+                        confirmButtonColor: '#1C3166',
+                        confirmButtonText: 'Entendido'
+                    }).then(() => {
+                        window.location.href = '../index.php';
+                    });
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    Swal.fire({
+                        title: 'Error',
+                        text: 'Ocurrió un inconveniente al procesar su solicitud. Por favor, intente nuevamente.',
+                        icon: 'error',
+                        confirmButtonColor: '#1C3166',
+                        confirmButtonText: 'Aceptar'
+                    });
+                    
+                    // Re-habilitar botón
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = originalContent;
+                });
             });
         });
     </script>

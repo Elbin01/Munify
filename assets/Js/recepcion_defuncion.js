@@ -53,7 +53,7 @@ $(document).ready(function() {
     $('#btnBuscarDeclarante').on('click', function() {
         const dui = $('#duiDeclarante').val().trim();
         if (dui.length < 10) {
-            alert('Por favor ingrese un DUI válido (00000000-0)');
+            window.showToast('Por favor ingrese un DUI válido (00000000-0)');
             return;
         }
 
@@ -67,7 +67,7 @@ $(document).ready(function() {
                     const c = data[0];
                     $('#regNombreDeclarante').val(c.nombres + ' ' + c.apellidos);
                 } else {
-                    alert('No se encontró ningún ciudadano con ese DUI.');
+                    window.showToast('No se encontró ningún ciudadano con ese DUI.');
                 }
             }
         });
@@ -132,7 +132,7 @@ $(document).ready(function() {
                 }
             },
             error: function() {
-                alert("Hubo un error al conectar con la base de datos.");
+                window.showToast("Hubo un error al conectar con la base de datos.");
             }
         });
     });
@@ -154,27 +154,38 @@ $(document).ready(function() {
         };
 
         if (citizenData.nombres === '' || citizenData.apellidos === '' || defuncionData.fecha_defuncion === '') {
-            alert('Los campos Nombres, Apellidos y Fecha de Defunción son obligatorios.');
+            window.showToast('Los campos Nombres, Apellidos y Fecha de Defunción son obligatorios.');
             return;
         }
 
-        // Primero guardamos al ciudadano si es nuevo
-        $.ajax({
-            url: '../controller/guardar_ciudadano_controller.php',
-            type: 'POST',
-            data: citizenData,
-            dataType: 'json',
-            success: function(response) {
-                if (response.success) {
-                    const id_ciudadano = response.id_ciudadano;
-                    // Ahora guardamos la carta de defunción
-                    guardarCartaDefuncion(id_ciudadano, defuncionData);
-                } else {
-                    alert('Error al registrar ciudadano: ' + response.message);
-                }
-            },
-            error: function() {
-                alert('Hubo un error al procesar el registro del ciudadano.');
+        Swal.fire({
+            title: '¿Guardar Acta de Defunción?',
+            text: "Verifique que todos los datos ingresados sean correctos.",
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#1C3166',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sí, guardar',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: '../controller/guardar_ciudadano_controller.php',
+                    type: 'POST',
+                    data: citizenData,
+                    dataType: 'json',
+                    success: function(response) {
+                        if (response.success) {
+                            const id_ciudadano = response.id_ciudadano;
+                            guardarCartaDefuncion(id_ciudadano, defuncionData);
+                        } else {
+                            window.showToast('Error al registrar ciudadano: ' + response.message);
+                        }
+                    },
+                    error: function() {
+                        window.showToast('Hubo un error al procesar el registro del ciudadano.');
+                    }
+                });
             }
         });
     });
@@ -194,17 +205,27 @@ $(document).ready(function() {
             dataType: 'json',
             success: function(response) {
                 if (response.success) {
-                    alert('Acta de defunción guardada correctamente.');
                     $('#modalDefuncion').modal('hide');
                     $('#formDefuncion')[0].reset();
-                    $('#searchInput').val(data.dui_declarante || id_ciudadano);
+                    const nombreBusqueda = $('#resNombre').text() || ($('#regNombres').val() + ' ' + $('#regApellidos').val());
+                    $('#searchInput').val(nombreBusqueda.trim());
                     $('#searchForm').submit();
+                    
+                    Swal.fire({
+                        icon: 'success',
+                        title: '¡Acta Generada!',
+                        text: 'El Acta de Defunción ha sido registrada y está lista para imprimir.',
+                        confirmButtonColor: '#1C3166',
+                        confirmButtonText: '<i class="bi bi-printer-fill"></i> Abrir Acta'
+                    }).then(() => {
+                        window.open(`../reportes/carta_defuncion.php?id=${response.id_carta}`, '_blank');
+                    });
                 } else {
-                    alert('Error: ' + response.message);
+                    window.showToast('Error: ' + response.message);
                 }
             },
             error: function() {
-                alert('Hubo un error al procesar la solicitud del acta.');
+                window.showToast('Hubo un error al procesar la solicitud del acta.');
             }
         });
     }
@@ -212,7 +233,7 @@ $(document).ready(function() {
     // Generar e imprimir carta
     $('#btnImprimirDefuncion').on('click', function() {
         if (!window.selectedCiudadanoId) {
-            alert('Error: No se ha seleccionado un ciudadano.');
+            window.showToast('Error: No se ha seleccionado un ciudadano.');
             return;
         }
 
@@ -223,39 +244,61 @@ $(document).ready(function() {
             nombre_declarante: $('#lblDeclarante').text()
         };
 
-        // Si ya tiene una carta registrada, simplemente la imprimimos.
-        // Si no la tiene, primero la guardamos.
-        if (window.selectedDefuncionId) {
-            window.open(`../reportes/carta_defuncion.php?id=${window.selectedDefuncionId}`, '_blank');
-        } else {
-            // En este flujo, si llegamos aquí es porque queremos generar una nueva desde el modal de "Generar"
-            // Pero el modal de generar en defuncion no tiene campos para guardar, solo muestra.
-            // Así que asumimos que si el botón dice "Generar", es porque ya existe o el modal debe guardarla.
-            // Vamos a hacerlo similar a partidas.
-            
-            const defData = {
-                id_ciudadano: window.selectedCiudadanoId,
-                fecha_defuncion: $('#regFechaDef_modal').val() || new Date().toISOString().split('T')[0], // Añadir este campo si falta
-                lugar_defuncion: $('#partidaLibro').val(), // Reusando campos de libro/folio para acta/libro/folio si aplica
-                causa: 'Muerte natural',
-                nombre_declarante: $('#lblDeclarante').text()
-            };
+        Swal.fire({
+            title: '¿Imprimir Carta?',
+            text: "Se generará el acta de defunción oficial.",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#1C3166',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sí, imprimir',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                if (window.selectedDefuncionId) {
+                    Swal.fire({
+                        icon: 'info',
+                        title: 'Imprimiendo',
+                        text: 'Abriendo el acta en una nueva pestaña...',
+                        confirmButtonColor: '#1C3166',
+                        confirmButtonText: 'OK'
+                    }).then(() => {
+                        window.open(`../reportes/carta_defuncion.php?id=${window.selectedDefuncionId}`, '_blank');
+                    });
+                } else {
+                    const defData = {
+                        id_ciudadano: window.selectedCiudadanoId,
+                        fecha_defuncion: $('#regFechaDef_modal').val() || new Date().toISOString().split('T')[0],
+                        lugar_defuncion: $('#partidaLibro').val(),
+                        causa: 'Muerte natural',
+                        nombre_declarante: $('#lblDeclarante').text()
+                    };
 
-            $.ajax({
-                url: '../controller/guardar_defuncion_controller.php',
-                type: 'POST',
-                data: defData,
-                dataType: 'json',
-                success: function(response) {
-                    if (response.success) {
-                        $('#modalPartida').modal('hide');
-                        window.open(`../reportes/carta_defuncion.php?id=${response.id_carta}`, '_blank');
-                    } else {
-                        alert('Error: ' + response.message);
-                    }
+                    $.ajax({
+                        url: '../controller/guardar_defuncion_controller.php',
+                        type: 'POST',
+                        data: defData,
+                        dataType: 'json',
+                        success: function(response) {
+                            if (response.success) {
+                                $('#modalPartida').modal('hide');
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: '¡Acta Generada!',
+                                    text: 'El Acta de Defunción ha sido registrada y está lista para imprimir.',
+                                    confirmButtonColor: '#1C3166',
+                                    confirmButtonText: '<i class="bi bi-printer-fill"></i> Abrir Acta'
+                                }).then(() => {
+                                    window.open(`../reportes/carta_defuncion.php?id=${response.id_carta}`, '_blank');
+                                });
+                            } else {
+                                window.showToast('Error: ' + response.message);
+                            }
+                        }
+                    });
                 }
-            });
-        }
+            }
+        });
     });
 });
 
@@ -279,7 +322,15 @@ window.seleccionarCiudadano = function(index) {
         btnAccion.html('<i class="bi bi-printer-fill me-2"></i> Imprimir Carta');
         btnAccion.removeAttr('data-bs-toggle').removeAttr('data-bs-target');
         btnAccion.off('click').on('click', function() {
-            window.open(`../reportes/carta_defuncion.php?id=${ciudadano.id_carta}`, '_blank');
+            Swal.fire({
+                icon: 'info',
+                title: 'Documento Existente',
+                text: 'El Acta de Defunción ya está generada en el sistema.',
+                confirmButtonColor: '#1C3166',
+                confirmButtonText: '<i class="bi bi-printer-fill"></i> Imprimir Acta'
+            }).then(() => {
+                window.open(`../reportes/carta_defuncion.php?id=${ciudadano.id_carta}`, '_blank');
+            });
         });
     } else {
         window.selectedDefuncionId = null;

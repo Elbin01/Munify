@@ -142,7 +142,29 @@ $datos_footer = [
         /* Firmas y Sellos */
         .frontal-footer { padding: 5px 20px 15px; display: flex; justify-content: space-around; align-items: flex-end; }
         .sello-wrap { text-align: center; }
-        .firma-linea-sm { width: 140px; border-bottom: 1px solid #000; margin-bottom: 5px; }
+        .firma-imagen-wrap-sm {
+            height: 42px;
+            margin-bottom: -42px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            pointer-events: none;
+            position: relative;
+            top: -34px;
+            z-index: 5;
+        }
+        .firma-imagen-wrap-sm img {
+            height: 100%;
+            max-width: 120px;
+            object-fit: contain;
+        }
+        .firma-linea-sm {
+            width: 140px;
+            border-bottom: 1px solid #000;
+            margin-bottom: 5px;
+            position: relative;
+            z-index: 1;
+        }
         .firma-label { font-family: 'Cinzel'; font-size: 0.6rem; }
         .sello-circulo { width: 65px; height: 65px; border: 1px solid var(--gris-linea); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.5rem; font-family: 'Cinzel'; }
         /* Reverso */
@@ -156,6 +178,15 @@ $datos_footer = [
 
         /* ── CONFIGURACIÓN DE IMPRESIÓN (UNA SOLA PÁGINA) ── */
         @media print {
+            /* Ocultar elementos de SweetAlert en la impresión y evitar que interfieran con el layout */
+            .swal2-container, .swal2-backdrop, .swal2-popup, .swal2-overlay, .swal2-modal {
+                display: none !important;
+            }
+            body.swal2-shown, html.swal2-shown {
+                overflow: visible !important;
+                height: auto !important;
+            }
+
             body { background: white; padding: 0; margin: 0; }
             .btn-imprimir, .cara-label { display: none !important; }
             .hoja { 
@@ -171,7 +202,7 @@ $datos_footer = [
 </head>
 <body>
 
-<button class="btn-imprimir" onclick="confirmarImpresion()">&#128438; Imprimir Carnet</button>
+<button class="btn-imprimir" onclick="preguntarFirmaReverso()">Imprimir Carnet</button>
 
 <!-- CARA FRONTAL -->
 <div class="cara-label">▶ Cara frontal</div>
@@ -207,9 +238,27 @@ $datos_footer = [
     </div>
 
     <div class="frontal-footer">
-        <div class="sello-wrap"><div class="firma-linea-sm"></div><div class="firma-label">Alcalde</div><div style="font-size:0.7rem"><?= $datos_footer['alcalde'] ?></div></div>
-        <div class="sello-wrap"><div class="sello-circulo">SELLO<br>ALCALDÍA</div></div>
-        <div class="sello-wrap"><div class="firma-linea-sm"></div><div class="firma-label">Secretario(a)</div><div style="font-size:0.7rem"><?= $datos_footer['secretario'] ?></div></div>
+        <div class="sello-wrap" style="position: relative;">
+            <div class="firma-imagen-wrap-sm">
+                <img src="../assets/uploads/firmas/firma2.png" alt="Firma Alcalde">
+            </div>
+            <div class="firma-linea-sm"></div>
+            <div class="firma-label">Alcalde</div>
+            <div style="font-size:0.7rem"><?= $datos_footer['alcalde'] ?></div>
+        </div>
+        <div class="sello-wrap">
+            <div class="sello-circulo" style="border: none; position: relative;">
+                <img src="../assets/Img/sello_ilobasco.png" alt="Sello" style="width: 75px; height: 75px; object-fit: contain; position: absolute; top: -5px; left: -5px; opacity: 0.85; transform: rotate(-5deg);">
+            </div>
+        </div>
+        <div class="sello-wrap" style="position: relative;">
+            <div class="firma-imagen-wrap-sm">
+                <img src="../assets/uploads/firmas/firma1.png" alt="Firma">
+            </div>
+            <div class="firma-linea-sm"></div>
+            <div class="firma-label">Secretario(a)</div>
+            <div style="font-size:0.7rem"><?= $datos_footer['secretario'] ?></div>
+        </div>
     </div>
 </div>
 
@@ -227,7 +276,13 @@ $datos_footer = [
     </div>
 
     <div class="reverso-footer">
-        <div class="sello-wrap"><div class="firma-linea-sm" style="width:100px"></div><div class="firma-label">Firma</div></div>
+        <div class="sello-wrap" style="position: relative; min-width: 140px;" id="reversoFirmaSelloWrap">
+            <div class="firma-imagen-wrap-sm" id="reversoFirmaImagenWrap" style="display: none;">
+                <img id="reversoFirmaImg" src="" alt="Firma">
+            </div>
+            <div class="firma-linea-sm" style="width:140px; margin: 0 auto 5px auto;"></div>
+            <div class="firma-label" id="reversoFirmaLabel">Firma</div>
+        </div>
         <div class="huella-box"><div class="huella-oval"></div><span>Huella</span></div>
         <div class="ministerio-wrap">MINISTERIO DE HACIENDA<br>No <?= $datos_menor['numero_carnet'] ?> "A"</div>
     </div>
@@ -243,30 +298,231 @@ $datos_footer = [
         timerProgressBar: true
     });
 
+    function preguntarFirmaReverso() {
+        Swal.fire({
+            title: '¿Agregar firma al reverso?',
+            text: '¿Desea dibujar e incorporar la firma del menor o la del padre/tutor en la parte trasera del carnet?',
+            icon: 'question',
+            showDenyButton: true,
+            showCancelButton: true,
+            confirmButtonText: 'Firma del Menor',
+            denyButtonText: 'Firma del Padre/Tutor',
+            cancelButtonText: 'Omitir y continuar',
+            confirmButtonColor: '#1C3166',
+            denyButtonColor: '#2e7d32',
+            cancelButtonColor: '#757575',
+            allowOutsideClick: false
+        }).then((result) => {
+            if (result.isConfirmed) {
+                abrirModalFirma('menor');
+            } else if (result.isDenied) {
+                abrirModalFirma('padre');
+            } else {
+                confirmarImpresion();
+            }
+        });
+    }
+
+    function abrirModalFirma(tipo) {
+        const titulo = tipo === 'menor' ? 'Firma del Menor' : 'Firma del Padre / Madre / Tutor';
+        Swal.fire({
+            title: `Dibujar ${titulo}`,
+            html: `
+                <div style="text-align: center; font-family: 'EB Garamond', Georgia, serif;">
+                    <p style="color: #555; font-size: 0.9rem; margin-bottom: 15px;">
+                        Dibuje la firma dentro del recuadro blanco usando su ratón, panel táctil o pantalla móvil.
+                    </p>
+                    <div style="position: relative; width: 100%; max-width: 440px; margin: 0 auto; background: #FFFFFF; border: 2px dashed #1C3166; border-radius: 12px; overflow: hidden; aspect-ratio: 16/9; display: flex; align-items: center; justify-content: center; box-shadow: inset 0 2px 8px rgba(0,0,0,0.1);">
+                        <canvas id="modalFirmaCanvas" style="width: 100%; height: 100%; display: block; cursor: crosshair; touch-action: none;"></canvas>
+                        <div id="modalFirmaHint" style="position: absolute; pointer-events: none; color: #aaa; font-weight: bold; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; transition: opacity 0.2s;">
+                            Dibuje la firma aquí
+                        </div>
+                    </div>
+                    <div style="margin-top: 15px; display: flex; justify-content: center; gap: 10px;">
+                        <button type="button" id="btnLimpiarModalFirma" class="swal2-styled" style="background-color: #757575; color: white; margin: 0; padding: 6px 16px; border-radius: 6px; font-size: 0.85rem; font-weight: bold;">
+                            Limpiar
+                        </button>
+                    </div>
+                </div>
+            `,
+            showCancelButton: true,
+            confirmButtonText: 'Guardar Firma',
+            cancelButtonText: 'Atrás',
+            confirmButtonColor: '#1C3166',
+            cancelButtonColor: '#d33',
+            allowOutsideClick: false,
+            preConfirm: () => {
+                const canvas = document.getElementById('modalFirmaCanvas');
+                const cropped = getCroppedCanvas(canvas);
+                if (!cropped) {
+                    Swal.showValidationMessage('Por favor, dibuje una firma antes de guardar.');
+                    return false;
+                }
+                return {
+                    dataURL: cropped.toDataURL('image/png'),
+                    tipo: tipo
+                };
+            },
+            didOpen: () => {
+                const canvas = document.getElementById('modalFirmaCanvas');
+                const ctx = canvas.getContext('2d');
+                const hint = document.getElementById('modalFirmaHint');
+                const btnLimpiar = document.getElementById('btnLimpiarModalFirma');
+                
+                let drawing = false;
+                
+                const rect = canvas.getBoundingClientRect();
+                canvas.width = rect.width;
+                canvas.height = rect.height;
+                
+                ctx.lineCap = 'round';
+                ctx.lineJoin = 'round';
+                ctx.strokeStyle = '#1C3166';
+                ctx.lineWidth = 3;
+                
+                function getCoordinates(e) {
+                    const r = canvas.getBoundingClientRect();
+                    if (e.touches && e.touches.length > 0) {
+                        return {
+                            x: e.touches[0].clientX - r.left,
+                            y: e.touches[0].clientY - r.top
+                        };
+                    } else {
+                        return {
+                            x: e.clientX - r.left,
+                            y: e.clientY - r.top
+                        };
+                    }
+                }
+                
+                function startDrawing(e) {
+                    e.preventDefault();
+                    drawing = true;
+                    hint.style.opacity = '0';
+                    const coords = getCoordinates(e);
+                    ctx.beginPath();
+                    ctx.moveTo(coords.x, coords.y);
+                    ctx.lineTo(coords.x, coords.y);
+                    ctx.stroke();
+                }
+                
+                function draw(e) {
+                    if (!drawing) return;
+                    e.preventDefault();
+                    const coords = getCoordinates(e);
+                    ctx.lineTo(coords.x, coords.y);
+                    ctx.stroke();
+                }
+                
+                function stopDrawing() {
+                    if (drawing) {
+                        drawing = false;
+                        ctx.closePath();
+                    }
+                }
+                
+                canvas.addEventListener('mousedown', startDrawing);
+                canvas.addEventListener('mousemove', draw);
+                window.addEventListener('mouseup', stopDrawing);
+                
+                canvas.addEventListener('touchstart', startDrawing, { passive: false });
+                canvas.addEventListener('touchmove', draw, { passive: false });
+                window.addEventListener('touchend', stopDrawing);
+                
+                btnLimpiar.addEventListener('click', () => {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    hint.style.opacity = '1';
+                });
+            }
+        }).then((result) => {
+            if (result.isConfirmed && result.value) {
+                aplicarFirmaReverso(result.value.dataURL, result.value.tipo);
+            } else if (result.dismiss === Swal.DismissReason.cancel) {
+                preguntarFirmaReverso();
+            }
+        });
+    }
+
+    function getCroppedCanvas(canvas) {
+        const ctx = canvas.getContext('2d');
+        const w = canvas.width;
+        const h = canvas.height;
+        
+        const imgData = ctx.getImageData(0, 0, w, h);
+        const data = imgData.data;
+        
+        let minX = w, minY = h, maxX = 0, maxY = 0;
+        let hasPixels = false;
+        
+        for (let y = 0; y < h; y++) {
+            for (let x = 0; x < w; x++) {
+                const alphaIndex = ((y * w) + x) * 4 + 3;
+                if (data[alphaIndex] > 0) {
+                    hasPixels = true;
+                    if (x < minX) minX = x;
+                    if (x > maxX) maxX = x;
+                    if (y < minY) minY = y;
+                    if (y > maxY) maxY = y;
+                }
+            }
+        }
+        
+        if (!hasPixels) return null;
+        
+        const croppedCanvas = document.createElement('canvas');
+        const croppedCtx = croppedCanvas.getContext('2d');
+        
+        const padding = 10;
+        const croppedWidth = (maxX - minX) + (padding * 2);
+        const croppedHeight = (maxY - minY) + (padding * 2);
+        
+        croppedCanvas.width = croppedWidth;
+        croppedCanvas.height = croppedHeight;
+        
+        croppedCtx.drawImage(
+            canvas,
+            minX, minY, (maxX - minX), (maxY - minY),
+            padding, padding, (maxX - minX), (maxY - minY)
+        );
+        
+        return croppedCanvas;
+    }
+
+    function aplicarFirmaReverso(dataURL, tipoFirma) {
+        const imgWrap = document.getElementById('reversoFirmaImagenWrap');
+        const img = document.getElementById('reversoFirmaImg');
+        const label = document.getElementById('reversoFirmaLabel');
+        
+        img.src = dataURL;
+        imgWrap.style.display = 'flex';
+        
+        if (tipoFirma === 'menor') {
+            label.textContent = 'Firma del Menor';
+        } else {
+            label.textContent = 'Firma del Padre/Tutor';
+        }
+        
+        setTimeout(() => {
+            confirmarImpresion();
+        }, 500);
+    }
+
     function confirmarImpresion() {
         Swal.fire({
             title: '¿Imprimir Carnet?',
             text: "Se imprimirán ambas caras en una sola página.",
             icon: 'question',
             showCancelButton: true,
-            confirmButtonColor: '#003366',
-              cancelButtonColor: 'rgb(175, 158, 158)',
+            confirmButtonColor: '#1C3166',
+            cancelButtonColor: '#d33',
             confirmButtonText: 'Sí, imprimir',
             cancelButtonText: 'Cancelar'
         }).then((result) => {
             if (result.isConfirmed) {
-                
-                Toast.fire({
-                    icon: 'info',
-                    title: 'Preparando documento...'
-                });
-
-                
+                Swal.close();
                 setTimeout(() => {
-                    
-                    Swal.close(); 
                     window.print();
-                }, 2500); 
+                }, 350);
             }
         });
     }

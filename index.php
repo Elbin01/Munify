@@ -1,3 +1,6 @@
+<?php
+session_start();
+?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -6,6 +9,7 @@
     <title>Alcaldía Municipal — MUNIFY</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,700;1,700&family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <link rel="stylesheet" href="assets/Css/footer.css">
         <style>
         :root {
@@ -50,7 +54,7 @@
             font-size: 0.84rem; font-weight: 500;
             text-decoration: none; transition: color 0.2s;
         }
-        .nav-links a:hover { color: var(--color-3); text-shadow: 0 0 8px rgba(255,255,255,0.5); }
+        .nav-links a:not(.btn-login):not(.btn-ghost):hover { color: var(--color-3); text-shadow: 0 0 8px rgba(255,255,255,0.5); }
         .btn-login {
             background: var(--color-3) !important;
             color: var(--color-1) !important;
@@ -58,8 +62,57 @@
             font-size: 0.82rem !important; font-weight: 700 !important;
             letter-spacing: 0.04em; transition: all 0.25s !important;
         }
-        .btn-login:hover { background: var(--color-2) !important; color: #fff !important; }
+        .btn-login:hover { background: var(--color-2) !important; color: var(--color-1) !important; }
         .hamburger { display: none; background: none; border: none; color: var(--color-3); font-size: 1.3rem; cursor: pointer; }
+
+        /* ══════════════ USER DROPDOWN ══════════════ */
+        .nav-dropdown {
+            position: relative;
+            display: inline-block;
+        }
+        .nav-dropdown-content {
+            display: none;
+            position: absolute;
+            right: 0;
+            background-color: #ffffff;
+            min-width: 150px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.15);
+            border-radius: 8px;
+            z-index: 400;
+            overflow: hidden;
+            margin-top: 5px;
+            border: 1px solid rgba(0,0,0,0.08);
+            text-align: left;
+        }
+        .nav-dropdown:hover .nav-dropdown-content {
+            display: block;
+        }
+        .nav-dropdown-content a {
+            color: #333 !important;
+            padding: 10px 16px !important;
+            text-decoration: none;
+            display: flex !important;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.82rem !important;
+            font-weight: 600 !important;
+            transition: background-color 0.2s;
+            text-shadow: none !important;
+        }
+        .nav-dropdown-content a:hover {
+            background-color: #f0f4ff !important;
+            color: var(--color-1) !important;
+        }
+        .nav-username {
+            color: rgba(255,255,255,0.95);
+            font-size: 0.84rem;
+            font-weight: 600;
+            letter-spacing: 0.02em;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+        }
 
         /* ══════════════ HERO ══════════════ */
         .hero {
@@ -143,7 +196,7 @@
             text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem;
             transition: all 0.25s;
         }
-        .btn-cta:hover { background: var(--color-2); color: #fff; transform: translateY(-2px); box-shadow: 0 10px 20px rgba(0,0,0,0.3); }
+        .btn-cta:hover { background: var(--color-2) !important; color: var(--color-1) !important; transform: translateY(-2px); box-shadow: 0 10px 20px rgba(0,0,0,0.3); }
 
         .btn-ghost {
             background: rgba(255,255,255,0.1); color: #fff;
@@ -153,36 +206,62 @@
             display: inline-flex; align-items: center; gap: 0.5rem;
             transition: all 0.25s; backdrop-filter: blur(6px);
         }
-        .btn-ghost:hover { border-color: var(--color-3); background: rgba(255,255,255,0.2); }
+        .btn-ghost:hover { border-color: var(--color-3) !important; background: var(--color-3) !important; color: var(--color-1) !important; }
 
         /* Tarjeta flotante */
         .hero-card {
             background: #ffffff;
             border-radius: 16px; padding: 2.5rem 2rem;
-            width: 300px; flex-shrink: 0; color: var(--color-4);
+            width: 380px; flex-shrink: 0; color: var(--color-4);
             box-shadow: 0 25px 50px rgba(0,0,0,0.3);
             animation: up 0.7s 0.45s ease both;
             border-bottom: 4px solid var(--color-2);
+            text-align: center;
         }
         .hc-icon {
-            width: 60px; height: 60px; background: rgba(28, 49, 102, 0.1);
-            border-radius: 14px; display: flex; align-items: center;
-            justify-content: center; font-size: 1.6rem; color: var(--color-1);
-            margin-bottom: 1.2rem;
+            width: 80px; height: 80px; background: rgba(28, 49, 102, 0.1);
+            border-radius: 50%; display: flex; align-items: center;
+            justify-content: center; font-size: 2.5rem; color: var(--color-1);
+            margin: 0 auto 1.5rem;
+            box-shadow: 0 4px 15px rgba(28, 49, 102, 0.15);
         }
-        .hero-card h3 { font-size: 1.15rem; font-weight: 700; color: var(--color-1); margin-bottom: 0.5rem; }
-        .hero-card p { font-size: 0.85rem; color: #666; line-height: 1.65; margin-bottom: 1.5rem; }
-        .hc-pills { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+        .hero-card h3 { font-size: 1.25rem; font-weight: 700; color: var(--color-1); margin-bottom: 0.5rem; }
+        .hero-card p { font-size: 0.88rem; color: #666; line-height: 1.65; margin-bottom: 1.5rem; }
+        .hc-pills { display: flex; flex-wrap: wrap; gap: 0.6rem; justify-content: center; }
         .hc-pill {
             background: var(--color-1); color: #ffffff;
-            border-radius: 50px; padding: 0.4rem 1.1rem;
-            font-size: 0.72rem; font-weight: 600;
-            display: flex; align-items: center; gap: 0.5rem;
+            border-radius: 50%; 
+            width: 46px;
+            height: 46px;
+            font-size: 0.78rem; font-weight: 600;
+            display: flex; align-items: center; justify-content: center;
             box-shadow: 0 4px 10px rgba(28, 49, 102, 0.2);
-            transition: all 0.3s;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            overflow: hidden;
+            white-space: nowrap;
         }
-        .hc-pill:hover { transform: translateY(-2px); background: var(--color-2); }
-        .hc-pill i { font-size: 0.8rem; }
+        .hc-pill:hover { 
+            transform: translateY(-2px); 
+            background: var(--color-2); 
+            color: var(--color-1);
+            width: 150px;
+            border-radius: 50px;
+        }
+        .hc-pill i { font-size: 0.95rem; }
+        .hc-pill .pill-text {
+            max-width: 0;
+            opacity: 0;
+            display: inline-block;
+            transition: max-width 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
+            vertical-align: middle;
+            overflow: hidden;
+        }
+        .hc-pill:hover .pill-text {
+            max-width: 120px;
+            opacity: 1;
+            margin-left: 0.5rem;
+        }
 
         /* Indicador de scroll */
         .scroll-hint {
@@ -273,7 +352,7 @@
             font-weight: 700; text-decoration: none; display: inline-flex; align-items: center;
             gap: 0.5rem; transition: all 0.25s; white-space: nowrap; font-size: 0.95rem;
         }
-        .btn-featured:hover { background: #f0f0f0; color: var(--color-2); transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.15); }
+        .btn-featured:hover { background: #f0f0f0; color: var(--color-1); transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.15); }
         
         @media (max-width: 900px) {
             .featured-svc { flex-direction: column; text-align: center; padding: 2rem; }
@@ -351,6 +430,33 @@
         <a href="#servicios">Servicios</a>
         <a href="#nosotros">Nosotros</a>
         <a href="#ubicacion">Contacto</a>
+        
+        <?php if (isset($_SESSION['usuario'])): ?>
+            <?php if (isset($_SESSION['rol']) && $_SESSION['rol'] == 1): ?>
+                <a href="views/dashboard.php" class="btn-ghost" style="padding: 0.48rem 1.4rem; font-size: 0.82rem;"><i class="bi bi-speedometer2" style="margin-right: 5px;"></i> Dashboard</a>
+            <?php else: ?>
+                <a href="views/SolicitudCitas.php" class="btn-ghost" style="padding: 0.48rem 1.4rem; font-size: 0.82rem;"><i class="bi bi-calendar-plus" style="margin-right: 5px;"></i> Solicitar Cita</a>
+            <?php endif; ?>
+            
+            <div class="nav-dropdown" style="margin-left: 1rem;">
+                <a href="javascript:void(0)" class="nav-username" style="text-decoration: none; display: flex; align-items: center; gap: 8px;">
+                    <i class="bi bi-person-circle" style="font-size: 1.1rem; color: #fff;"></i>
+                    <strong style="color: #fff; font-weight: 600; font-size: 0.85rem;"><?php echo htmlspecialchars($_SESSION['usuario']); ?></strong>
+                    <i class="bi bi-chevron-down" style="font-size: 0.7rem; color: rgba(255,255,255,0.7);"></i>
+                </a>
+                <div class="nav-dropdown-content">
+                    <?php if (isset($_SESSION['rol']) && $_SESSION['rol'] == 1): ?>
+                        <a href="views/perfil.php"><i class="bi bi-person-badge"></i> Perfil</a>
+                    <?php else: ?>
+                        <a href="javascript:void(0)" onclick="verPerfilCiudadano()"><i class="bi bi-person-badge"></i> Perfil</a>
+                    <?php endif; ?>
+                    <a href="controller/logout.php" style="border-top: 1px solid rgba(0,0,0,0.06); color: #dc3545 !important;"><i class="bi bi-box-arrow-right"></i> Cerrar Sesión</a>
+                </div>
+            </div>
+        <?php else: ?>
+            <a href="javascript:void(0)" onclick="requerirLogin()" class="btn-ghost" style="padding: 0.48rem 1.4rem; font-size: 0.82rem;"><i class="bi bi-calendar-plus" style="margin-right: 5px;"></i> Solicitar Cita</a>
+            <a href="views/login.php" class="btn-login">Iniciar Sesión</a>
+        <?php endif; ?>
     </div>
 </nav>
 
@@ -384,9 +490,9 @@
             <h3>Gestión con identidad</h3>
             <p>Documentos oficiales para cada ciudadano, con atención ágil y proceso 100% verificado por la alcaldía.</p>
             <div class="hc-pills">
-                <span class="hc-pill"><i class="fas fa-baby"></i> Nacimiento</span>
-                <span class="hc-pill"><i class="fas fa-id-card-clip"></i> Minoridad</span>
-                <span class="hc-pill"><i class="fas fa-file-contract"></i> Defunción</span>
+                <span class="hc-pill"><i class="fas fa-baby"></i><span class="pill-text">Nacimiento</span></span>
+                <span class="hc-pill"><i class="fas fa-id-card-clip"></i><span class="pill-text">Minoridad</span></span>
+                <span class="hc-pill"><i class="fas fa-file-contract"></i><span class="pill-text">Defunción</span></span>
             </div>
         </div>
     </div>
@@ -509,7 +615,7 @@
                 <div class="sched">
                     <div class="sd-item">
                         <div class="sd-day">Lunes — Viernes</div>
-                        <div class="sd-time">8:00 a.m. — 3:00 p.m.</div>
+                        <div class="sd-time">8:00 a.m. — 4:00 p.m.</div>
                     </div>
                     <div class="sd-line"></div>
                     <div class="sd-item">
@@ -575,15 +681,114 @@
         <a href="#ubicacion">Contacto</a>
     </div>
 
-    <div class="footer-developer">
+    <div class="footer-developer" style="cursor: pointer; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'" onclick="openBlackRose()">
       <span class="footer-developer-text">Desarrollado por</span>
       <div class="footer-developer-brand">
         <img src="assets/Img/BlackRoseSystems.png" alt="Blackrose Logo" class="footer-developer-logo">
         <span class="footer-developer-name">BlackRose Systems</span>
       </div>
     </div>
+    
+    <!-- PANEL BLACKROSE (CUSTOM OFFCANVAS) -->
+    <style>
+    .co-backdrop { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.5); z-index: 9998; opacity: 0; visibility: hidden; transition: all 0.3s ease; }
+    .co-backdrop.show { opacity: 1; visibility: visible; }
+    .co-panel { position: fixed; top: 0; right: -450px; width: 400px; max-width: 100%; height: 100vh; background: #fff; z-index: 9999; box-shadow: -5px 0 30px rgba(0,0,0,0.15); transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1); display: flex; flex-direction: column; font-family: 'Poppins', sans-serif; }
+    .co-panel.show { right: 0; }
+    .co-header { background: #1C3166; color: white; padding: 1.2rem 1.5rem; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+    .co-title { font-size: 1.1rem; font-weight: 600; margin: 0; display: flex; align-items: center; gap: 10px; }
+    .co-close { background: none; border: none; color: white; font-size: 1.8rem; cursor: pointer; opacity: 0.8; transition: opacity 0.2s; line-height: 1; padding: 0; }
+    .co-close:hover { opacity: 1; }
+    .co-body { padding: 2rem; overflow-y: auto; text-align: center; }
+    </style>
+
+    <div class="co-backdrop" id="coBackdrop" onclick="closeBlackRose()"></div>
+    <div class="co-panel" id="coPanelBlackRose">
+        <div class="co-header">
+            <h5 class="co-title"><i class="bi bi-code-slash"></i> Desarrolladores</h5>
+            <button class="co-close" onclick="closeBlackRose()">&times;</button>
+        </div>
+        <div class="co-body">
+            <div style="display: inline-block; margin-bottom: 1.5rem;">
+                <img src="assets/Img/BlackRoseSystems.png" alt="BlackRose Systems" style="width: 140px; height: auto;">
+            </div>
+            
+            <h3 style="color: #1C3166; font-weight: 800; font-size: 1.4rem; margin-bottom: 5px;">BlackRose Systems</h3>
+            <p style="color: #666; font-weight: 500; font-size: 0.9rem; margin-bottom: 2rem;">Agencia de Ingeniería y Soluciones de Software</p>
+            
+            <div style="text-align: left; background: #f8f9fa; border: 1px solid #edf1f7; border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem;">
+                <p style="color: #444; font-size: 0.88rem; line-height: 1.6; margin-bottom: 15px;">
+                    Somos un equipo de desarrolladores apasionados por crear ecosistemas tecnológicos escalables, innovadores y de alto rendimiento.
+                </p>
+                <p style="color: #444; font-size: 0.88rem; line-height: 1.6; margin-bottom: 0;">
+                    Nos especializamos en la modernización digital, arquitecturas web seguras y soluciones a medida que transforman instituciones y conectan a la comunidad.
+                </p>
+            </div>
+            
+            <div style="background: rgba(28, 49, 102, 0.05); border: 1px dashed rgba(28, 49, 102, 0.2); border-radius: 8px; padding: 15px; display: flex; align-items: center; justify-content: center; gap: 10px;">
+                <i class="bi bi-gear-wide-connected" style="color: #1C3166; font-size: 1.2rem;"></i>
+                <span style="color: #1C3166; font-weight: 700; font-size: 0.85rem; text-transform: uppercase;">Transformando ideas en código</span>
+            </div>
+        </div>
+    </div>
 </footer>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="assets/Js/principal.js"></script>
+<script>
+function requerirLogin() {
+    Swal.fire({
+        title: 'Acceso Restringido',
+        text: 'Debes iniciar sesión para poder solicitar una cita con la Alcaldía.',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#1C3166',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Ir a Iniciar Sesión',
+        cancelButtonText: 'Cerrar'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            window.location.href = 'views/login.php';
+        }
+    });
+}
+
+function verPerfilCiudadano() {
+    const nombre = <?php echo isset($_SESSION['usuario']) ? json_encode($_SESSION['usuario']) : '""'; ?>;
+    const correo = <?php echo isset($_SESSION['correo']) ? json_encode($_SESSION['correo']) : '"usuario@munify.gob.sv"'; ?>;
+    
+    Swal.fire({
+        html: `
+            <div style="text-align: center; font-family: 'Poppins', sans-serif; padding-top: 15px;">
+                <div style="width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg, #1C3166 0%, #2A488E 100%); color: white; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; margin: 0 auto 15px; box-shadow: 0 4px 10px rgba(28, 49, 102, 0.2);">
+                    <i class="bi bi-person"></i>
+                </div>
+                <h3 style="margin-bottom: 5px; color: #1C3166; font-weight: 700;">${nombre}</h3>
+                <p style="color: #666; margin-bottom: 20px; font-size: 0.9rem;"><i class="bi bi-envelope"></i> ${correo}</p>
+                <div style="background: rgba(28, 49, 102, 0.05); border: 1px solid rgba(28, 49, 102, 0.1); border-radius: 8px; padding: 8px 15px; display: inline-block;">
+                    <span style="color: #1C3166; font-weight: 600; font-size: 0.9rem;"><i class="bi bi-shield-check" style="margin-right:5px;"></i> Ciudadano Registrado</span>
+                </div>
+            </div>
+        `,
+        showConfirmButton: true,
+        confirmButtonColor: '#1C3166',
+        confirmButtonText: 'Cerrar',
+        width: '400px',
+        padding: '2em'
+    });
+}
+
+function openBlackRose() {
+    document.getElementById('coBackdrop').classList.add('show');
+    document.getElementById('coPanelBlackRose').classList.add('show');
+    document.body.style.overflow = 'hidden'; // Evita scroll
+}
+
+function closeBlackRose() {
+    document.getElementById('coBackdrop').classList.remove('show');
+    document.getElementById('coPanelBlackRose').classList.remove('show');
+    document.body.style.overflow = 'auto';
+}
+</script>
 
 </body>
 </html>

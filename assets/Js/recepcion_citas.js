@@ -83,13 +83,24 @@ $(document).ready(function() {
         }).get();
 
         if (selected.length === 0) {
-            alert('Por favor, seleccione al menos una cita pendiente.');
+            window.showToast('Por favor, seleccione al menos una cita pendiente.');
             return;
         }
 
-        if (confirm(`¿Está seguro de que desea aceptar las ${selected.length} citas seleccionadas?`)) {
-            procesarBatch(selected, 'confirmada');
-        }
+        Swal.fire({
+            title: '¿Confirmar Selección?',
+            text: `¿Está seguro de que desea aceptar las ${selected.length} citas seleccionadas?`,
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#1C3166',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sí, aceptar',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                procesarBatch(selected, 'confirmada');
+            }
+        });
     });
 
     // Aceptar Todas (las que están en la vista actual / filtradas)
@@ -99,13 +110,24 @@ $(document).ready(function() {
             .map(row => row.id_cita);
 
         if (allIds.length === 0) {
-            alert('No hay citas pendientes para aceptar en la vista actual.');
+            window.showToast('No hay citas pendientes para aceptar en la vista actual.');
             return;
         }
 
-        if (confirm(`¿Está seguro de que desea aceptar TODAS las citas pendientes (${allIds.length})?`)) {
-            procesarBatch(allIds, 'confirmada');
-        }
+        Swal.fire({
+            title: '¿Confirmar Todas?',
+            text: `¿Está seguro de que desea aceptar TODAS las citas pendientes (${allIds.length})?`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#1C3166',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sí, aceptar todas',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                procesarBatch(allIds, 'confirmada');
+            }
+        });
     });
 
     // Función para procesar en lote
@@ -124,11 +146,11 @@ $(document).ready(function() {
         });
 
         Promise.all(promesas).then(() => {
-            alert('Proceso completado exitosamente.');
+            window.showToast('Proceso completado exitosamente.');
             table.ajax.reload();
             $('#selectAll').prop('checked', false);
         }).catch(() => {
-            alert('Hubo un error al procesar algunas solicitudes.');
+            window.showToast('Hubo un error al procesar algunas solicitudes.');
             table.ajax.reload();
         });
     }
@@ -198,23 +220,34 @@ $(document).ready(function() {
     // Función para cambiar estado
     window.cambiarEstado = function(id, nuevoEstado) {
         const mensaje = nuevoEstado === 'confirmada' ? 'aceptar y notificar por correo' : 'denegar';
-        if(confirm(`¿Está seguro de que desea ${mensaje} esta solicitud?`)) {
-            $.ajax({
-                url: '../controller/actualizar_estado_cita.php',
-                type: 'POST',
-                data: { id: id, estado: nuevoEstado },
-                dataType: 'json',
-                success: function(response) {
-                    if (response.success) {
-                        table.ajax.reload();
-                    } else {
-                        alert('Error al actualizar el estado: ' + response.message);
+        Swal.fire({
+            title: '¿Procesar Solicitud?',
+            text: `¿Está seguro de que desea ${mensaje} esta solicitud?`,
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#1C3166',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sí, confirmar',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: '../controller/actualizar_estado_cita.php',
+                    type: 'POST',
+                    data: { id: id, estado: nuevoEstado },
+                    dataType: 'json',
+                    success: function(response) {
+                        if (response.success) {
+                            table.ajax.reload();
+                        } else {
+                            window.showToast('Error al actualizar el estado: ' + response.message);
+                        }
+                    },
+                    error: function() {
+                        window.showToast('Error en la comunicación con el servidor.');
                     }
-                },
-                error: function() {
-                    alert('Error en la comunicación con el servidor.');
-                }
-            });
-        }
+                });
+            }
+        });
     };
 });

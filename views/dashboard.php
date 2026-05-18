@@ -49,7 +49,7 @@ $citasSolicitadas = $citaModel->obtenerCitasSolicitadas(3);
                         </nav>
                     </div>
                     <div class="user-info text-end">
-                        <span class="text-muted small">Bienvenido, <strong>Administrador</strong></span>
+                        <span class="text-muted small">Bienvenido, <strong><?= htmlspecialchars($_SESSION['usuario'] ?? 'Administrador') ?></strong></span>
                     </div>
                 </div>
 
@@ -176,7 +176,7 @@ $citasSolicitadas = $citaModel->obtenerCitasSolicitadas(3);
                             <?php endif; ?>
                             
                             <div class="mt-4 text-center">
-                                <a href="SolicitudCitas.php" class="btn btn-sm btn-outline-primary w-100" style="color: var(--color-3); border-color: var(--color-3);">Ver todas las citas</a>
+                                <a href="recepcion_citas.php" class="btn btn-sm btn-outline-primary w-100" style="color: var(--color-3); border-color: var(--color-3);">Ver todas las citas</a>
                             </div>
                         </div>
                     </div>

@@ -1,7 +1,7 @@
 <?php
-class Conexion {
-    private $host = '127.0.0.1:3308'; 
-    private $port = '3308'; // Tu puerto actual
+class Conexion { 
+    private $host = ''; // Marcos 127.0.0.1:3308
+    private $port = ''; // Tu puerto actual
     private $db_name = 'bdd_munify';
     private $username = 'root';
     private $password = '';

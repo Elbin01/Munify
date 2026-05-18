@@ -2,6 +2,25 @@ $(document).ready(function() {
     // Cargar últimas minoridades al iniciar
     cargarUltimasMinoridades();
 
+    // Restringir el calendario de fecha de nacimiento a menores de 18 años
+    const hoy = new Date();
+    const fechaLimite = new Date();
+    fechaLimite.setFullYear(fechaLimite.getFullYear() - 18);
+    fechaLimite.setDate(fechaLimite.getDate() + 1); // Estrictamente menor de 18
+    
+    const minAnio = fechaLimite.getFullYear();
+    const minMes = String(fechaLimite.getMonth() + 1).padStart(2, '0');
+    const minDia = String(fechaLimite.getDate()).padStart(2, '0');
+    const minFechaAttr = `${minAnio}-${minMes}-${minDia}`;
+    
+    const maxAnio = hoy.getFullYear();
+    const maxMes = String(hoy.getMonth() + 1).padStart(2, '0');
+    const maxDia = String(hoy.getDate()).padStart(2, '0');
+    const maxFechaAttr = `${maxAnio}-${maxMes}-${maxDia}`;
+
+    $('#regFechaNac').attr('min', minFechaAttr);
+    $('#regFechaNac').attr('max', maxFechaAttr);
+
     function cargarUltimasMinoridades() {
         $.ajax({
             url: '../controller/minoridad_recientes_controller.php',
@@ -22,7 +41,7 @@ $(document).ready(function() {
                                 <td>${nombre}</td>
                                 <td>${item.fecha_vencimiento}</td>
                                 <td>
-                                    <button class="btn btn-sm btn-outline-secondary" title="Ver Detalle" onclick="window.open('../reportes/carnet_minoridad.php?id=${item.id_carnet}', '_blank')">
+                                    <button class="btn btn-sm btn-outline-secondary" title="Ver Detalle" onclick="window.open('../reportes/ver_carnet_3d.php?id=${item.id_carnet}', '_blank')">
                                         <i class="bi bi-eye"></i>
                                     </button>
                                 </td>
@@ -51,7 +70,7 @@ $(document).ready(function() {
     // Buscar Responsable por DUI
     $('#btnBuscarResponsable').on('click', function() {
         const dui = $('#duiResponsable').val().trim();
-        if (dui.length < 10) return alert('DUI inválido');
+        if (dui.length < 10) return window.showToast('DUI inválido');
         
         $.ajax({
             url: '../controller/buscar_ciudadano_controller.php',
@@ -62,7 +81,7 @@ $(document).ready(function() {
                 if (data && data.length > 0) {
                     $('#regNombreResponsable').val(data[0].nombres + ' ' + data[0].apellidos);
                 } else {
-                    alert('Responsable no encontrado');
+                    window.showToast('Responsable no encontrado');
                 }
             }
         });
@@ -97,6 +116,31 @@ $(document).ready(function() {
             data: { q: query },
             dataType: 'json',
             success: function(data) {
+                // Filtrar solo menores de 18 años
+                if (data && data.length > 0) {
+                    data = data.filter(ciudadano => {
+                        if (!ciudadano.fecha_nacimiento) return false;
+                        
+                        const partes = ciudadano.fecha_nacimiento.split('-');
+                        if (partes.length !== 3) return false;
+                        
+                        const birthYear = parseInt(partes[0], 10);
+                        const birthMonth = parseInt(partes[1], 10) - 1;
+                        const birthDay = parseInt(partes[2], 10);
+                        
+                        const birthDate = new Date(birthYear, birthMonth, birthDay);
+                        const today = new Date();
+                        
+                        let age = today.getFullYear() - birthDate.getFullYear();
+                        const monthDiff = today.getMonth() - birthDate.getMonth();
+                        if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+                            age--;
+                        }
+                        
+                        return age < 18;
+                    });
+                }
+
                 if (data && data.length > 0) {
                     window.ciudadanosBusqueda = data;
                     if (data.length === 1) {
@@ -128,7 +172,7 @@ $(document).ready(function() {
                 }
             },
             error: function() {
-                alert("Hubo un error al conectar con la base de datos.");
+                window.showToast("Hubo un error al conectar con la base de datos.");
             }
         });
     });
@@ -139,29 +183,64 @@ $(document).ready(function() {
             nombres: $('#regNombres').val().trim(),
             apellidos: $('#regApellidos').val().trim(),
             fecha_nacimiento: $('#regFechaNac').val(),
-            sexo: $('#regSexo').val()
+            sexo: $('#regSexo').val(),
+            lugar_nacimiento: $('#regLugarNac').val().trim(),
+            nombre_padre: $('#regNombrePadre').val().trim(),
+            nombre_madre: $('#regNombreMadre').val().trim()
         };
 
         if (citizenData.nombres === '' || citizenData.apellidos === '' || citizenData.fecha_nacimiento === '') {
-            alert('Los campos Nombres, Apellidos y Fecha de Nacimiento son obligatorios.');
+            window.showToast('Los campos Nombres, Apellidos y Fecha de Nacimiento son obligatorios.');
             return;
         }
 
-        $.ajax({
-            url: '../controller/guardar_ciudadano_controller.php',
-            type: 'POST',
-            data: citizenData,
-            dataType: 'json',
-            success: function(response) {
-                if (response.success) {
-                    const id_ciudadano = response.id_ciudadano;
-                    guardarExpedienteMinoridad(id_ciudadano);
-                } else {
-                    alert('Error al registrar menor: ' + response.message);
-                }
-            },
-            error: function() {
-                alert('Hubo un error al procesar el registro del menor.');
+        // Validar que sea menor de 18 años antes de guardar
+        const partes = citizenData.fecha_nacimiento.split('-');
+        const birthYear = parseInt(partes[0], 10);
+        const birthMonth = parseInt(partes[1], 10) - 1;
+        const birthDay = parseInt(partes[2], 10);
+        const birthDate = new Date(birthYear, birthMonth, birthDay);
+        const today = new Date();
+        
+        let age = today.getFullYear() - birthDate.getFullYear();
+        const monthDiff = today.getMonth() - birthDate.getMonth();
+        if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+            age--;
+        }
+        
+        if (age >= 18) {
+            window.showToast('Error: El ciudadano registrado debe ser menor de 18 años para emitir un carnet de minoridad.');
+            return;
+        }
+
+        Swal.fire({
+            title: '¿Guardar y generar carnet?',
+            text: "Verifique que los datos del menor sean correctos.",
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#1C3166',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sí, generar',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: '../controller/guardar_ciudadano_controller.php',
+                    type: 'POST',
+                    data: citizenData,
+                    dataType: 'json',
+                    success: function(response) {
+                        if (response.success) {
+                            const id_ciudadano = response.id_ciudadano;
+                            guardarExpedienteMinoridad(id_ciudadano);
+                        } else {
+                            window.showToast('Error al registrar menor: ' + response.message);
+                        }
+                    },
+                    error: function() {
+                        window.showToast('Hubo un error al procesar el registro del menor.');
+                    }
+                });
             }
         });
     });
@@ -170,11 +249,11 @@ $(document).ready(function() {
         const data = {
             id_ciudadano: id_ciudadano,
             numero_carnet: 'CM-' + Math.floor(Math.random() * 1000000),
-            lugar_estudio: $('#regDireccion').val().trim(), // Usando dirección como placeholder o lugar estudio
-            color_piel: 'Trigueño', // Opciones fijas o añadir al modal
-            color_ojos: 'Café',
-            color_cabello: 'Negro',
-            senales_especiales: 'Ninguna'
+            lugar_estudio: $('#regLugarEstudio').val().trim(),
+            color_piel: $('#regColorPiel').val().trim() || 'No especificado',
+            color_ojos: $('#regColorOjos').val().trim() || 'No especificado',
+            color_cabello: $('#regColorCabello').val().trim() || 'No especificado',
+            senales_especiales: $('#regSenales').val().trim() || 'Ninguna'
         };
 
         $.ajax({
@@ -184,17 +263,27 @@ $(document).ready(function() {
             dataType: 'json',
             success: function(response) {
                 if (response.success) {
-                    alert('Expediente de minoridad guardado correctamente.');
                     $('#modalMinoridad').modal('hide');
                     $('#formMinoridad')[0].reset();
-                    $('#searchInput').val(id_ciudadano);
+                    const nombreBusqueda = $('#resNombre').text() || ($('#regNombres').val() + ' ' + $('#regApellidos').val());
+                    $('#searchInput').val(nombreBusqueda.trim());
                     $('#searchForm').submit();
+                    
+                    Swal.fire({
+                        icon: 'success',
+                        title: '¡Carnet Generado!',
+                        text: 'El Carnet de Minoridad ha sido registrado y está listo para imprimir.',
+                        confirmButtonColor: '#1C3166',
+                        confirmButtonText: '<i class="bi bi-printer-fill"></i> Abrir Carnet'
+                    }).then(() => {
+                        window.open(`../reportes/carnet_minoridad.php?id=${response.id_carnet}`, '_blank');
+                    });
                 } else {
-                    alert('Error: ' + response.message);
+                    window.showToast('Error: ' + response.message);
                 }
             },
             error: function() {
-                alert('Hubo un error al procesar la solicitud del expediente.');
+                window.showToast('Hubo un error al procesar la solicitud del expediente.');
             }
         });
     }
@@ -202,16 +291,37 @@ $(document).ready(function() {
     // Imprimir carnet
     $('#btnImprimirCarnet').on('click', function() {
         if (!window.selectedCiudadanoId) {
-            alert('Error: No se ha seleccionado un menor.');
+            window.showToast('Error: No se ha seleccionado un menor.');
             return;
         }
 
-        if (window.selectedCarnetId) {
-            window.open(`../reportes/carnet_minoridad.php?id=${window.selectedCarnetId}`, '_blank');
-        } else {
-            // Generar uno nuevo si no existe
-            guardarExpedienteMinoridad(window.selectedCiudadanoId);
-        }
+        Swal.fire({
+            title: '¿Imprimir Carnet?',
+            text: "Se generará el carnet de minoridad.",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#1C3166',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sí, imprimir',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                if (window.selectedCarnetId) {
+                    Swal.fire({
+                        icon: 'info',
+                        title: 'Imprimiendo',
+                        text: 'Abriendo el carnet en una nueva pestaña...',
+                        confirmButtonColor: '#1C3166',
+                        confirmButtonText: 'OK'
+                    }).then(() => {
+                        window.open(`../reportes/carnet_minoridad.php?id=${window.selectedCarnetId}`, '_blank');
+                    });
+                } else {
+                    // Generar uno nuevo si no existe
+                    guardarExpedienteMinoridad(window.selectedCiudadanoId);
+                }
+            }
+        });
     });
 });
 
@@ -232,7 +342,15 @@ window.seleccionarCiudadano = function(index) {
         btnAccion.html('<i class="bi bi-printer-fill me-2"></i> Imprimir Carnet');
         btnAccion.removeAttr('data-bs-toggle').removeAttr('data-bs-target');
         btnAccion.off('click').on('click', function() {
-            window.open(`../reportes/carnet_minoridad.php?id=${ciudadano.id_carnet}`, '_blank');
+            Swal.fire({
+                icon: 'info',
+                title: 'Documento Existente',
+                text: 'El Carnet de Minoridad ya está generado en el sistema.',
+                confirmButtonColor: '#1C3166',
+                confirmButtonText: '<i class="bi bi-printer-fill"></i> Imprimir Carnet'
+            }).then(() => {
+                window.open(`../reportes/carnet_minoridad.php?id=${ciudadano.id_carnet}`, '_blank');
+            });
         });
     } else {
         window.selectedCarnetId = null;

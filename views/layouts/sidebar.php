@@ -45,6 +45,12 @@ $inicial_usuario = strtoupper(substr($nombre_usuario, 0, 1));
             </a>
         </li>
         <li>
+            <a href="buscador_documentos.php" class="nav-link <?= $current_page == 'buscador_documentos.php' ? 'active' : 'text-white' ?>">
+                <i class="bi bi-search me-2"></i>
+                <span class="nav-text">Buscar Documentos</span>
+            </a>
+        </li>
+        <li>
             <a href="estadisticas.php" class="nav-link <?= $current_page == 'estadisticas.php' ? 'active' : 'text-white' ?>">
                 <i class="bi bi-bar-chart-line me-2"></i>
                 <span class="nav-text">Estadísticas</span>
@@ -65,9 +71,9 @@ $inicial_usuario = strtoupper(substr($nombre_usuario, 0, 1));
         </a>
         <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
             <li><a class="dropdown-item" href="#">Configuración</a></li>
-            <li><a class="dropdown-item" href="#">Perfil</a></li>
+            <li><a class="dropdown-item" href="perfil.php">Perfil</a></li>
             <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="login.php">Cerrar Sesión</a></li>
+            <li><a class="dropdown-item" href="../controller/logout.php">Cerrar Sesión</a></li>
         </ul>
     </div>
 </div>

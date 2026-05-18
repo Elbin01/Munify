@@ -344,6 +344,15 @@ $datos_footer = [
 
     /* ── Impresión ── */
     @media print {
+      /* Ocultar elementos de SweetAlert en la impresión y evitar que interfieran con el layout */
+      .swal2-container, .swal2-backdrop, .swal2-popup, .swal2-overlay, .swal2-modal {
+        display: none !important;
+      }
+      body.swal2-shown, html.swal2-shown {
+        overflow: visible !important;
+        height: auto !important;
+      }
+
       body {
         background: white;
         padding: 0;
@@ -509,16 +518,10 @@ function confirmarImpresion(){
 
         if(result.isConfirmed){
 
-            Toast.fire({
-                icon:'info',
-                title:'Preparando documento...'
-            });
-
+            Swal.close();
             setTimeout(() => {
-
                 window.print();
-
-            },2000);
+            }, 350);
 
         }
 

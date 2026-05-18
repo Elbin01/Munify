@@ -147,7 +147,7 @@
     <?php include 'layouts/sidebar.php'; ?>
 
     <main class="main-content">
-        <div class="container-fluid py-4 px-4">
+        <div class="container-fluid py-4 px-4" style="flex: 1;">
             <!-- Page Header -->
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <div>
@@ -195,35 +195,7 @@
                 </div>
             </div>
 
-            <!-- Buscador de Documentos -->
-            <div class="d-flex justify-content-between align-items-center mb-4 mt-5">
-                <div>
-                    <h2 class="fw-bold mb-1" style="color: var(--primary);">Buscador de Documentos</h2>
-                    <p class="text-muted small">Consulta cualquier documento registrado por nombre del ciudadano.</p>
-                </div>
-            </div>
 
-            <div class="filter-container">
-                <div class="row g-3 align-items-center">
-                    <div class="col-md-10">
-                        <div class="input-group">
-                            <span class="input-group-text bg-light border-end-0"><i class="bi bi-file-earmark-text text-muted"></i></span>
-                            <input type="text" id="docSearch" class="form-control border-start-0 shadow-none" placeholder="Ingresa nombres o apellidos del ciudadano...">
-                        </div>
-                    </div>
-                    <div class="col-md-2">
-                        <button class="btn btn-primary w-100 shadow-sm" onclick="searchDocs()" style="background-color: var(--primary); border-radius: 10px;">
-                            <i class="bi bi-search me-2"></i> Buscar
-                        </button>
-                    </div>
-                </div>
-                <div id="docsResults" class="mt-4">
-                    <div class="text-center py-4">
-                        <i class="bi bi-info-circle text-muted mb-2 fs-3"></i>
-                        <p class="text-muted small">Ingresa un nombre para ver los documentos asociados.</p>
-                    </div>
-                </div>
-            </div>
         </div>
         <?php include 'layouts/footer.php'; ?>
     </main>
@@ -341,44 +313,8 @@
         }
     }
 
-    // Búsqueda de Documentos
-    async function searchDocs() {
-        const termino = document.getElementById('docSearch').value;
-        if(!termino) return;
-
-        const resultsDiv = document.getElementById('docsResults');
-        resultsDiv.innerHTML = '<div class="text-center py-4"><div class="spinner-border spinner-border-sm text-primary"></div><p class="mt-2 text-muted small">Buscando...</p></div>';
-
-        const resp = await fetch(`../controller/UsuarioController.php?action=buscar_docs&termino=${termino}`);
-        const data = await resp.json();
-
-        if(data.length === 0) {
-            resultsDiv.innerHTML = '<div class="text-center py-4"><i class="bi bi-exclamation-circle text-muted fs-3"></i><p class="mt-2 text-muted small">No se encontraron documentos para este nombre.</p></div>';
-            return;
-        }
-
-        resultsDiv.innerHTML = data.map(d => `
-            <div class="result-item p-3 mb-2 border rounded-3 bg-light d-flex justify-content-between align-items-center">
-                <div class="result-info">
-                    <span class="badge-role" style="background: white; color: var(--primary); border: 1px solid var(--primary);">${d.tipo}</span>
-                    <h5 class="mb-1 mt-2 fw-bold" style="color: var(--primary);">${d.nombres} ${d.apellidos}</h5>
-                    <div class="text-muted small">ID Doc: ${d.id_doc} | Emitido: ${new Date(d.fecha_emision).toLocaleDateString()}</div>
-                </div>
-                <button class="btn btn-sm btn-primary shadow-sm" style="background-color: var(--primary);" onclick="notify('Funcionalidad de impresión en desarrollo', 'info')"><i class="bi bi-printer me-2"></i> Imprimir</button>
-            </div>
-        `).join('');
-    }
-
     function searchDocsFromUser(name) {
-        document.getElementById('docSearch').value = name;
-        searchDocs();
-        window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
-    }
-
-    function getBadgeClass(tipo) {
-        if(tipo.includes('Nacimiento')) return 'badge-partida';
-        if(tipo.includes('Defunción')) return 'badge-defuncion';
-        return 'badge-minoridad';
+        window.location.href = 'buscador_documentos.php?q=' + encodeURIComponent(name);
     }
 
     // Modal Helpers

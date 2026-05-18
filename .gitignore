@@ -1,3 +1,4 @@
 # .gitignore
 vendor/
 scratch/
+views/dibujar_firma.php

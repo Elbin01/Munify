@@ -112,6 +112,40 @@
                                             <option>Femenino</option>
                                         </select>
                                     </div>
+                                    <div class="col-md-12">
+                                        <label class="form-label fw-bold text-dark small">Lugar de Nacimiento</label>
+                                        <input type="text" id="regLugarNac" class="form-control border-secondary-subtle shadow-none" placeholder="Ciudad, Departamento">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-bold text-dark small">Nombre del Padre</label>
+                                        <input type="text" id="regNombrePadre" class="form-control border-secondary-subtle shadow-none">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-bold text-dark small">Nombre de la Madre</label>
+                                        <input type="text" id="regNombreMadre" class="form-control border-secondary-subtle shadow-none">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <h6 class="border-bottom pb-2 text-muted fw-bold"><i class="bi bi-body-text me-2"></i>Descripción Física</h6>
+                            <div class="row g-3 mt-1">
+                                <div class="col-md-4">
+                                    <label class="form-label fw-bold text-dark small">Color de Piel</label>
+                                    <input type="text" id="regColorPiel" class="form-control border-secondary-subtle shadow-none" placeholder="Ej: Trigueño, Blanco">
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label fw-bold text-dark small">Color de Ojos</label>
+                                    <input type="text" id="regColorOjos" class="form-control border-secondary-subtle shadow-none" placeholder="Ej: Café, Negro">
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label fw-bold text-dark small">Color de Cabello</label>
+                                    <input type="text" id="regColorCabello" class="form-control border-secondary-subtle shadow-none" placeholder="Ej: Negro, Castaño">
+                                </div>
+                                <div class="col-md-12">
+                                    <label class="form-label fw-bold text-dark small">Señas Especiales</label>
+                                    <input type="text" id="regSenales" class="form-control border-secondary-subtle shadow-none" placeholder="Cicatrices, lunares, etc.">
                                 </div>
                             </div>
                         </div>
@@ -136,9 +170,13 @@
                         <div>
                             <h6 class="border-bottom pb-2 text-muted fw-bold"><i class="bi bi-geo-alt-fill me-2"></i>Información Adicional</h6>
                             <div class="row g-3 mt-1">
-                                <div class="col-md-12">
+                                <div class="col-md-6">
                                     <label class="form-label fw-bold text-dark small">Dirección Residencial</label>
                                     <input type="text" id="regDireccion" class="form-control border-secondary-subtle shadow-none">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-bold text-dark small">Centro de Estudios</label>
+                                    <input type="text" id="regLugarEstudio" class="form-control border-secondary-subtle shadow-none">
                                 </div>
                             </div>
                         </div>
@@ -275,9 +313,9 @@
                     <!-- Éxito -->
                     <div id="cardSuccess" class="card result-card result-card-success d-none">
                         <div class="card-body p-4">
-                            <div class="d-flex align-items-center justify-content-between flex-wrap gap-3">
-                                <div class="d-flex align-items-center gap-4">
-                                    <div class="avatar-circle">
+                            <div class="row align-items-center">
+                                <div class="col-md-8 d-flex align-items-center gap-4">
+                                    <div class="avatar-circle flex-shrink-0">
                                         <i class="bi bi-person-vcard-fill"></i>
                                     </div>
                                     <div>
@@ -287,7 +325,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div>
+                                <div class="col-md-4 text-md-end mt-3 mt-md-0">
                                     <button id="btnAccionPartida" class="btn-action-primary btn-lg shadow-sm" data-bs-toggle="modal" data-bs-target="#modalPartida">
                                         <i class="bi bi-printer-fill me-2"></i> Generar Carnet
                                     </button>

@@ -8,6 +8,7 @@ $estadisticaModel = new EstadisticaModel();
 $citasMes = $estadisticaModel->getCitasPorMes();
 $distribucion = $estadisticaModel->getDistribucionTramites();
 $partidasMes = $estadisticaModel->getPartidasPorMes();
+$demografia = $estadisticaModel->getDemografiaCiudadanos();
 
 // Preparar arrays para Tendencia
 $mesesNombres = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
@@ -114,6 +115,22 @@ foreach ($diasSemana as $index => $dia) {
                         <div class="chart-card">
                             <h5 class="fw-bold mb-4">Distribución de Trámites</h5>
                             <div id="chart-distribucion"></div>
+                        </div>
+                    </div>
+
+                    <!-- Gráfico de Barras -->
+                    <div class="col-12 col-lg-6">
+                        <div class="chart-card">
+                            <h5 class="fw-bold mb-4">Comparativa de Documentos Emitidos</h5>
+                            <div id="chart-barras"></div>
+                        </div>
+                    </div>
+
+                    <!-- Gráfico de Demografía (Menores vs Adultos) -->
+                    <div class="col-12 col-lg-6">
+                        <div class="chart-card">
+                            <h5 class="fw-bold mb-4">Demografía (Adultos vs Menores)</h5>
+                            <div id="chart-demografia"></div>
                         </div>
                     </div>
 
@@ -242,6 +259,82 @@ foreach ($diasSemana as $index => $dia) {
             }
         };
         new ApexCharts(document.querySelector("#chart-heatmap"), optionsHeatmap).render();
+
+        // 4. Gráfico de Barras (Comparativa)
+        var optionsBarras = {
+            series: [{
+                name: 'Total Emitidos',
+                data: <?= json_encode($distValues) ?>
+            }],
+            chart: {
+                type: 'bar',
+                height: 350,
+                toolbar: { show: false }
+            },
+            plotOptions: {
+                bar: {
+                    borderRadius: 6,
+                    distributed: true,
+                    columnWidth: '55%',
+                }
+            },
+            dataLabels: {
+                enabled: true,
+                style: {
+                    fontSize: '12px',
+                    fontWeight: 'bold'
+                }
+            },
+            stroke: {
+                show: true,
+                width: 2,
+                colors: ['transparent']
+            },
+            xaxis: {
+                categories: <?= json_encode($distLabels) ?>,
+                labels: {
+                    style: {
+                        fontSize: '12px',
+                        fontWeight: 600
+                    }
+                }
+            },
+            colors: [primaryColor, '#27ae60', '#f39c12'],
+            tooltip: {
+                y: {
+                    formatter: function (val) {
+                        return val + " Documentos"
+                    }
+                }
+            }
+        };
+        new ApexCharts(document.querySelector("#chart-barras"), optionsBarras).render();
+
+        // 5. Gráfico de Demografía (Pie)
+        var optionsDemografia = {
+            series: [<?= $demografia['Adultos'] ?>, <?= $demografia['Menores'] ?>],
+            chart: {
+                type: 'pie',
+                height: 350
+            },
+            labels: ['Adultos (+18)', 'Menores (-18)'],
+            colors: ['#34495e', '#3498db'],
+            legend: { position: 'bottom' },
+            dataLabels: {
+                enabled: true,
+                formatter: function (val) {
+                    return val.toFixed(1) + "%"
+                }
+            },
+            tooltip: {
+                y: {
+                    formatter: function(val) {
+                        return val + " Ciudadanos"
+                    }
+                }
+            }
+        };
+        new ApexCharts(document.querySelector("#chart-demografia"), optionsDemografia).render();
     </script>
 </body>
 </html>
