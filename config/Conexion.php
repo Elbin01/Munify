@@ -1,7 +1,7 @@
 <?php
 class Conexion { 
-    private $host = 'localhost'; // Marcos 127.0.0.1:3308
-    private $port = ''; // Tu puerto actual
+    private $host = '127.0.0.1:3308'; // Marcos 127.0.0.1:3308
+    private $port = '3308'; // Tu puerto actual
     private $db_name = 'bdd_munify';
     private $username = 'root';
     private $password = '';
@@ -11,7 +11,7 @@ class Conexion {
         $this->conn = null;
         try {
             // Intentamos la conexión usando host y puerto por separado
-            $dsn = "mysql:host=" . $this->host . ";port=" . $this->db_name . ";dbname=" . $this->db_name . ";charset=utf8";
+            $dsn = "mysql:host=" . $this->host . ";port=" . $this->port . ";dbname=" . $this->db_name . ";charset=utf8";
             $this->conn = new PDO($dsn, $this->username, $this->password);
             $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         } catch(PDOException $exception) {

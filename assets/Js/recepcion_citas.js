@@ -63,7 +63,7 @@ $(document).ready(function() {
             "search": "Pendiente"
         },
         "order": [[4, "asc"], [5, "asc"]],
-        "dom": '<"row mb-3"<"col-md-6"l><"col-md-6"f>>rt<"row mt-3"<"col-md-6"i><"col-md-6"p>>',
+        "dom": '<"row g-2 mb-3 align-items-center"<"col-12 col-md-6"l><"col-12 col-md-6"f>>rt<"row g-2 mt-3 align-items-center"<"col-12 col-md-6"i><"col-12 col-md-6"p>>',
         "initComplete": function(settings, json) {
             $('.dataTables_filter input').addClass('form-control form-control-sm shadow-none border-secondary-subtle');
             $('.dataTables_filter input').attr('placeholder', 'Buscar...');

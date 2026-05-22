@@ -11,8 +11,10 @@
     position: relative;
     font-family: "Outfit", sans-serif;
     width: 100%;
+    max-width: 100%;
     box-sizing: border-box;
     margin: 0;
+    flex-shrink: 0;
 }
 
 .munify-footer::before {
@@ -29,6 +31,7 @@
     display: flex;
     flex-direction: column;
     gap: 4px;
+    min-width: min(100%, 230px);
 }
 
 .munify-footer .footer-brand-name {
@@ -56,6 +59,7 @@
     display: flex;
     align-items: center;
     gap: 8px;
+    min-width: 0;
 }
 
 .munify-footer .footer-status-dot {
@@ -69,8 +73,10 @@
 .munify-footer .footer-right {
     display: flex;
     align-items: center;
+    justify-content: flex-end;
     gap: 1.4rem;
     flex-wrap: wrap;
+    min-width: 0;
 }
 
 .munify-footer .footer-version {
@@ -147,6 +153,30 @@
 
     .munify-footer .footer-right {
         width: 100%;
-        justify-content: space-between;
+        justify-content: flex-start;
+        gap: 1rem;
+    }
+
+    .munify-footer .footer-links {
+        width: 100%;
+        gap: 0.75rem 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .munify-footer {
+        padding: 1rem 0.85rem;
+    }
+
+    .munify-footer .footer-brand,
+    .munify-footer .footer-status,
+    .munify-footer .footer-right,
+    .munify-footer .footer-developer,
+    .munify-footer .footer-links {
+        width: 100%;
+    }
+
+    .munify-footer .footer-developer-brand {
+        align-items: flex-start;
     }
 }

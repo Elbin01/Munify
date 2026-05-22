@@ -3,12 +3,17 @@ $current_page = basename($_SERVER['PHP_SELF']);
 $nombre_usuario = $_SESSION['usuario'] ?? 'Usuario';
 $inicial_usuario = strtoupper(substr($nombre_usuario, 0, 1));
 ?>
-<div class="d-flex flex-column flex-shrink-0 p-3 custom-sidebar" id="sidebar">
+<button class="btn btn-primary mobile-sidebar-toggle d-lg-none" id="btnMobileSidebar" type="button" aria-controls="sidebar" aria-expanded="false" aria-label="Abrir menú">
+    <i class="bi bi-list"></i>
+</button>
+<div class="sidebar-backdrop d-lg-none" id="sidebarBackdrop"></div>
+
+<aside class="d-flex flex-column flex-shrink-0 p-3 custom-sidebar" id="sidebar" aria-label="Menú principal">
     <div class="d-flex align-items-center justify-content-between mb-1 px-1">
         <a href="../views/dashboard.php" class="d-flex align-items-center text-white text-decoration-none logo-container">
             <img src="../assets/Img/logo_munify/logo_negativo.png" alt="Munify Logo" class="sidebar-logo" style="width: 140px; height: auto;">
         </a>
-        <button id="btnToggleSidebar" class="btn btn-sm text-white border-0 p-0 fs-4 ms-2">
+        <button id="btnToggleSidebar" class="btn btn-sm text-white border-0 p-0 fs-4 ms-2" type="button" aria-label="Contraer menú">
             <i class="bi bi-list"></i>
         </button>
     </div>
@@ -76,21 +81,64 @@ $inicial_usuario = strtoupper(substr($nombre_usuario, 0, 1));
             <li><a class="dropdown-item" href="../controller/logout.php">Cerrar Sesión</a></li>
         </ul>
     </div>
-</div>
+</aside>
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const sidebar = document.getElementById('sidebar');
     const toggleBtn = document.getElementById('btnToggleSidebar');
+    const mobileBtn = document.getElementById('btnMobileSidebar');
+    const backdrop = document.getElementById('sidebarBackdrop');
+    const desktopQuery = window.matchMedia('(min-width: 992px)');
+
+    function setMobileSidebar(open) {
+        document.body.classList.toggle('sidebar-open', open);
+        if (mobileBtn) {
+            mobileBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+        }
+    }
     
-    // Cargar estado guardado
-    if (localStorage.getItem('sidebar-collapsed') === 'true') {
+    if (desktopQuery.matches && localStorage.getItem('sidebar-collapsed') === 'true') {
         sidebar.classList.add('collapsed');
     }
 
     toggleBtn.addEventListener('click', function() {
-        sidebar.classList.toggle('collapsed');
-        localStorage.setItem('sidebar-collapsed', sidebar.classList.contains('collapsed'));
+        if (desktopQuery.matches) {
+            sidebar.classList.toggle('collapsed');
+            localStorage.setItem('sidebar-collapsed', sidebar.classList.contains('collapsed'));
+            return;
+        }
+
+        setMobileSidebar(false);
+    });
+
+    if (mobileBtn) {
+        mobileBtn.addEventListener('click', function() {
+            setMobileSidebar(!document.body.classList.contains('sidebar-open'));
+        });
+    }
+
+    if (backdrop) {
+        backdrop.addEventListener('click', function() {
+            setMobileSidebar(false);
+        });
+    }
+
+    sidebar.querySelectorAll('.nav-link, .dropdown-item').forEach(function(link) {
+        link.addEventListener('click', function() {
+            if (!desktopQuery.matches) {
+                setMobileSidebar(false);
+            }
+        });
+    });
+
+    desktopQuery.addEventListener('change', function(event) {
+        setMobileSidebar(false);
+        if (event.matches && localStorage.getItem('sidebar-collapsed') === 'true') {
+            sidebar.classList.add('collapsed');
+        } else if (!event.matches) {
+            sidebar.classList.remove('collapsed');
+        }
     });
 });
 </script>

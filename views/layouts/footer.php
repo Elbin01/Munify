@@ -15,7 +15,6 @@ $anio = date('Y');
     }
 </style>
 
-<!-- Munify Footer -->
 <footer class="munify-footer">
   <div class="footer-brand">
     <span class="footer-brand-name">MUNIFY</span>
@@ -67,7 +66,6 @@ $anio = date('Y');
             </div>
         </div>
     </div>
-  </div>
 
     <span class="footer-version">v1.0.0</span>
     <nav class="footer-links">

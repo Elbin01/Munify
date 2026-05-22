@@ -31,7 +31,7 @@
         
         body { background-color: var(--bg-body); font-family: 'Inter', system-ui, -apple-system, sans-serif; }
         
-        .main-content { padding: 2rem; }
+        .main-content { padding: 0; }
         
         .filter-container {
             background: white;
@@ -107,6 +107,19 @@
 
         .dataTables_wrapper .dataTables_info,
         .dataTables_wrapper .dataTables_paginate { padding: 1.25rem; }
+
+        @media (max-width: 767.98px) {
+            #tablaCitas thead th,
+            #tablaCitas tbody td {
+                padding: 0.85rem;
+            }
+
+            .btn-accept-batch,
+            #btnAceptarTodas,
+            #btnLimpiarFiltros {
+                width: 100%;
+            }
+        }
     </style>
 </head>
 <body>
@@ -159,7 +172,7 @@
                         </div>
                         <div class="col-lg-8 col-md-4">
                             <label class="form-label d-none d-md-block" style="visibility: hidden;">Acciones</label>
-                            <div class="d-flex gap-2 justify-content-end">
+                            <div class="d-flex flex-column flex-sm-row gap-2 justify-content-end">
                                 <button id="btnAceptarSeleccionadas" class="btn-accept-batch shadow-sm">
                                     <i class="bi bi-check-all me-1"></i> Aceptar Seleccionadas
                                 </button>
