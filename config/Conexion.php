@@ -11,7 +11,7 @@ class Conexion {
         $this->conn = null;
         try {
             // Intentamos la conexión usando host y puerto por separado
-            $dsn = "mysql:host=" . $this->host . ";port=" . $this->port . ";dbname=" . $this->db_name . ";charset=utf8";
+            $dsn = "mysql:host=" . $this->host . ";port=" . $this->db_name . ";dbname=" . $this->db_name . ";charset=utf8";
             $this->conn = new PDO($dsn, $this->username, $this->password);
             $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         } catch(PDOException $exception) {

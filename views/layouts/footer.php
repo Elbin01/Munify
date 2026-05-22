@@ -1,5 +1,6 @@
 <?php
 $anio = date('Y');
+include __DIR__ . '/secretary_notifications.php';
 ?>
 
 <!-- Link al CSS del Footer 2 -->
