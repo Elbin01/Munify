@@ -63,7 +63,7 @@ $(document).ready(function () {
         $('#cardSuccess, #cardMultipleResults, #cardError').addClass('d-none');
 
         $.ajax({
-            url: '../controller/buscar_ciudadano_controller.php',
+            url: '../controller/buscar_testamento_controller.php',
             type: 'GET',
             data: { q: query },
             dataType: 'json',
@@ -82,7 +82,7 @@ $(document).ready(function () {
                                 <tr>
                                     <td><strong>${nombre}</strong></td>
                                     <td>${ciudadano.DUI || '<span class="text-muted">N/A</span>'}</td>
-                                    <td>${ciudadano.domicilio || '<span class="text-muted">No especificado</span>'}</td>
+                                    <td>${ciudadano.nombre_heredero || '<span class="text-muted">No especificado</span>'}</td>
                                     <td>
                                         <button type="button" class="btn btn-sm btn-outline-primary"
                                             onclick="seleccionarCiudadano(${index})">
@@ -219,12 +219,12 @@ window.seleccionarCiudadano = function (index) {
     // Llenar tarjeta de resultado
     $('#resNombre').text(nombreCompleto);
     $('#resDui').text(ciudadano.DUI || 'N/A');
-    $('#resHeredero').text('—');           // Se llenará si ya existe testamento
+    $('#resHeredero').text(ciudadano.nombre_heredero || '—');
 
     // Llenar modal de vista previa
     $('#lblNombre').text(nombreCompleto);
     $('#lblDui').text(ciudadano.DUI || 'N/A');
-    $('#lblHeredero').text('—');
+    $('#lblHeredero').text(ciudadano.nombre_heredero || '—');
 
     const btnAccion = $('#btnGenerarFicha');
 

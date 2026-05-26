@@ -60,7 +60,7 @@ $datos_testamento = [
 ];
 
 $datos_footer = [
-    'atendio'       => $datos['atendio_por'],
+    'atendio'       => $datos['atendio_por'] ?? 'Registro del Estado Familiar',
     'testador'      => $datos['nombre_testador']
 ];
 
