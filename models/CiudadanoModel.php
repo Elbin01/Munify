@@ -26,6 +26,7 @@ class CiudadanoModel {
                 LEFT JOIN partida_nacimiento p ON c.id_ciudadano = p.id_ciudadano 
                 LEFT JOIN carta_defuncion d ON c.id_ciudadano = d.id_ciudadano
                 LEFT JOIN carnet_menoridad m ON c.id_ciudadano = m.id_ciudadano
+                
                 WHERE c.nombres LIKE :query OR c.apellidos LIKE :query OR c.DUI LIKE :query";
         try {
             $stmt = $this->conn->prepare($sql);

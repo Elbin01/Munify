@@ -6,7 +6,9 @@ $nombre_usuario = $_SESSION['usuario'] ?? 'Usuario';
 $servicios_pages = [
     'recepcion_minoridad.php',
     'recepcion_defuncion.php',
-    'recepcion_partida.php'
+    'recepcion_partida.php',
+    'recepcion_testamento.php'
+
 ];
 
 $servicios_active = in_array($current_page, $servicios_pages);
@@ -162,6 +164,20 @@ function isActive($page, $current_page)
 
                             <span class="nav-text">
                                 Partida de Nacimiento
+                            </span>
+                        </a>
+                    </li>
+
+                    
+                    <li>
+                        <a
+                            href="recepcion_testamento.php"
+                            class="nav-link py-2 <?= isActive('recepcion_testamento.php', $current_page) ?>">
+
+                            <i class="bi bi-file-earmark-x me-2"></i>
+
+                            <span class="nav-text">
+                                Testamento
                             </span>
                         </a>
                     </li>
