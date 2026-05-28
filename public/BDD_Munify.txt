@@ -101,3 +101,20 @@ INSERT INTO Tipo_Tramite (nombre) VALUES
 ('Partida de nacimiento'),
 ('Carta de defunción'),
 ('Carnet de menoridad');
+
+
+
+CREATE TABLE IF NOT EXISTS testamentos (
+    id_testamento INT AUTO_INCREMENT PRIMARY KEY,
+    nombre_testador VARCHAR(255) NOT NULL,
+    dui_testador VARCHAR(15) NOT NULL,
+    edad_testador INT NULL,
+    estado_civil_testador VARCHAR(50) NULL,
+    domicilio_testador TEXT NULL,
+    nombre_heredero VARCHAR(255) NOT NULL,
+    parentesco_heredero VARCHAR(100) NULL,
+    bienes_declarados TEXT NOT NULL,
+    declaracion_voluntad TEXT NOT NULL,
+    atendio_por VARCHAR(150) NULL,
+    fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
