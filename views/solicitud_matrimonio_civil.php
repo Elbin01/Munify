@@ -1,3 +1,4 @@
+<?php session_start(); ?>
 <?php
 // =============================================
 //  DATOS DEL MUNICIPIO - Ajusta según tu entorno
@@ -15,409 +16,67 @@ $datos_municipio = [
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Solicitud de Matrimonio Civil</title>
+    <title>Solicitud de Matrimonio Civil - Munify</title>
     
+    <!-- Fonts -->
+    <?php include 'layouts/fonts.php'; ?>
     <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:wght@400;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        
-        body {
-            font-family: 'Open Sans', sans-serif;
-            background: #f5f5f5;
-            padding: 20px;
-            -webkit-text-size-adjust: 100%;
-        }
-        
-        .documento {
-            max-width: 1000px;
-            margin: 0 auto;
-            background: white;
-            padding: 40px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-        
-        /* ════════ HEADER ════════ */
-        .header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 20px;
-            padding-bottom: 20px;
-            border-bottom: 3px double #1C3166;
-        }
-        
-       .escudo {
-    width: 80px;
-    height: 80px;
-    border: 2px solid #1C3166;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-    flex-shrink: 0;
-    background: white;
-}
-
-.escudo img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    padding: 4px;
-}
-        
-        .titulo-central {
-            text-align: center;
-            flex: 1;
-            padding: 0 20px;
-        }
-        
-        .titulo-central h1 {
-            font-family: 'Crimson Text', serif;
-            font-size: 1.1rem;
-            font-weight: 700;
-            letter-spacing: 2px;
-            color: #1a1a1a;
-            margin-bottom: 4px;
-        }
-        
-        .titulo-central h2 {
-            font-family: 'Crimson Text', serif;
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: #333;
-            margin-bottom: 8px;
-        }
-        
-        .titulo-central .registro {
-            font-family: 'Crimson Text', serif;
-            font-size: 0.75rem;
-            font-style: italic;
-            color: #1C3166;
-            display: block;
-            margin-bottom: 10px;
-        }
-        
-        .titulo-central h3 {
-            font-family: 'Crimson Text', serif;
-            font-size: 1.4rem;
-            font-weight: 700;
-            letter-spacing: 3px;
-            color: #1a1a1a;
-            text-transform: uppercase;
-        }
-        
-        /* ════════ BOTONES ACCIÓN ════════ */
-        .acciones-header {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-            justify-content: flex-end;
-        }
-        
-        .btn {
-            padding: 10px 20px;
-            border-radius: 4px;
-            font-family: 'Open Sans', sans-serif;
-            font-size: 0.85rem;
-            font-weight: 600;
-            text-decoration: none;
-            border: none;
-            cursor: pointer;
-            transition: all 0.3s;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        .btn-primary {
-            background: #1C3166;
-            color: white;
-        }
-        
-        .btn-primary:hover {
-            background: #15254d;
-        }
-        
-        .btn-secondary {
-            background: white;
-            color: #1C3166;
-            border: 2px solid #1C3166;
-        }
-        
-        .btn-secondary:hover {
-            background: #1C3166;
-            color: white;
-        }
-        
-        .btn-success {
-            background: #10b981;
-            color: white;
-        }
-        
-        .btn-success:hover {
-            background: #059669;
-        }
-        
-        /* ════════ SECCIONES ════════ */
-        .seccion {
-            margin-bottom: 15px;
-            border: 1px solid #ddd;
-        }
-        
-        .seccion-header {
-            background: #1C3166;
-            color: white;
-            padding: 10px 15px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        .seccion-header i {
-            font-size: 0.7rem;
-        }
-        
-        .seccion-body {
-            padding: 20px;
-            background: #fafbfc;
-        }
-        
-        /* ════════ FORMULARIO ════════ */
-        .fila {
-            display: flex;
-            gap: 20px;
-            margin-bottom: 15px;
-        }
-        
-        .fila:last-child {
-            margin-bottom: 0;
-        }
-        
-        .campo {
-            flex: 1;
-            min-width: 0;
-        }
-        
-        .campo.full-width {
-            flex: 100%;
-        }
-        
-        .campo label {
-            display: block;
-            font-size: 0.65rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            color: #1C3166;
-            margin-bottom: 6px;
-        }
-        
-        .campo input,
-        .campo select,
-        .campo textarea {
-            width: 100%;
-            padding: 10px 12px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            font-family: 'Open Sans', sans-serif;
-            font-size: 0.9rem;
-            color: #1a1a1a;
-            background: white;
-            transition: all 0.3s;
-        }
-        
-        .campo input:focus,
-        .campo select:focus,
-        .campo textarea:focus {
-            outline: none;
-            border-color: #1C3166;
-            box-shadow: 0 0 0 3px rgba(28, 49, 102, 0.1);
-        }
-        
-        .campo small {
-            display: block;
-            font-size: 0.7rem;
-            color: #888;
-            margin-top: 4px;
-        }
-        
-        /* ════════ DOS COLUMNAS ════════ */
-        .dos-columnas {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-        }
-        
-        .columna {
-            border: 1px solid #ddd;
-        }
-        
-        .columna .seccion-header {
-            background: #1C3166;
-        }
-        
-        .columna .seccion-body {
-            padding: 15px;
-        }
-        
-        /* ════════ NAVEGACIÓN ════════ */
-       /* ════════ NAVEGACIÓN (BOTONES PEQUEÑOS) ════════ */
-.nav-documentos {
-    display: flex;
-    gap: 8px;
-    margin-top: 20px;
-    padding-top: 15px;
-    border-top: 1px solid #ddd;
-}
-
-.nav-item {
-    flex: 1;
-    padding: 10px 8px;
-    background: white;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    text-align: center;
-    text-decoration: none;
-    color: inherit;
-    transition: all 0.2s;
-}
-
-.nav-item:hover {
-    border-color: #1C3166;
-    transform: translateY(-2px);
-}
-
-.nav-item.active {
-    background: #1C3166;
-    border-color: #1C3166;
-    color: white;
-}
-
-.nav-num {
-    font-family: 'Crimson Text', serif;
-    font-size: 1.1rem;
-    font-weight: 600;
-    display: block;
-    margin-bottom: 2px;
-    line-height: 1;
-}
-
-.nav-title {
-    font-size: 0.65rem;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    font-weight: 500;
-}
-
-/* Responsive */
-@media screen and (max-width: 768px) {
-    .nav-documentos {
-        gap: 6px;
-        margin-top: 15px;
-    }
-    
-    .nav-item {
-        padding: 8px 5px;
-        border-radius: 4px;
-    }
-    
-    .nav-num {
-        font-size: 1rem;
-    }
-    
-    .nav-title {
-        font-size: 0.6rem;
-    }
-}
-
-        /* ═══════════════════════════════════════════════════════════
-           RESPONSIVE
-           ═══════════════════════════════════════════════════════════ */
-        @media screen and (max-width: 1024px) {
-            body { padding: 10px; }
-            .documento { padding: 25px; }
-            .titulo-central h1 { font-size: 1rem; }
-            .titulo-central h3 { font-size: 1.2rem; }
-            .escudo { width: 60px; height: 60px; font-size: 1.5rem; }
-        }
-
-        @media screen and (max-width: 768px) {
-            body { padding: 0; background: white; }
-            .documento { padding: 20px; box-shadow: none; }
-            
-            .header {
-                flex-direction: column;
-                gap: 15px;
-                text-align: center;
-            }
-            
-            .escudo { width: 50px; height: 50px; font-size: 1.2rem; }
-            .titulo-central h1 { font-size: 0.9rem; }
-            .titulo-central h3 { font-size: 1.1rem; }
-            
-            .acciones-header {
-                flex-direction: column;
-                align-items: stretch;
-            }
-            
-            .dos-columnas { grid-template-columns: 1fr; }
-            .fila { flex-direction: column; gap: 12px; }
-            .seccion-body { padding: 15px; }
-            
-            .nav-documentos { flex-direction: column; }
-        }
-
-        @media screen and (max-width: 480px) {
-            .documento { padding: 15px; }
-            .campo input, .campo select { font-size: 16px; } /* Prevenir zoom en iOS */
-        }
-    </style>
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../assets/Css/index.css?v=<?= time() ?>">
+    <link rel="stylesheet" href="../assets/Css/sidebar.css?v=<?= time() ?>">
+    <link rel="stylesheet" href="../assets/Css/footer.css?v=<?= time() ?>">
+    <link rel="stylesheet" href="../assets/Css/solicitud_matrimonio.css?v=<?= time() ?>">
 </head>
 <body>
 
-    <div class="documento">
-        
-        <!-- HEADER -->
-        <div class="header">
-    <div class="escudo">
-        <?php if (!empty($datos_municipio['escudo_nacion'])): ?>
-            <img src="<?= htmlspecialchars($datos_municipio['escudo_nacion']) ?>" 
-                 alt="Escudo" 
-                 style="width:100%; height:100%; object-fit:contain;">
-        <?php else: ?>
-            <i class="fas fa-landmark"></i>
-        <?php endif; ?>
-    </div>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <?php include 'layouts/sidebar.php'; ?>
 
-    <div class="titulo-central">
-        <h1>ALCALDÍA MUNICIPAL DE ILOBASCO</h1>
-        <h2>DEPARTAMENTO DE CABAÑAS — EL SALVADOR</h2>
-        <span class="registro">Registro del Estado Familiar</span>
-        <h3>SOLICITUD DE MATRIMONIO CIVIL</h3>
-    </div>
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="container-fluid py-4 px-4">
+                <div class="documento">
+                    
+                    <!-- HEADER -->
+                    <div class="header">
+                        <div class="escudo">
+                            <?php if (!empty($datos_municipio['escudo_nacion'])): ?>
+                                <img src="<?= htmlspecialchars($datos_municipio['escudo_nacion']) ?>" 
+                                     alt="Escudo" 
+                                     style="width:100%; height:100%; object-fit:contain;">
+                            <?php else: ?>
+                                <i class="fas fa-landmark"></i>
+                            <?php endif; ?>
+                        </div>
 
-    <div style="width: 80px;"></div>
-</div>
-            
-            <div style="width: 80px;"></div>
-        </div>
+                        <div class="titulo-central">
+                            <h1>ALCALDÍA MUNICIPAL DE ILOBASCO</h1>
+                            <h2>DEPARTAMENTO DE CABAÑAS — EL SALVADOR</h2>
+                            <span class="registro">Registro del Estado Familiar</span>
+                            <h3>SOLICITUD DE MATRIMONIO CIVIL</h3>
+                        </div>
 
-        <!-- ACCIONES -->
-        <div class="acciones-header">
-            <a href="dashboard.php" class="btn btn-secondary">
-                <i class="fas fa-arrow-left"></i> Cancelar
-            </a>
-            <button type="submit" form="formSolicitud" class="btn btn-primary">
-                <i class="fas fa-save"></i> Guardar Solicitud
-            </button>
-        </div>
+                        <div style="width: 80px;"></div>
+                    </div>
+
+                    <!-- ACCIONES -->
+                    <div class="acciones-header">
+                        <a href="dashboard.php" class="btn-custom btn-custom-secondary">
+                            <i class="fas fa-arrow-left"></i> Cancelar
+                        </a>
+                        <button type="submit" form="formSolicitud" class="btn-custom btn-custom-primary">
+                            <i class="fas fa-save"></i> Guardar Solicitud
+                        </button>
+                    </div>
 
         <form id="formSolicitud" method="POST" action="guardar_solicitud.php">
             
@@ -605,23 +264,31 @@ $datos_municipio = [
 
         </form>
 
-        <!-- NAVEGACIÓN -->
-        <div class="nav-documentos">
-            <a href="#" class="nav-item active" onclick="return false;">
-                <span class="nav-num">I</span>
-                <span class="nav-title">Solicitud</span>
-            </a>
-            <a href="acta_de_matrimonio.php?id=NUEVO_ID" class="nav-item">
-                <span class="nav-num">II</span>
-                <span class="nav-title">Acta</span>
-            </a>
-            <a href="certificación_partida_matrimonio.php?id=NUEVO_ID" class="nav-item">
-                <span class="nav-num">III</span>
-                <span class="nav-title">Certificación</span>
-            </a>
-        </div>
+                    <!-- NAVEGACIÓN -->
+                    <div class="doc-nav">
+                        <a href="#" class="doc-nav-item active" onclick="return false;">
+                            <span class="doc-nav-num">I</span>
+                            <span class="doc-nav-title">Solicitud</span>
+                        </a>
+                        <a href="acta_de_matrimonio.php?id=NUEVO_ID" class="doc-nav-item">
+                            <span class="doc-nav-num">II</span>
+                            <span class="doc-nav-title">Acta</span>
+                        </a>
+                        <a href="certificación_partida_matrimonio.php?id=NUEVO_ID" class="doc-nav-item">
+                            <span class="doc-nav-num">III</span>
+                            <span class="doc-nav-title">Certificación</span>
+                        </a>
+                    </div>
 
+                </div>
+            </div>
+            
+            <!-- Footer -->
+            <?php include 'layouts/footer.php'; ?>
+        </main>
     </div>
 
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

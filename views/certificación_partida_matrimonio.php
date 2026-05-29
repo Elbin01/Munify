@@ -1,3 +1,4 @@
+<?php session_start(); ?>
 <?php
 // =============================================
 //  DATOS DEL MUNICIPIO - Ajusta según tu entorno
@@ -15,514 +16,69 @@ $datos_municipio = [
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Certificación de Partida de Matrimonio</title>
+    <title>Certificación de Partida de Matrimonio - Munify</title>
     
+    <!-- Fonts -->
+    <?php include 'layouts/fonts.php'; ?>
     <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:wght@400;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        
-        body {
-            font-family: 'Open Sans', sans-serif;
-            background: #f5f5f5;
-            padding: 20px;
-            -webkit-text-size-adjust: 100%;
-        }
-        
-        .documento {
-            max-width: 1000px;
-            margin: 0 auto;
-            background: white;
-            padding: 40px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-        
-        /* ════════ HEADER ════════ */
-        .header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 20px;
-            padding-bottom: 20px;
-            border-bottom: 3px double #1C3166;
-        }
-        
-           .escudo {
-    width: 80px;
-    height: 80px;
-    border: 2px solid #1C3166;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-    flex-shrink: 0;
-    background: white;
-}
-
-.escudo img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    padding: 4px;
-}
-        
-        .titulo-central {
-            text-align: center;
-            flex: 1;
-            padding: 0 20px;
-        }
-        
-        .titulo-central h1 {
-            font-family: 'Crimson Text', serif;
-            font-size: 1.1rem;
-            font-weight: 700;
-            letter-spacing: 2px;
-            color: #1a1a1a;
-            margin-bottom: 4px;
-        }
-        
-        .titulo-central h2 {
-            font-family: 'Crimson Text', serif;
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: #333;
-            margin-bottom: 8px;
-        }
-        
-        .titulo-central .registro {
-            font-family: 'Crimson Text', serif;
-            font-size: 0.75rem;
-            font-style: italic;
-            color: #1C3166;
-            display: block;
-            margin-bottom: 10px;
-        }
-        
-        .titulo-central h3 {
-            font-family: 'Crimson Text', serif;
-            font-size: 1.4rem;
-            font-weight: 700;
-            letter-spacing: 3px;
-            color: #1a1a1a;
-            text-transform: uppercase;
-        }
-        
-        .btn-imprimir {
-            position: fixed;
-            top: 30px;
-            right: 30px;
-            background: #1C3166;
-            color: white;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 0.85rem;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            box-shadow: 0 4px 12px rgba(28, 49, 102, 0.3);
-            z-index: 1000;
-        }
-        
-        .btn-imprimir:hover {
-            background: #15254d;
-        }
-        
-        /* ════════ SECCIONES ════════ */
-        .seccion {
-            margin-bottom: 15px;
-            border: 1px solid #ddd;
-        }
-        
-        .seccion-header {
-            background: #1C3166;
-            color: white;
-            padding: 10px 15px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        .seccion-header i {
-            font-size: 0.7rem;
-        }
-        
-        .seccion-body {
-            padding: 20px;
-            background: #fafbfc;
-        }
-        
-        /* ════════ CAMPOS ════════ */
-        .fila {
-            display: flex;
-            gap: 30px;
-            margin-bottom: 15px;
-        }
-        
-        .fila:last-child {
-            margin-bottom: 0;
-        }
-        
-        .campo {
-            flex: 1;
-            min-width: 0; /* Evita desbordamiento */
-        }
-        
-        .campo label {
-            display: block;
-            font-size: 0.65rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            color: #1C3166;
-            margin-bottom: 4px;
-        }
-        
-        .campo .valor {
-            font-family: 'Crimson Text', serif;
-            font-size: 0.95rem;
-            color: #1a1a1a;
-            padding-bottom: 4px;
-            border-bottom: 1px solid #bbb;
-            min-height: 24px;
-            word-wrap: break-word;
-            overflow-wrap: break-word;
-        }
-        
-        /* ════════ DOS COLUMNAS ════════ */
-        .dos-columnas {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-        }
-        
-        .columna {
-            border: 1px solid #ddd;
-            min-width: 0; /* Evita desbordamiento */
-        }
-        
-        .columna .seccion-header {
-            background: #1C3166;
-        }
-        
-        .columna .seccion-body {
-            padding: 15px;
-        }
-        
-        /* ════════ CERTIFICACIÓN TEXTO ════════ */
-        .certificacion-texto {
-            padding: 25px;
-            font-family: 'Crimson Text', serif;
-            font-size: 0.95rem;
-            line-height: 1.8;
-            text-align: justify;
-            color: #1a1a1a;
-        }
-        
-        .certificacion-texto p {
-            margin-bottom: 15px;
-            text-indent: 30px;
-        }
-        
-        .certificacion-texto strong {
-            color: #1C3166;
-        }
-        
-        /* ════════ FIRMAS ════════ */
-        .firmas {
-            display: flex;
-            justify-content: space-around;
-            margin-top: 40px;
-            padding-top: 30px;
-        }
-        
-        .firma {
-            text-align: center;
-            width: 250px;
-        }
-        
-        .firma .linea {
-            border-top: 1px solid #333;
-            margin-bottom: 8px;
-            padding-top: 8px;
-        }
-        
-        .firma strong {
-            font-family: 'Crimson Text', serif;
-            font-size: 0.9rem;
-            display: block;
-            color: #1a1a1a;
-        }
-        
-        .firma span {
-            font-size: 0.75rem;
-            color: #666;
-        }
-        
-        /* ════════ SELLO ════════ */
-        .sello-container {
-            display: flex;
-            justify-content: center;
-            margin: 30px 0;
-        }
-        
-        .sello {
-            width: 100px;
-            height: 100px;
-            border: 2px solid #1C3166;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-family: 'Crimson Text', serif;
-            font-size: 0.7rem;
-            text-align: center;
-            color: #1C3166;
-            transform: rotate(-15deg);
-            opacity: 0.6;
-        }
-        
-        /* ════════ FOOTER INFO ════════ */
-        .footer-info {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 20px;
-            padding-top: 15px;
-            border-top: 1px solid #ddd;
-            font-size: 0.7rem;
-            color: #666;
-        }
-
-        /* ═══════════════════════════════════════════════════════════
-           RESPONSIVE - TABLET (max-width: 1024px)
-           ═══════════════════════════════════════════════════════════ */
-        @media screen and (max-width: 1024px) {
-            body {
-                padding: 10px;
-            }
-            
-            .documento {
-                padding: 25px;
-                max-width: 100%;
-            }
-            
-            .titulo-central h1 {
-                font-size: 1rem;
-            }
-            
-            .titulo-central h2 {
-                font-size: 0.8rem;
-            }
-            
-            .titulo-central h3 {
-                font-size: 1.2rem;
-            }
-            
-            .escudo {
-                width: 60px;
-                height: 60px;
-                font-size: 1.5rem;
-            }
-            
-            .dos-columnas {
-                gap: 10px;
-            }
-            
-            .fila {
-                gap: 20px;
-            }
-        }
-
-        /* ═══════════════════════════════════════════════════════════
-           RESPONSIVE - MÓVIL (max-width: 768px)
-           ═══════════════════════════════════════════════════════════ */
-        @media screen and (max-width: 768px) {
-            body {
-                padding: 0;
-                background: white;
-            }
-            
-            .documento {
-                padding: 20px;
-                box-shadow: none;
-            }
-            
-            /* Header apilado en móvil */
-            .header {
-                flex-direction: column;
-                gap: 15px;
-                text-align: center;
-            }
-            
-            .escudo {
-                width: 50px;
-                height: 50px;
-                font-size: 1.2rem;
-            }
-            
-            .titulo-central {
-                padding: 0;
-            }
-            
-            .titulo-central h1 {
-                font-size: 0.9rem;
-                letter-spacing: 1px;
-            }
-            
-            .titulo-central h2 {
-                font-size: 0.75rem;
-            }
-            
-            .titulo-central h3 {
-                font-size: 1.1rem;
-                letter-spacing: 2px;
-            }
-            
-            /* Botón imprimir más pequeño */
-            .btn-imprimir {
-                top: 10px;
-                right: 10px;
-                padding: 8px 16px;
-                font-size: 0.75rem;
-            }
-            
-            /* Una sola columna en móvil */
-            .dos-columnas {
-                grid-template-columns: 1fr;
-            }
-            
-            /* Filas en columna */
-            .fila {
-                flex-direction: column;
-                gap: 12px;
-            }
-            
-            .seccion-body {
-                padding: 15px;
-            }
-            
-            .seccion-header {
-                padding: 8px 12px;
-                font-size: 0.7rem;
-            }
-            
-            .campo label {
-                font-size: 0.6rem;
-            }
-            
-            .campo .valor {
-                font-size: 0.9rem;
-            }
-            
-            /* Certificación más compacta */
-            .certificacion-texto {
-                padding: 15px;
-                font-size: 0.9rem;
-                line-height: 1.6;
-            }
-            
-            .certificacion-texto p {
-                text-indent: 20px;
-            }
-            
-            /* Firmas en columna */
-            .firmas {
-                flex-direction: column;
-                align-items: center;
-                gap: 30px;
-                margin-top: 30px;
-            }
-            
-            .firma {
-                width: 200px;
-            }
-            
-            /* Footer en columna */
-            .footer-info {
-                flex-direction: column;
-                gap: 5px;
-                text-align: center;
-            }
-        }
-
-        /* ═══════════════════════════════════════════════════════════
-           RESPONSIVE - MÓVIL PEQUEÑO (max-width: 480px)
-           ═══════════════════════════════════════════════════════════ */
-        @media screen and (max-width: 480px) {
-            .documento {
-                padding: 15px;
-            }
-            
-            .titulo-central h1 {
-                font-size: 0.8rem;
-            }
-            
-            .titulo-central h3 {
-                font-size: 1rem;
-            }
-            
-            .campo .valor {
-                font-size: 0.85rem;
-            }
-            
-            .certificacion-texto {
-                font-size: 0.85rem;
-                padding: 12px;
-            }
-        }
-
-        /* Print */
-        @media print {
-            body { 
-                background: white; 
-                padding: 0; 
-            }
-            .documento { 
-                box-shadow: none; 
-                max-width: 100%;
-                padding: 15px;
-            }
-            .btn-imprimir { 
-                display: none; 
-            }
-            .seccion { 
-                break-inside: avoid; 
-            }
-            .dos-columnas {
-                grid-template-columns: 1fr 1fr;
-            }
-        }
-    </style>
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../assets/Css/index.css?v=<?= time() ?>">
+    <link rel="stylesheet" href="../assets/Css/sidebar.css?v=<?= time() ?>">
+    <link rel="stylesheet" href="../assets/Css/footer.css?v=<?= time() ?>">
+    <link rel="stylesheet" href="../assets/Css/solicitud_matrimonio.css?v=<?= time() ?>">
 </head>
 <body>
 
-    <button class="btn-imprimir" onclick="window.print()">
-        <i class="fas fa-print"></i> IMPRIMIR
-    </button>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <?php include 'layouts/sidebar.php'; ?>
 
-    <div class="documento">
-        
-        <!-- HEADER -->
-        <div class="header">
-    <div class="escudo">
-        <?php if (!empty($datos_municipio['escudo_nacion'])): ?>
-            <img src="<?= htmlspecialchars($datos_municipio['escudo_nacion']) ?>" 
-                 alt="Escudo" 
-                 style="width:100%; height:100%; object-fit:contain;">
-        <?php else: ?>
-            <i class="fas fa-landmark"></i>
-        <?php endif; ?>
-        </div>
-            
-            <div style="width: 80px;" class="spacer"></div>
-        </div>
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="container-fluid py-4 px-4">
+                <div class="documento">
+                    
+                    <!-- HEADER -->
+                    <div class="header">
+                        <div class="escudo">
+                            <?php if (!empty($datos_municipio['escudo_nacion'])): ?>
+                                <img src="<?= htmlspecialchars($datos_municipio['escudo_nacion']) ?>" 
+                                     alt="Escudo" 
+                                     style="width:100%; height:100%; object-fit:contain;">
+                            <?php else: ?>
+                                <i class="fas fa-landmark"></i>
+                            <?php endif; ?>
+                        </div>
+
+                        <div class="titulo-central">
+                            <h1>ALCALDÍA MUNICIPAL DE ILOBASCO</h1>
+                            <h2>DEPARTAMENTO DE CABAÑAS — EL SALVADOR</h2>
+                            <span class="registro">Registro del Estado Familiar</span>
+                            <h3>CERTIFICACIÓN DE MATRIMONIO</h3>
+                        </div>
+
+                        <div style="width: 80px;"></div>
+                    </div>
+
+                    <!-- ACCIONES -->
+                    <div class="acciones-header">
+                        <a href="acta_de_matrimonio.php?id=ID_AQUI" class="btn-custom btn-custom-secondary">
+                            <i class="fas fa-arrow-left"></i> Volver al Acta
+                        </a>
+                        <div>
+                            <button onclick="window.print()" class="btn-custom btn-custom-primary">
+                                <i class="fas fa-print"></i> Imprimir Certificación
+                            </button>
+                        </div>
+                    </div>
 
         <!-- DATOS DEL MATRIMONIO -->
         <div class="seccion">
@@ -716,7 +272,31 @@ $datos_municipio = [
             <span>Fecha de emisión: <strong id="fecha_emision">_____</strong></span>
         </div>
 
+                    <!-- NAVEGACIÓN -->
+                    <div class="doc-nav">
+                        <a href="solicitud_matrimonio_civil.php?id=ID_AQUI" class="doc-nav-item">
+                            <span class="doc-nav-num">I</span>
+                            <span class="doc-nav-title">Solicitud</span>
+                        </a>
+                        <a href="acta_de_matrimonio.php?id=ID_AQUI" class="doc-nav-item">
+                            <span class="doc-nav-num">II</span>
+                            <span class="doc-nav-title">Acta</span>
+                        </a>
+                        <a href="#" class="doc-nav-item active" onclick="return false;">
+                            <span class="doc-nav-num">III</span>
+                            <span class="doc-nav-title">Certificación</span>
+                        </a>
+                    </div>
+
+                </div>
+            </div>
+            
+            <!-- Footer -->
+            <?php include 'layouts/footer.php'; ?>
+        </main>
     </div>
 
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
