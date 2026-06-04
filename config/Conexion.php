@@ -1,8 +1,8 @@
 <?php
 class Conexion {
-    private $host = 'localhost'; 
-    private $port = '3307'; // Tu puerto actual
-    private $db_name = 'Munify';
+    private $host = '127.0.0.1'; 
+    private $port = '3308'; // Tu puerto actual
+    private $db_name = 'bdd_munify';
     private $username = 'root';
     private $password = '';
     public $conn;

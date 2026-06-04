@@ -2,12 +2,15 @@
 session_start();
 require_once __DIR__ . '/../models/EstadisticaModel.php';
 
+$inicio = $_GET['inicio'] ?? null;
+$fin = $_GET['fin'] ?? null;
+
 $estadisticaModel = new EstadisticaModel();
 
 /* ================= DATOS ================= */
-$citasMes     = $estadisticaModel->getCitasPorMes();
-$distribucion = $estadisticaModel->getDistribucionTramites();
-$partidasMes  = $estadisticaModel->getPartidasPorMes();
+$citasMes     = $estadisticaModel->getCitasPorMes($inicio, $fin);
+$distribucion = $estadisticaModel->getDistribucionTramites($inicio, $fin);
+$partidasMes  = $estadisticaModel->getPartidasPorMes($inicio, $fin);
 $demografia   = $estadisticaModel->getDemografiaCiudadanos();
 
 $mesesNombres = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
@@ -25,7 +28,7 @@ foreach ($distribucion as $d) {
 }
 
 /* ================= HEATMAP ================= */
-$heatmapRaw = $estadisticaModel->getDemandaHeatmap();
+$heatmapRaw = $estadisticaModel->getDemandaHeatmap($inicio, $fin);
 $diasSemana = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
 $diasEs     = ['Lun','Mar','Mié','Jue','Vie','Sáb','Dom'];
 $heatmapData = [];
@@ -106,6 +109,26 @@ foreach ($diasSemana as $i => $dia) {
             </ol>
         </nav>
     </div>
+    <div>
+        <form id="filtro-estadisticas" method="GET" action="estadisticas.php" class="d-flex gap-2 align-items-center">
+            <div>
+                <label for="inicio" class="form-label small mb-0">Inicio:</label>
+                <input type="date" name="inicio" id="inicio" class="form-control form-control-sm" value="<?= htmlspecialchars($inicio ?? '') ?>">
+            </div>
+            <div>
+                <label for="fin" class="form-label small mb-0">Fin:</label>
+                <input type="date" name="fin" id="fin" class="form-control form-control-sm" value="<?= htmlspecialchars($fin ?? '') ?>">
+            </div>
+            <div class="d-flex align-items-end mt-3">
+                <button type="submit" class="btn btn-primary btn-sm shadow-sm px-3" style="background-color: var(--color-3); border-color: var(--color-3); border-radius: 8px; font-weight: 500;">
+                    <i class="bi bi-funnel"></i> Filtrar
+                </button>
+                <button type="button" class="btn btn-primary btn-sm shadow-sm ms-2 px-3" style="background-color: var(--color-3); border-color: var(--color-3); border-radius: 8px; font-weight: 500;" onclick="generarPDF()">
+                    <i class="bi bi-file-earmark-pdf"></i> Generar PDF
+                </button>
+            </div>
+        </form>
+    </div>
 </div>
 <!-- ================= TABS ================= -->
 <ul class="nav nav-tabs mb-4">
@@ -147,8 +170,61 @@ foreach ($diasSemana as $i => $dia) {
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
+function generarPDF() {
+    const inicio = document.getElementById('inicio').value;
+    const fin = document.getElementById('fin').value;
+    
+    if (!inicio || !fin) {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Fechas incompletas',
+            text: 'Por favor seleccione una fecha de inicio y una fecha de fin para generar el reporte.',
+            confirmButtonColor: '#1C3166'
+        });
+        return;
+    }
+
+    if (inicio > fin) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Rango inválido',
+            text: 'La fecha de inicio no puede ser mayor que la fecha de fin.',
+            confirmButtonColor: '#1C3166'
+        });
+        return;
+    }
+
+    Swal.fire({
+        title: '¿Generar Reporte PDF?',
+        text: 'Se generará un reporte formal con las estadísticas del rango de fechas seleccionado.',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#1C3166',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Sí, generar PDF',
+        cancelButtonText: 'Cancelar'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            Swal.fire({
+                title: 'Generando Reporte',
+                text: 'Por favor espere...',
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+
+            setTimeout(() => {
+                Swal.close();
+                window.open(`../reportes/estadisticas_pdf.php?inicio=${inicio}&fin=${fin}`, '_blank');
+            }, 800);
+        }
+    });
+}
+
 const primaryColor = '#1C3166';
 const charts = [];
 
