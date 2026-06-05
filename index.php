@@ -328,8 +328,8 @@ session_start();
 
         /* ══════════════ SERVICIOS ══════════════ */
         .svc-section { background: rgba(28, 49, 102, 0.03); border-top: 1px solid rgba(0,0,0,0.05); border-bottom: 1px solid rgba(0,0,0,0.05); }
-        .svc-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(240px,1fr)); gap: 1.5rem; margin-top: 3rem; }
-        .svc { background: #ffffff; border: 1px solid #E2E8F0; border-radius: 14px; padding: 2rem 1.8rem; transition: all 0.3s; position: relative; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.03); }
+        .svc-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 1.5rem; margin-top: 3rem; }
+        .svc { flex: 1 1 300px; max-width: 350px; background: #ffffff; border: 1px solid #E2E8F0; border-radius: 14px; padding: 2rem 1.8rem; transition: all 0.3s; position: relative; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.03); }
         .svc::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 4px; background: var(--color-2); transform: scaleX(0); transition: transform 0.3s; transform-origin: left; }
         .svc:hover { border-color: var(--color-1); transform: translateY(-5px); box-shadow: 0 20px 40px rgba(0,0,0,0.08); }
         .svc:hover::after { transform: scaleX(1); }
@@ -423,7 +423,8 @@ session_start();
             .featured-svc { padding: 1.5rem; gap: 1.5rem; }
             .featured-svc-title { font-size: 1.65rem; }
             .featured-svc > div:last-child, .btn-featured { width: 100%; justify-content: center; text-align: center; white-space: normal; }
-            .svc-grid { grid-template-columns: minmax(0, 1fr); }
+            .svc-grid { flex-direction: column; align-items: stretch; }
+            .svc { max-width: 100%; width: 100%; }
             .ir { padding: 1rem; }
             .sched { justify-content: center; }
             .sd-line { display: none; }
@@ -529,6 +530,9 @@ session_start();
                 <span class="hc-pill"><i class="fas fa-baby"></i><span class="pill-text">Nacimiento</span></span>
                 <span class="hc-pill"><i class="fas fa-id-card-clip"></i><span class="pill-text">Minoridad</span></span>
                 <span class="hc-pill"><i class="fas fa-file-contract"></i><span class="pill-text">Defunción</span></span>
+                <div style="flex-basis: 100%; height: 0;"></div>
+                <span class="hc-pill"><i class="fas fa-ring"></i><span class="pill-text">Matrimonio</span></span>
+                <span class="hc-pill"><i class="fas fa-file-signature"></i><span class="pill-text">Testamento</span></span>
             </div>
         </div>
     </div>
@@ -614,7 +618,16 @@ session_start();
                 <h3>Acta de Defunción</h3>
                 <p>Documento Legal a Través del Cual Se Certifica El Fallecimiento de Una Persona y El Lugar Donde El Fallecimiento Fue Inscrito.</p>
             </div>
-            
+            <div class="svc">
+                <div class="svc-ico"><i class="fas fa-ring"></i></div>
+                <h3>Acta de Matrimonio</h3>
+                <p>Registro y certificación de matrimonios civiles, asegurando su validez legal y oficial.</p>
+            </div>
+            <div class="svc">
+                <div class="svc-ico"><i class="fas fa-file-signature"></i></div>
+                <h3>Testamentos</h3>
+                <p>Registro y resguardo de testamentos para garantizar la voluntad del testador con respaldo legal.</p>
+            </div>
         </div>
     </div>
 </section>
