@@ -14,6 +14,7 @@ $estadisticaModel = new EstadisticaModel();
 $citasMes     = $estadisticaModel->getCitasPorMes($inicio, $fin);
 $distribucion = $estadisticaModel->getDistribucionTramites($inicio, $fin);
 $partidasMes  = $estadisticaModel->getPartidasPorMes($inicio, $fin);
+$testamentosMes = $estadisticaModel->getTestamentosPorMes($inicio, $fin);
 $demografia   = $estadisticaModel->getDemografiaCiudadanos(); // General
 
 // Preparamos HTML
@@ -192,6 +193,40 @@ if(empty($partidasMes)) {
         <tr>
             <td style="text-align: right; font-weight: bold;">Total Partidas:</td>
             <td style="font-weight: bold;">' . $totalPartidas . '</td>
+        </tr>';
+}
+$html .= '
+    </tbody>
+</table>
+
+<h2>Testamentos Emitidos por Mes</h2>
+<table class="datos">
+    <thead>
+        <tr>
+            <th>Mes</th>
+            <th>Total Testamentos</th>
+        </tr>
+    </thead>
+    <tbody>';
+$totalTestamentos = 0;
+foreach ($testamentosMes as $t) {
+    // Convertir el número de mes a nombre para mejor lectura
+    $meses = ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"];
+    $mesNombre = $meses[(int)$t['mes_num'] - 1];
+    
+    $html .= '<tr>
+                <td>' . $mesNombre . '</td>
+                <td>' . htmlspecialchars($t['total']) . '</td>
+              </tr>';
+    $totalTestamentos += (int)$t['total'];
+}
+if(empty($testamentosMes)) {
+    $html .= '<tr><td colspan="2" style="text-align:center;">No hay testamentos registrados en este período</td></tr>';
+} else {
+    $html .= '
+        <tr>
+            <td style="text-align: right; font-weight: bold;">Total Testamentos:</td>
+            <td style="font-weight: bold;">' . $totalTestamentos . '</td>
         </tr>';
 }
 $html .= '

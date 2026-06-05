@@ -42,14 +42,18 @@ class EstadisticaModel {
         $condPartida = "";
         $condDefuncion = "";
         $condMenoridad = "";
+        $condMatrimonio = "";
+        $condTestamento = "";
         
         if ($inicio && $fin) {
             $condPartida = " WHERE DATE(fecha_emision) BETWEEN :inicio AND :fin";
             $condDefuncion = " WHERE DATE(fecha_emision) BETWEEN :inicio AND :fin";
             $condMenoridad = " WHERE DATE(fecha_emision) BETWEEN :inicio AND :fin";
             $condMatrimonio = " WHERE DATE(fecha_registro) BETWEEN :inicio AND :fin";
+            $condTestamento = " WHERE DATE(fecha_registro) BETWEEN :inicio AND :fin";
         } else {
             $condMatrimonio = "";
+            $condTestamento = "";
         }
 
         $sql = "SELECT 
@@ -58,6 +62,7 @@ class EstadisticaModel {
                         WHEN t.id_tipo = 1 THEN (SELECT COUNT(*) FROM Partida_Nacimiento $condPartida)
                         WHEN t.id_tipo = 2 THEN (SELECT COUNT(*) FROM Carta_Defuncion $condDefuncion)
                         WHEN t.id_tipo = 3 THEN (SELECT COUNT(*) FROM Carnet_Menoridad $condMenoridad)
+                        WHEN t.id_tipo = 4 THEN (SELECT COUNT(*) FROM testamentos $condTestamento)
                         WHEN t.id_tipo = 5 THEN (SELECT COUNT(*) FROM acta_matrimonio $condMatrimonio)
                         ELSE 0
                     END AS total
@@ -126,6 +131,33 @@ class EstadisticaModel {
             return array();
         }
     }
+    
+    /**
+     * Obtiene comparativa de testamentos emitidos por mes
+     */
+    public function getTestamentosPorMes($inicio = null, $fin = null) {
+        $where = "YEAR(fecha_registro) = YEAR(CURRENT_DATE())";
+        if ($inicio && $fin) {
+            $where = "DATE(fecha_registro) BETWEEN :inicio AND :fin";
+        }
+        $sql = "SELECT MONTH(fecha_registro) as mes_num, COUNT(*) as total 
+                FROM testamentos 
+                WHERE $where
+                GROUP BY MONTH(fecha_registro)
+                ORDER BY MONTH(fecha_registro) ASC";
+        try {
+            $stmt = $this->conn->prepare($sql);
+            if ($inicio && $fin) {
+                $stmt->bindParam(':inicio', $inicio);
+                $stmt->bindParam(':fin', $fin);
+            }
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            return array();
+        }
+    }
+
     /**
      * Obtiene demografía de ciudadanos (Adultos vs Menores)
      */

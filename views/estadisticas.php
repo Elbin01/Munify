@@ -11,14 +11,17 @@ $estadisticaModel = new EstadisticaModel();
 $citasMes     = $estadisticaModel->getCitasPorMes($inicio, $fin);
 $distribucion = $estadisticaModel->getDistribucionTramites($inicio, $fin);
 $partidasMes  = $estadisticaModel->getPartidasPorMes($inicio, $fin);
+$testamentosMes = $estadisticaModel->getTestamentosPorMes($inicio, $fin);
 $demografia   = $estadisticaModel->getDemografiaCiudadanos();
 
 $mesesNombres = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
 $citasData    = array_fill(0,12,0);
 $partidasData = array_fill(0,12,0);
+$testamentosData = array_fill(0,12,0);
 
 foreach ($citasMes as $c)     $citasData[$c['mes_num'] - 1] = (int)$c['total'];
 foreach ($partidasMes as $p)  $partidasData[$p['mes_num'] - 1] = (int)$p['total'];
+foreach ($testamentosMes as $t) $testamentosData[$t['mes_num'] - 1] = (int)$t['total'];
 
 $distLabels = [];
 $distValues = [];
@@ -232,11 +235,12 @@ const charts = [];
 charts.push(new ApexCharts(document.querySelector("#chart-tendencia"),{
 series:[
 { name:'Citas', data:<?=json_encode($citasData)?> },
-{ name:'Partidas', data:<?=json_encode($partidasData)?> }
+{ name:'Partidas', data:<?=json_encode($partidasData)?> },
+{ name:'Testamentos', data:<?=json_encode($testamentosData)?> }
 ],
 chart:{ type:'area', height:350 },
 xaxis:{ categories:<?=json_encode($mesesNombres)?> },
-colors:[primaryColor,'#27ae60']
+colors:[primaryColor,'#27ae60','#f39c12']
 }));
 
 /* Distribución */
@@ -244,7 +248,7 @@ charts.push(new ApexCharts(document.querySelector("#chart-distribucion"),{
 series:<?=json_encode($distValues)?>,
 chart:{ type:'donut', height:350 },
 labels:<?=json_encode($distLabels)?>,
-colors:[primaryColor,'#3498db','#9b59b6','#e67e22']
+colors:[primaryColor,'#3498db','#9b59b6','#e67e22', '#1abc9c']
 }));
 
 /* Barras */
