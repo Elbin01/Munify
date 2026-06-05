@@ -1,13 +1,42 @@
 <?php
+require_once __DIR__ . '/../models/ActaMatrimonioModel.php';
+
+$id_acta = $_GET['id'] ?? null;
+
+if (!$id_acta) {
+    die("Error: No se proporcionó un ID de acta.");
+}
+
+$modelo = new ActaMatrimonioModel();
+$datos = $modelo->obtenerActaPorId($id_acta);
+
+if (!$datos) {
+    die("Error: No se encontró el acta con el ID proporcionado.");
+}
+
 // =============================================
 //  DATOS DEL MUNICIPIO - Ajusta según tu entorno
 // =============================================
 $datos_municipio = [
-    'alcaldia'      => $_POST['alcaldia'] ?? 'Alcaldía Municipal',
-    'departamento'  => $_POST['departamento'] ?? '',
+    'alcaldia'      => 'Alcaldía Municipal de Ilobasco',
+    'departamento'  => 'Cabañas',
     'pais'          => 'El Salvador',
     'escudo_nacion' => '../assets/Img/escudo.jpeg',
 ];
+
+function fechaEspañolCert($fecha) {
+    if (!$fecha) return '---';
+    $meses = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"];
+    $timestamp = strtotime($fecha);
+    return [
+        'dia' => date('d', $timestamp),
+        'mes' => $meses[date('n', $timestamp) - 1],
+        'anio' => date('Y', $timestamp)
+    ];
+}
+
+$f_boda = fechaEspañolCert($datos['fecha_matrimonio']);
+$f_hoy = fechaEspañolCert(date('Y-m-d'));
 ?>
 
 <!DOCTYPE html>
@@ -109,27 +138,47 @@ $datos_municipio = [
             text-transform: uppercase;
         }
         
-        .btn-imprimir {
+        .acciones-flotantes {
             position: fixed;
-            top: 30px;
-            right: 30px;
-            background: #1C3166;
-            color: white;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 0.85rem;
+            top: 20px;
+            right: 20px;
             display: flex;
-            align-items: center;
-            gap: 8px;
-            box-shadow: 0 4px 12px rgba(28, 49, 102, 0.3);
+            gap: 10px;
             z-index: 1000;
         }
         
-        .btn-imprimir:hover {
-            background: #15254d;
+        .btn-flotante {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            transition: all 0.2s;
+            border: none;
         }
+        
+        .btn-volver {
+            background: #6c757d;
+            color: white;
+        }
+        .btn-volver:hover { background: #5a6268; }
+        
+        .btn-imprimir {
+            background: #1C3166;
+            color: white;
+        }
+        .btn-imprimir:hover { background: #15254d; }
+        
+        .btn-navegar {
+            background: #198754;
+            color: white;
+        }
+        .btn-navegar:hover { background: #146c43; }
         
         /* ════════ SECCIONES ════════ */
         .seccion {
@@ -478,7 +527,6 @@ $datos_municipio = [
             }
         }
 
-        /* Print */
         @media print {
             body { 
                 background: white; 
@@ -489,7 +537,7 @@ $datos_municipio = [
                 max-width: 100%;
                 padding: 15px;
             }
-            .btn-imprimir { 
+            .acciones-flotantes { 
                 display: none; 
             }
             .seccion { 
@@ -500,12 +548,22 @@ $datos_municipio = [
             }
         }
     </style>
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
 
-    <button class="btn-imprimir" onclick="window.print()">
-        <i class="fas fa-print"></i> IMPRIMIR
-    </button>
+    <div class="acciones-flotantes">
+        <a href="recepcion_matrimonio.php" class="btn-flotante btn-volver">
+            <i class="fas fa-arrow-left"></i> Volver
+        </a>
+        <button class="btn-flotante btn-imprimir" onclick="preguntarImpresion()">
+            <i class="fas fa-print"></i> Imprimir
+        </button>
+        <a href="acta_de_matrimonio.php?id=<?= $id_acta ?>" class="btn-flotante btn-navegar">
+            <i class="fas fa-arrow-left"></i> Ver Acta
+        </a>
+    </div>
 
     <div class="documento">
         
@@ -534,25 +592,25 @@ $datos_municipio = [
                 <div class="fila">
                     <div class="campo">
                         <label>Número de Acta</label>
-                        <div class="valor" id="numero_acta">_____</div>
+                        <div class="valor" id="numero_acta"><?= htmlspecialchars($datos['numero_acta']) ?></div>
                     </div>
                     <div class="campo">
                         <label>Fecha de Celebración</label>
-                        <div class="valor" id="fecha_matrimonio">_____</div>
+                        <div class="valor" id="fecha_matrimonio"><?= htmlspecialchars($datos['fecha_matrimonio']) ?></div>
                     </div>
                     <div class="campo">
                         <label>Hora</label>
-                        <div class="valor" id="hora_matrimonio">_____</div>
+                        <div class="valor" id="hora_matrimonio"><?= htmlspecialchars(date('H:i', strtotime($datos['hora_matrimonio']))) ?></div>
                     </div>
                 </div>
                 <div class="fila">
                     <div class="campo">
                         <label>Lugar</label>
-                        <div class="valor" id="lugar">_____</div>
+                        <div class="valor" id="lugar">Alcaldía Municipal de Ilobasco</div>
                     </div>
                     <div class="campo">
                         <label>Régimen Patrimonial</label>
-                        <div class="valor" id="regimen">_____</div>
+                        <div class="valor" id="regimen"><?= htmlspecialchars($datos['regimen_patrimonial']) ?></div>
                     </div>
                 </div>
             </div>
@@ -570,29 +628,29 @@ $datos_municipio = [
                 <div class="seccion-body">
                     <div class="campo" style="margin-bottom: 12px;">
                         <label>Nombre Completo</label>
-                        <div class="valor" id="novio_nombre">_____</div>
+                        <div class="valor" id="novio_nombre"><?= htmlspecialchars($datos['novio_nombre_completo']) ?></div>
                     </div>
                     <div class="fila" style="gap: 15px;">
                         <div class="campo">
                             <label>DUI</label>
-                            <div class="valor" id="novio_dui">_____</div>
+                            <div class="valor" id="novio_dui"><?= htmlspecialchars($datos['novio_dui']) ?></div>
                         </div>
                         <div class="campo">
                             <label>Edad</label>
-                            <div class="valor" id="novio_edad">_____</div>
+                            <div class="valor" id="novio_edad"><?= htmlspecialchars($datos['novio_edad']) ?> años</div>
                         </div>
                     </div>
                     <div class="campo" style="margin-top: 12px;">
                         <label>Profesión u Oficio</label>
-                        <div class="valor" id="novio_profesion">_____</div>
+                        <div class="valor" id="novio_profesion"><?= htmlspecialchars($datos['novio_profesion']) ?></div>
                     </div>
                     <div class="campo" style="margin-top: 12px;">
                         <label>Nacionalidad</label>
-                        <div class="valor" id="novio_nacionalidad">_____</div>
+                        <div class="valor" id="novio_nacionalidad"><?= htmlspecialchars($datos['novio_nacionalidad']) ?></div>
                     </div>
                     <div class="campo" style="margin-top: 12px;">
                         <label>Domicilio</label>
-                        <div class="valor" id="novio_domicilio">_____</div>
+                        <div class="valor" id="novio_domicilio"><?= htmlspecialchars($datos['novio_domicilio']) ?></div>
                     </div>
                 </div>
             </div>
@@ -606,29 +664,29 @@ $datos_municipio = [
                 <div class="seccion-body">
                     <div class="campo" style="margin-bottom: 12px;">
                         <label>Nombre Completo</label>
-                        <div class="valor" id="novia_nombre">_____</div>
+                        <div class="valor" id="novia_nombre"><?= htmlspecialchars($datos['novia_nombre_completo']) ?></div>
                     </div>
                     <div class="fila" style="gap: 15px;">
                         <div class="campo">
                             <label>DUI</label>
-                            <div class="valor" id="novia_dui">_____</div>
+                            <div class="valor" id="novia_dui"><?= htmlspecialchars($datos['novia_dui']) ?></div>
                         </div>
                         <div class="campo">
                             <label>Edad</label>
-                            <div class="valor" id="novia_edad">_____</div>
+                            <div class="valor" id="novia_edad"><?= htmlspecialchars($datos['novia_edad']) ?> años</div>
                         </div>
                     </div>
                     <div class="campo" style="margin-top: 12px;">
                         <label>Profesión u Oficio</label>
-                        <div class="valor" id="novia_profesion">_____</div>
+                        <div class="valor" id="novia_profesion"><?= htmlspecialchars($datos['novia_profesion']) ?></div>
                     </div>
                     <div class="campo" style="margin-top: 12px;">
                         <label>Nacionalidad</label>
-                        <div class="valor" id="novia_nacionalidad">_____</div>
+                        <div class="valor" id="novia_nacionalidad"><?= htmlspecialchars($datos['novia_nacionalidad']) ?></div>
                     </div>
                     <div class="campo" style="margin-top: 12px;">
                         <label>Domicilio</label>
-                        <div class="valor" id="novia_domicilio">_____</div>
+                        <div class="valor" id="novia_domicilio"><?= htmlspecialchars($datos['novia_domicilio']) ?></div>
                     </div>
                 </div>
             </div>
@@ -644,19 +702,11 @@ $datos_municipio = [
                 <div class="fila">
                     <div class="campo">
                         <label>Testigo 1</label>
-                        <div class="valor" id="testigo1_nombre">_____</div>
-                    </div>
-                    <div class="campo">
-                        <label>DUI Testigo 1</label>
-                        <div class="valor" id="testigo1_dui">_____</div>
+                        <div class="valor" id="testigo1_nombre"><?= htmlspecialchars($datos['testigo1_nombre']) ?></div>
                     </div>
                     <div class="campo">
                         <label>Testigo 2</label>
-                        <div class="valor" id="testigo2_nombre">_____</div>
-                    </div>
-                    <div class="campo">
-                        <label>DUI Testigo 2</label>
-                        <div class="valor" id="testigo2_dui">_____</div>
+                        <div class="valor" id="testigo2_nombre"><?= htmlspecialchars($datos['testigo2_nombre']) ?></div>
                     </div>
                 </div>
             </div>
@@ -674,23 +724,23 @@ $datos_municipio = [
                 </p>
                 
                 <p>
-                    <strong>CERTIFICA:</strong> Que en el Libro de Actas de Matrimonio N° <strong id="libro_numero">_____</strong>, 
-                    folio <strong id="folio_numero">_____</strong>, número <strong id="partida_numero">_____</strong>, 
+                    <strong>CERTIFICA:</strong> Que en el Libro de Actas de Matrimonio N° <strong id="libro_numero"><?= htmlspecialchars($datos['libro']) ?></strong>, 
+                    folio <strong id="folio_numero"><?= htmlspecialchars($datos['folio']) ?></strong>, número <strong id="partida_numero"><?= htmlspecialchars($datos['numero_acta']) ?></strong>, 
                     queda inscrito el acta de matrimonio celebrado entre los señores 
-                    <strong id="cert_novio">_____</strong> y <strong id="cert_novia">_____</strong>, 
-                    el día <strong id="cert_fecha">_____</strong> de <strong id="cert_mes">_____</strong> 
-                    de <strong id="cert_anio">_____</strong>.
+                    <strong id="cert_novio"><?= htmlspecialchars($datos['novio_nombre_completo']) ?></strong> y <strong id="cert_novia"><?= htmlspecialchars($datos['novia_nombre_completo']) ?></strong>, 
+                    el día <strong id="cert_fecha"><?= htmlspecialchars($f_boda['dia']) ?></strong> de <strong id="cert_mes"><?= htmlspecialchars($f_boda['mes']) ?></strong> 
+                    de <strong id="cert_anio"><?= htmlspecialchars($f_boda['anio']) ?></strong>.
                 </p>
                 
                 <p>
-                    El acto se realizó ante mi presencia como <strong id="cert_cargo">_____</strong>, 
+                    El acto se realizó ante mi presencia como <strong id="cert_cargo"><?= htmlspecialchars($datos['cargo_oficial']) ?></strong>, 
                     en presencia de los testigos arriba mencionados.
                 </p>
                 
                 <p>
                     Se extiende la presente certificación para los fines que el interesado estime conveniente, 
-                    en la ciudad de Ilobasco, a los <strong id="cert_dia_emision">_____</strong> días del mes de 
-                    <strong id="cert_mes_emision">_____</strong> de <strong id="cert_anio_emision">_____</strong>.
+                    en la ciudad de Ilobasco, a los <strong id="cert_dia_emision"><?= htmlspecialchars($f_hoy['dia']) ?></strong> días del mes de 
+                    <strong id="cert_mes_emision"><?= htmlspecialchars($f_hoy['mes']) ?></strong> de <strong id="cert_anio_emision"><?= htmlspecialchars($f_hoy['anio']) ?></strong>.
                 </p>
             </div>
         </div>
@@ -698,25 +748,52 @@ $datos_municipio = [
         <!-- SELLO Y FIRMAS -->
         <div class="sello-container">
             <div class="sello">
-                SELLO<br>OFICIAL
+                <img src="../assets/Img/sello_ilobasco.png" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" style="width: 100%; height: 100%; object-fit: contain;">
+                <span style="display:none;">SELLO<br>OFICIAL</span>
             </div>
         </div>
 
         <div class="firmas">
             <div class="firma">
                 <div class="linea"></div>
-                <strong id="firma_oficial_nombre">_____</strong>
-                <span id="firma_oficial_cargo">Encargado del Registro del Estado Familiar</span>
+                <strong id="firma_oficial_nombre"><?= htmlspecialchars($datos['nombre_oficial']) ?></strong>
+                <span id="firma_oficial_cargo"><?= htmlspecialchars($datos['cargo_oficial']) ?></span>
             </div>
         </div>
 
         <!-- FOOTER -->
         <div class="footer-info">
-            <span>Código de verificación: <strong id="codigo_verificacion">_____</strong></span>
-            <span>Fecha de emisión: <strong id="fecha_emision">_____</strong></span>
+            <span>Código de verificación: <strong id="codigo_verificacion"><?= substr(md5($datos['id_acta']), 0, 8) ?></strong></span>
+            <span>Fecha de emisión: <strong id="fecha_emision"><?= date('d/m/Y') ?></strong></span>
         </div>
 
     </div>
 
+    <script>
+        function preguntarImpresion() {
+            Swal.fire({
+                title: 'Opciones de Documento',
+                text: "¿Qué desea hacer con la Certificación?",
+                icon: 'question',
+                showCancelButton: true,
+                showDenyButton: true,
+                confirmButtonColor: '#1C3166',
+                denyButtonColor: '#6c757d',
+                cancelButtonColor: '#d33',
+                confirmButtonText: '<i class="fas fa-print me-2"></i> Imprimir',
+                denyButtonText: '<i class="fas fa-eye me-2"></i> Solo Ver',
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.print();
+                }
+            });
+        }
+
+        // Ejecutar la pregunta al cargar la página
+        window.onload = function() {
+            preguntarImpresion();
+        };
+    </script>
 </body>
 </html>

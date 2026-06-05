@@ -1,13 +1,33 @@
 <?php
-// =============================================
-//  DATOS DEL MUNICIPIO - Ajusta según tu entorno
-// =============================================
+require_once __DIR__ . '/../models/ActaMatrimonioModel.php';
+
+$id_acta = $_GET['id'] ?? null;
+
+if (!$id_acta) {
+    die("Error: No se proporcionó un ID de acta.");
+}
+
+$modelo = new ActaMatrimonioModel();
+$datos = $modelo->obtenerActaPorId($id_acta);
+
+if (!$datos) {
+    die("Error: No se encontró el acta con el ID proporcionado.");
+}
+
 $datos_municipio = [
-    'alcaldia'      => $_POST['alcaldia'] ?? 'Alcaldía Municipal',
-    'departamento'  => $_POST['departamento'] ?? '',
+    'alcaldia'      => 'Alcaldía Municipal de Ilobasco',
+    'departamento'  => 'Cabañas',
     'pais'          => 'El Salvador',
     'escudo_nacion' => '../assets/Img/escudo.jpeg',
 ];
+
+function fechaEspañol($fecha) {
+    if (!$fecha) return '---';
+    $meses = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"];
+    $timestamp = strtotime($fecha);
+    return date('d', $timestamp) . " de " . $meses[date('n', $timestamp) - 1] . " de " . date('Y', $timestamp);
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -48,25 +68,25 @@ $datos_municipio = [
             border-bottom: 3px double #1C3166;
         }
         
-                  .escudo {
-    width: 80px;
-    height: 80px;
-    border: 2px solid #1C3166;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-    flex-shrink: 0;
-    background: white;
-}
+        .escudo {
+            width: 80px;
+            height: 80px;
+            border: 2px solid #1C3166;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            flex-shrink: 0;
+            background: white;
+        }
 
-.escudo img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    padding: 4px;
-}
+        .escudo img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            padding: 4px;
+        }
         
         .titulo-central {
             text-align: center;
@@ -83,23 +103,6 @@ $datos_municipio = [
             margin-bottom: 4px;
         }
         
-        .titulo-central h2 {
-            font-family: 'Crimson Text', serif;
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: #333;
-            margin-bottom: 8px;
-        }
-        
-        .titulo-central .registro {
-            font-family: 'Crimson Text', serif;
-            font-size: 0.75rem;
-            font-style: italic;
-            color: #1C3166;
-            display: block;
-            margin-bottom: 10px;
-        }
-        
         .titulo-central h3 {
             font-family: 'Crimson Text', serif;
             font-size: 1.4rem;
@@ -109,371 +112,338 @@ $datos_municipio = [
             text-transform: uppercase;
         }
         
-        /* ════════ BOTONES ════════ */
-        .acciones-header {
+        .acciones-flotantes {
+            position: fixed;
+            top: 20px;
+            right: 20px;
             display: flex;
             gap: 10px;
-            margin-bottom: 20px;
-            justify-content: space-between;
+            z-index: 1000;
         }
         
-        .btn {
+        .btn-flotante {
+            display: flex;
+            align-items: center;
+            gap: 8px;
             padding: 10px 20px;
-            border-radius: 4px;
-            font-family: 'Open Sans', sans-serif;
+            border-radius: 6px;
             font-size: 0.85rem;
             font-weight: 600;
-            text-decoration: none;
-            border: none;
             cursor: pointer;
-            transition: all 0.3s;
-            display: inline-flex;
+            text-decoration: none;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            transition: all 0.2s;
+            border: none;
+        }
+        
+        .btn-volver {
+            background: #6c757d;
+            color: white;
+        }
+        .btn-volver:hover { background: #5a6268; }
+        
+        .btn-imprimir {
+            background: #1C3166;
+            color: white;
+        }
+        .btn-imprimir:hover { background: #15254d; }
+        
+        .btn-navegar {
+            background: #198754;
+            color: white;
+        }
+        .btn-navegar:hover { background: #146c43; }
+        
+        /* ════════ SECCIONES ════════ */
+        .seccion {
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+        }
+        
+        .seccion-header {
+            background: #1C3166;
+            color: white;
+            padding: 10px 15px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: flex;
             align-items: center;
             gap: 8px;
         }
         
-        .btn-primary {
-            background: #1C3166;
-            color: white;
+        .seccion-header i {
+            font-size: 0.7rem;
         }
         
-        .btn-primary:hover {
-            background: #15254d;
+        .seccion-body {
+            padding: 20px;
+            background: #fafbfc;
         }
         
-        .btn-secondary {
-            background: white;
+        /* ════════ CAMPOS ════════ */
+        .fila {
+            display: flex;
+            gap: 30px;
+            margin-bottom: 15px;
+        }
+        
+        .fila:last-child {
+            margin-bottom: 0;
+        }
+        
+        .campo {
+            flex: 1;
+            min-width: 0;
+        }
+        
+        .campo label {
+            display: block;
+            font-size: 0.65rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
             color: #1C3166;
-            border: 2px solid #1C3166;
+            margin-bottom: 4px;
         }
         
-        .btn-secondary:hover {
+        .campo .valor {
+            font-family: 'Crimson Text', serif;
+            font-size: 0.95rem;
+            color: #1a1a1a;
+            padding-bottom: 4px;
+            border-bottom: 1px solid #bbb;
+            min-height: 24px;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+        }
+        
+        /* ════════ DOS COLUMNAS ════════ */
+        .dos-columnas {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        
+        .columna {
+            border: 1px solid #ddd;
+            min-width: 0;
+        }
+        
+        .columna .seccion-header {
             background: #1C3166;
-            color: white;
         }
         
-        .btn-success {
-            background: #003366;
-            color: white;
-        }
-        
-        /* ════════ ACTA CONTAINER ════════ */
-        .acta-container {
-            border: 2px solid #1C3166;
-            padding: 40px;
-            background: white;
-        }
-        
-        .acta-numero {
-            text-align: center;
-            margin-bottom: 30px;
+        .columna .seccion-body {
             padding: 15px;
-            background: #f0f4ff;
-            border: 1px solid #1C3166;
         }
         
-        .acta-numero strong {
+        /* ════════ ACTA TEXTO ════════ */
+        .acta-texto {
+            padding: 25px;
             font-family: 'Crimson Text', serif;
-            font-size: 1.2rem;
-            color: #1C3166;
-        }
-        
-        /* ════════ PROSA JURÍDICA ════════ */
-        .acta-prosa {
-            font-family: 'Crimson Text', serif;
-            font-size: 1rem;
-            line-height: 2;
+            font-size: 0.95rem;
+            line-height: 1.8;
             text-align: justify;
             color: #1a1a1a;
         }
         
-        .acta-prosa p {
-            margin-bottom: 20px;
-            text-indent: 40px;
+        .acta-texto p {
+            margin-bottom: 15px;
+            text-indent: 30px;
         }
         
-        .acta-prosa strong {
+        .acta-texto strong {
             color: #1C3166;
-            font-weight: 600;
         }
         
-        /* ════════ FIRMAS ACTA ════════ */
-        .acta-firmas {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 40px;
-            margin-top: 60px;
-            padding-top: 40px;
+        /* ════════ FIRMAS ════════ */
+        .firmas {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 40px;
+            padding-top: 30px;
+            flex-wrap: wrap;
+            gap: 20px;
         }
         
-        .firma-box {
+        .firma {
             text-align: center;
+            width: 250px;
         }
         
-        .firma-linea {
+        .firma .linea {
             border-top: 1px solid #333;
-            margin-bottom: 10px;
-            padding-top: 10px;
+            margin-bottom: 8px;
+            padding-top: 8px;
         }
         
-        .firma-box strong {
+        .firma strong {
             font-family: 'Crimson Text', serif;
             font-size: 0.9rem;
             display: block;
             color: #1a1a1a;
         }
         
-        .firma-box span {
+        .firma span {
             font-size: 0.75rem;
             color: #666;
+            display: block;
         }
         
-        /* ════════ NAVEGACIÓN ════════ */
-        /* ════════ NAVEGACIÓN (BOTONES PEQUEÑOS) ════════ */
-.nav-documentos {
-    display: flex;
-    gap: 8px;
-    margin-top: 20px;
-    padding-top: 15px;
-    border-top: 1px solid #ddd;
-}
-
-.nav-item {
-    flex: 1;
-    padding: 10px 8px;
-    background: white;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    text-align: center;
-    text-decoration: none;
-    color: inherit;
-    transition: all 0.2s;
-}
-
-.nav-item:hover {
-    border-color: #1C3166;
-    transform: translateY(-2px);
-}
-
-.nav-item.active {
-    background: #1C3166;
-    border-color: #1C3166;
-    color: white;
-}
-
-.nav-num {
-    font-family: 'Crimson Text', serif;
-    font-size: 1.1rem;
-    font-weight: 600;
-    display: block;
-    margin-bottom: 2px;
-    line-height: 1;
-}
-
-.nav-title {
-    font-size: 0.65rem;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    font-weight: 500;
-}
-
-/* Responsive */
-@media screen and (max-width: 768px) {
-    .nav-documentos {
-        gap: 6px;
-        margin-top: 15px;
-    }
-    
-    .nav-item {
-        padding: 8px 5px;
-        border-radius: 4px;
-    }
-    
-    .nav-num {
-        font-size: 1rem;
-    }
-    
-    .nav-title {
-        font-size: 0.6rem;
-    }
-}
-
-        /* ═══════════════════════════════════════════════════════════
-           RESPONSIVE
-           ═══════════════════════════════════════════════════════════ */
-        @media screen and (max-width: 1024px) {
-            body { padding: 10px; }
-            .documento { padding: 25px; }
-            .titulo-central h1 { font-size: 1rem; }
-            .titulo-central h3 { font-size: 1.2rem; }
-            .escudo { width: 60px; height: 60px; font-size: 1.5rem; }
-            .acta-container { padding: 25px; }
-        }
-
-        @media screen and (max-width: 768px) {
-            body { padding: 0; background: white; }
-            .documento { padding: 20px; box-shadow: none; }
-            
-            .header {
-                flex-direction: column;
-                gap: 15px;
-                text-align: center;
-            }
-            
-            .escudo { width: 50px; height: 50px; font-size: 1.2rem; }
-            .titulo-central h1 { font-size: 0.9rem; }
-            .titulo-central h3 { font-size: 1.1rem; }
-            
-            .acciones-header {
-                flex-direction: column;
-                align-items: stretch;
-            }
-            
-            .acta-container { padding: 20px; }
-            .acta-prosa { font-size: 0.95rem; line-height: 1.8; }
-            .acta-prosa p { text-indent: 20px; }
-            
-            .acta-firmas {
-                grid-template-columns: 1fr;
-                gap: 30px;
-                margin-top: 40px;
-            }
-            
-            .nav-documentos { flex-direction: column; }
+        /* ════════ FOOTER INFO ════════ */
+        .footer-info {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 1px solid #ddd;
+            font-size: 0.7rem;
+            color: #666;
         }
 
         @media print {
             body { background: white; padding: 0; }
-            .documento { box-shadow: none; max-width: 100%; }
-            .acciones-header, .nav-documentos { display: none; }
-            .acta-container { border: 2px solid #000; }
+            .documento { box-shadow: none; max-width: 100%; border: none; padding: 15px; }
+            .acciones-flotantes { display: none; }
+            .seccion { break-inside: avoid; }
         }
     </style>
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
+
+    <div class="acciones-flotantes">
+        <a href="recepcion_matrimonio.php" class="btn-flotante btn-volver">
+            <i class="fas fa-arrow-left"></i> Volver
+        </a>
+        <button class="btn-flotante btn-imprimir" onclick="preguntarImpresion()">
+            <i class="fas fa-print"></i> Imprimir
+        </button>
+        <a href="certificacion_matrimonio.php?id=<?= $id_acta ?>" class="btn-flotante btn-navegar">
+            Ver Certificación <i class="fas fa-arrow-right"></i>
+        </a>
+    </div>
 
     <div class="documento">
         
         <!-- HEADER -->
         <div class="header">
-        <div class="escudo">
-        <?php if (!empty($datos_municipio['escudo_nacion'])): ?>
-            <img src="<?= htmlspecialchars($datos_municipio['escudo_nacion']) ?>" 
-                 alt="Escudo" 
-                 style="width:100%; height:100%; object-fit:contain;">
-        <?php else: ?>
-            <i class="fas fa-landmark"></i>
-        <?php endif; ?>
-    </div>
-
-        <!-- ACCIONES -->
-        <div class="acciones-header">
-            <a href="solicitud_matrimonio_civil.php?id=ID_AQUI" class="btn btn-secondary">
-                <i class="fas fa-arrow-left"></i> Volver a Solicitud
-            </a>
-            <div>
-                <button onclick="window.print()" class="btn btn-success">
-                    <i class="fas fa-print"></i> Imprimir Acta
-                </button>
-                <a href="certificación_partida_matrimonio.php?id=ID_AQUI" class="btn btn-primary">
-                    <i class="fas fa-certificate"></i> Ver Certificación →
-                </a>
+            <div class="escudo">
+                <?php if (!empty($datos_municipio['escudo_nacion'])): ?>
+                    <img src="<?= htmlspecialchars($datos_municipio['escudo_nacion']) ?>" alt="Escudo">
+                <?php else: ?>
+                    <i class="fas fa-landmark"></i>
+                <?php endif; ?>
             </div>
+            <div class="titulo-central">
+                <h1><?= htmlspecialchars($datos_municipio['alcaldia']) ?></h1>
+                <h3>ACTA DE MATRIMONIO CIVIL</h3>
+            </div>
+            <div style="width: 80px;" class="spacer"></div>
         </div>
 
-        <!-- ACTA -->
-        <div class="acta-container">
-            
-            <div class="acta-numero">
-                <strong>ACTA N° <span id="numero_acta">_____</span> — AÑO <span id="anio">2025</span></strong>
+        <!-- CUERPO DEL ACTA -->
+        <div class="seccion">
+            <div class="seccion-header">
+                <i class="fas fa-file-alt"></i>
+                TEXTO DEL ACTA
             </div>
-
-            <div class="acta-prosa">
+            <div class="acta-texto">
                 <p>
                     En la Oficina del Registro del Estado Familiar de esta Alcaldía Municipal, 
-                    siendo las <strong id="hora_letras">_____</strong> horas del día 
-                    <strong id="fecha_letras">_____</strong> de <strong id="mes">_____</strong> 
-                    de <strong id="anio_letras">_____</strong>, ante mí, 
-                    <strong id="oficial_nombre">_____</strong>, 
-                    <strong id="oficial_cargo">_____</strong>, 
+                    siendo las <strong><?= htmlspecialchars(date('H:i', strtotime($datos['hora_matrimonio']))) ?></strong> horas del día 
+                    <strong><?= fechaEspañol($datos['fecha_matrimonio']) ?></strong>, ante mí, 
+                    <strong><?= htmlspecialchars($datos['nombre_oficial']) ?></strong>, 
+                    <strong><?= htmlspecialchars($datos['cargo_oficial']) ?></strong>, 
                     comparecieron los señores:
                 </p>
 
                 <p>
-                    <strong id="novio_nombre_completo">_____</strong>, 
-                    de <strong id="novio_edad">_____</strong> años de edad, 
-                    <strong id="novio_profesion">_____</strong>, 
-                    de nacionalidad <strong id="novio_nacionalidad">_____</strong>, 
-                    con Documento Único de Identidad número <strong id="novio_dui">_____</strong> 
-                    y domicilio en <strong id="novio_domicilio">_____</strong>;
+                    <strong><?= htmlspecialchars($datos['novio_nombre_completo']) ?></strong>, 
+                    de <strong><?= htmlspecialchars($datos['novio_edad']) ?></strong> años de edad, 
+                    <strong><?= htmlspecialchars($datos['novio_profesion']) ?></strong>, 
+                    de nacionalidad <strong><?= htmlspecialchars($datos['novio_nacionalidad']) ?></strong>, 
+                    con Documento Único de Identidad número <strong><?= htmlspecialchars($datos['novio_dui']) ?></strong> 
+                    y domicilio en <strong><?= htmlspecialchars($datos['novio_domicilio']) ?></strong>;
                 </p>
 
                 <p>
-                    Y <strong id="novia_nombre_completo">_____</strong>, 
-                    de <strong id="novia_edad">_____</strong> años de edad, 
-                    <strong id="novia_profesion">_____</strong>, 
-                    de nacionalidad <strong id="novia_nacionalidad">_____</strong>, 
-                    con Documento Único de Identidad número <strong id="novia_dui">_____</strong> 
-                    y domicilio en <strong id="novia_domicilio">_____</strong>.
+                    Y <strong><?= htmlspecialchars($datos['novia_nombre_completo']) ?></strong>, 
+                    de <strong><?= htmlspecialchars($datos['novia_edad']) ?></strong> años de edad, 
+                    <strong><?= htmlspecialchars($datos['novia_profesion']) ?></strong>, 
+                    de nacionalidad <strong><?= htmlspecialchars($datos['novia_nacionalidad']) ?></strong>, 
+                    con Documento Único de Identidad número <strong><?= htmlspecialchars($datos['novia_dui']) ?></strong> 
+                    y domicilio en <strong><?= htmlspecialchars($datos['novia_domicilio']) ?></strong>.
                 </p>
 
                 <p>
                     Los comparecientes manifestaron ser solteros, mayores de edad, actuar por su propio derecho, 
                     y solicitaron contraer matrimonio bajo el régimen de 
-                    <strong id="regimen">_____</strong>, en presencia de los testigos 
-                    <strong id="testigo1">_____</strong> y <strong id="testigo2">_____</strong>.
+                    <strong><?= htmlspecialchars($datos['regimen_patrimonial']) ?></strong>, en presencia de los testigos 
+                    <strong><?= htmlspecialchars($datos['testigo1_nombre']) ?></strong> y <strong><?= htmlspecialchars($datos['testigo2_nombre']) ?></strong>.
                 </p>
-
                 <p>
                     En testimonio de lo cual, y habiendo leído íntegramente la presente acta a los contrayentes, 
                     ratificaron su contenido y procedieron a firmar la misma, junto con el suscrito Oficial del 
                     Registro del Estado Familiar, en la fecha y hora antes indicadas.
                 </p>
             </div>
-
-            <div class="acta-firmas">
-                <div class="firma-box">
-                    <div class="firma-linea">
-                        <strong id="firma_oficial">____________________</strong>
-                    </div>
-                    <strong>EL OFICIAL</strong>
-                    <span>Encargado del Registro del Estado Familiar</span>
-                </div>
-                <div class="firma-box">
-                    <div class="firma-linea">
-                        <strong id="firma_novio">____________________</strong>
-                    </div>
-                    <strong>EL CONTRAYENTE</strong>
-                    <span>DUI: <span id="firma_novio_dui">_____</span></span>
-                </div>
-                <div class="firma-box">
-                    <div class="firma-linea">
-                        <strong id="firma_novia">____________________</strong>
-                    </div>
-                    <strong>LA CONTRAYENTE</strong>
-                    <span>DUI: <span id="firma_novia_dui">_____</span></span>
-                </div>
-            </div>
-
         </div>
 
-        <!-- NAVEGACIÓN -->
-        <div class="nav-documentos">
-            <a href="solicitud_matrimonio_civil.php?id=ID_AQUI" class="nav-item">
-                <span class="nav-num">I</span>
-                <span class="nav-title">Solicitud</span>
-            </a>
-            <a href="#" class="nav-item active" onclick="return false;">
-                <span class="nav-num">II</span>
-                <span class="nav-title">Acta</span>
-            </a>
-            <a href="certificación_partida_matrimonio.php?id=ID_AQUI" class="nav-item">
-                <span class="nav-num">III</span>
-                <span class="nav-title">Certificación</span>
-            </a>
+        <div class="firmas">
+            <div class="firma">
+                <div class="linea"></div>
+                <strong><?= htmlspecialchars($datos['nombre_oficial']) ?></strong>
+                <span><?= htmlspecialchars($datos['cargo_oficial']) ?></span>
+            </div>
+            <div class="firma">
+                <div class="linea"></div>
+                <strong><?= htmlspecialchars($datos['novio_nombre_completo']) ?></strong>
+                <span>El Contrayente (DUI: <?= htmlspecialchars($datos['novio_dui']) ?>)</span>
+            </div>
+            <div class="firma">
+                <div class="linea"></div>
+                <strong><?= htmlspecialchars($datos['novia_nombre_completo']) ?></strong>
+                <span>La Contrayente (DUI: <?= htmlspecialchars($datos['novia_dui']) ?>)</span>
+            </div>
+        </div>
+
+        <!-- FOOTER -->
+        <div class="footer-info">
+            <span>Acta número: <strong><?= htmlspecialchars($datos['numero_acta']) ?></strong></span>
+            <span>Libro: <strong><?= htmlspecialchars($datos['libro']) ?></strong> - Folio: <strong><?= htmlspecialchars($datos['folio']) ?></strong></span>
         </div>
 
     </div>
 
+    <script>
+        function preguntarImpresion() {
+            Swal.fire({
+                title: 'Opciones de Documento',
+                text: "¿Qué desea hacer con el Acta de Matrimonio?",
+                icon: 'question',
+                showCancelButton: true,
+                showDenyButton: true,
+                confirmButtonColor: '#1C3166',
+                denyButtonColor: '#6c757d',
+                cancelButtonColor: '#d33',
+                confirmButtonText: '<i class="fas fa-print me-2"></i> Imprimir',
+                denyButtonText: '<i class="fas fa-eye me-2"></i> Solo Ver',
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.print();
+                }
+            });
+        }
+
+        // Ejecutar la pregunta al cargar la página
+        window.onload = function() {
+            preguntarImpresion();
+        };
+    </script>
 </body>
 </html>

@@ -47,6 +47,9 @@ class EstadisticaModel {
             $condPartida = " WHERE DATE(fecha_emision) BETWEEN :inicio AND :fin";
             $condDefuncion = " WHERE DATE(fecha_emision) BETWEEN :inicio AND :fin";
             $condMenoridad = " WHERE DATE(fecha_emision) BETWEEN :inicio AND :fin";
+            $condMatrimonio = " WHERE DATE(fecha_registro) BETWEEN :inicio AND :fin";
+        } else {
+            $condMatrimonio = "";
         }
 
         $sql = "SELECT 
@@ -55,6 +58,7 @@ class EstadisticaModel {
                         WHEN t.id_tipo = 1 THEN (SELECT COUNT(*) FROM Partida_Nacimiento $condPartida)
                         WHEN t.id_tipo = 2 THEN (SELECT COUNT(*) FROM Carta_Defuncion $condDefuncion)
                         WHEN t.id_tipo = 3 THEN (SELECT COUNT(*) FROM Carnet_Menoridad $condMenoridad)
+                        WHEN t.id_tipo = 5 THEN (SELECT COUNT(*) FROM acta_matrimonio $condMatrimonio)
                         ELSE 0
                     END AS total
                 FROM Tipo_Tramite t";
