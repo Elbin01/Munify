@@ -439,7 +439,7 @@ $datos_municipio = [
                         </div>
                         <div class="campo">
                             <label>Lugar</label>
-                            <input type="text" name="lugar" placeholder="Oficina del Registro del Estado Familiar">
+                            <input type="text" name="lugar" placeholder="Oficina del Registro del Estado Familiar" class="letras-only">
                         </div>
                     </div>
                     <div class="fila">
@@ -468,17 +468,17 @@ $datos_municipio = [
                         <div class="fila">
                             <div class="campo">
                                 <label>Nombres</label>
-                                <input type="text" name="novio_nombres" placeholder="Ej: Juan Carlos" required>
+                                <input type="text" name="novio_nombres" placeholder="Ej: Juan Carlos" class="letras-only" required>
                             </div>
                             <div class="campo">
                                 <label>Apellidos</label>
-                                <input type="text" name="novio_apellidos" placeholder="Ej: Pérez García" required>
+                                <input type="text" name="novio_apellidos" placeholder="Ej: Pérez García" class="letras-only" required>
                             </div>
                         </div>
                         <div class="fila">
                             <div class="campo">
                                 <label>DUI</label>
-                                <input type="text" name="novio_dui" placeholder="00000000-0" pattern="\d{8}-\d" required>
+                                <input type="text" name="novio_dui" placeholder="00000000-0" pattern="\d{8}-\d" class="dui-mask" required>
                                 <small>Formato: 01234567-8</small>
                             </div>
                             <div class="campo">
@@ -489,11 +489,11 @@ $datos_municipio = [
                         <div class="fila">
                             <div class="campo">
                                 <label>Nacionalidad</label>
-                                <input type="text" name="novio_nacionalidad" value="Salvadoreño" required>
+                                <input type="text" name="novio_nacionalidad" value="Salvadoreño" class="letras-only" required>
                             </div>
                             <div class="campo">
                                 <label>Profesión u Oficio</label>
-                                <input type="text" name="novio_profesion" placeholder="Ej: Ingeniero">
+                                <input type="text" name="novio_profesion" placeholder="Ej: Ingeniero" class="letras-only">
                             </div>
                         </div>
                         <div class="fila">
@@ -515,17 +515,17 @@ $datos_municipio = [
                         <div class="fila">
                             <div class="campo">
                                 <label>Nombres</label>
-                                <input type="text" name="novia_nombres" placeholder="Ej: María Elena" required>
+                                <input type="text" name="novia_nombres" placeholder="Ej: María Elena" class="letras-only" required>
                             </div>
                             <div class="campo">
                                 <label>Apellidos</label>
-                                <input type="text" name="novia_apellidos" placeholder="Ej: López Hernández" required>
+                                <input type="text" name="novia_apellidos" placeholder="Ej: López Hernández" class="letras-only" required>
                             </div>
                         </div>
                         <div class="fila">
                             <div class="campo">
                                 <label>DUI</label>
-                                <input type="text" name="novia_dui" placeholder="00000000-0" pattern="\d{8}-\d" required>
+                                <input type="text" name="novia_dui" placeholder="00000000-0" pattern="\d{8}-\d" class="dui-mask" required>
                                 <small>Formato: 01234567-8</small>
                             </div>
                             <div class="campo">
@@ -536,11 +536,11 @@ $datos_municipio = [
                         <div class="fila">
                             <div class="campo">
                                 <label>Nacionalidad</label>
-                                <input type="text" name="novia_nacionalidad" value="Salvadoreña" required>
+                                <input type="text" name="novia_nacionalidad" value="Salvadoreña" class="letras-only" required>
                             </div>
                             <div class="campo">
                                 <label>Profesión u Oficio</label>
-                                <input type="text" name="novia_profesion" placeholder="Ej: Médico">
+                                <input type="text" name="novia_profesion" placeholder="Ej: Médico" class="letras-only">
                             </div>
                         </div>
                         <div class="fila">
@@ -563,21 +563,21 @@ $datos_municipio = [
                     <div class="fila">
                         <div class="campo">
                             <label>Nombre del Testigo 1</label>
-                            <input type="text" name="testigo1_nombre">
+                            <input type="text" name="testigo1_nombre" class="letras-only">
                         </div>
                         <div class="campo">
                             <label>DUI del Testigo 1</label>
-                            <input type="text" name="testigo1_dui" placeholder="00000000-0">
+                            <input type="text" name="testigo1_dui" placeholder="00000000-0" class="dui-mask">
                         </div>
                     </div>
                     <div class="fila">
                         <div class="campo">
                             <label>Nombre del Testigo 2</label>
-                            <input type="text" name="testigo2_nombre">
+                            <input type="text" name="testigo2_nombre" class="letras-only">
                         </div>
                         <div class="campo">
                             <label>DUI del Testigo 2</label>
-                            <input type="text" name="testigo2_dui" placeholder="00000000-0">
+                            <input type="text" name="testigo2_dui" placeholder="00000000-0" class="dui-mask">
                         </div>
                     </div>
                 </div>
@@ -593,11 +593,11 @@ $datos_municipio = [
                     <div class="fila">
                         <div class="campo">
                             <label>Nombre Completo</label>
-                            <input type="text" name="oficial_nombre" placeholder="Ej: Lic. Roberto Martínez">
+                            <input type="text" name="oficial_nombre" placeholder="Ej: Lic. Roberto Martínez" class="letras-only">
                         </div>
                         <div class="campo">
                             <label>Cargo</label>
-                            <input type="text" name="oficial_cargo" value="Encargado del Registro del Estado Familiar">
+                            <input type="text" name="oficial_cargo" value="Encargado del Registro del Estado Familiar" class="letras-only">
                         </div>
                     </div>
                 </div>
@@ -623,5 +623,40 @@ $datos_municipio = [
 
     </div>
 
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+    window.showToast = function(message, type = 'auto') {
+        if (!message) return;
+        
+        let swalIcon = 'info';
+        let swalTitle = 'Información';
+        
+        if (type === 'success') {
+            swalIcon = 'success';
+            swalTitle = 'Éxito';
+        } else if (type === 'danger' || type === 'error') {
+            swalIcon = 'error';
+            swalTitle = 'Error';
+        } else if (type === 'warning') {
+            swalIcon = 'warning';
+            swalTitle = 'Advertencia';
+        }
+
+        if (typeof Swal !== 'undefined') {
+            Swal.fire({
+                icon: swalIcon,
+                title: swalTitle,
+                text: message,
+                confirmButtonColor: '#1C3166',
+                confirmButtonText: 'Aceptar'
+            });
+        }
+    };
+    window.alert = function(message) { window.showToast(message, 'warning'); };
+    </script>
+    <script src="../assets/Js/validaciones.js?v=<?php echo time(); ?>"></script>
 </body>
 </html>

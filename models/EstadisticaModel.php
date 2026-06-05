@@ -159,6 +159,84 @@ class EstadisticaModel {
     }
 
     /**
+     * Obtiene comparativa de defunciones por mes
+     */
+    public function getDefuncionesPorMes($inicio = null, $fin = null) {
+        $where = "YEAR(fecha_emision) = YEAR(CURRENT_DATE())";
+        if ($inicio && $fin) {
+            $where = "DATE(fecha_emision) BETWEEN :inicio AND :fin";
+        }
+        $sql = "SELECT MONTH(fecha_emision) as mes_num, COUNT(*) as total 
+                FROM Carta_Defuncion 
+                WHERE $where
+                GROUP BY MONTH(fecha_emision)
+                ORDER BY MONTH(fecha_emision) ASC";
+        try {
+            $stmt = $this->conn->prepare($sql);
+            if ($inicio && $fin) {
+                $stmt->bindParam(':inicio', $inicio);
+                $stmt->bindParam(':fin', $fin);
+            }
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            return array();
+        }
+    }
+
+    /**
+     * Obtiene comparativa de carnet de minoridad por mes
+     */
+    public function getMinoridadPorMes($inicio = null, $fin = null) {
+        $where = "YEAR(fecha_emision) = YEAR(CURRENT_DATE())";
+        if ($inicio && $fin) {
+            $where = "DATE(fecha_emision) BETWEEN :inicio AND :fin";
+        }
+        $sql = "SELECT MONTH(fecha_emision) as mes_num, COUNT(*) as total 
+                FROM Carnet_Menoridad 
+                WHERE $where
+                GROUP BY MONTH(fecha_emision)
+                ORDER BY MONTH(fecha_emision) ASC";
+        try {
+            $stmt = $this->conn->prepare($sql);
+            if ($inicio && $fin) {
+                $stmt->bindParam(':inicio', $inicio);
+                $stmt->bindParam(':fin', $fin);
+            }
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            return array();
+        }
+    }
+
+    /**
+     * Obtiene comparativa de actas de matrimonio por mes
+     */
+    public function getMatrimoniosPorMes($inicio = null, $fin = null) {
+        $where = "YEAR(fecha_registro) = YEAR(CURRENT_DATE())";
+        if ($inicio && $fin) {
+            $where = "DATE(fecha_registro) BETWEEN :inicio AND :fin";
+        }
+        $sql = "SELECT MONTH(fecha_registro) as mes_num, COUNT(*) as total 
+                FROM acta_matrimonio 
+                WHERE $where
+                GROUP BY MONTH(fecha_registro)
+                ORDER BY MONTH(fecha_registro) ASC";
+        try {
+            $stmt = $this->conn->prepare($sql);
+            if ($inicio && $fin) {
+                $stmt->bindParam(':inicio', $inicio);
+                $stmt->bindParam(':fin', $fin);
+            }
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            return array();
+        }
+    }
+
+    /**
      * Obtiene demografía de ciudadanos (Adultos vs Menores)
      */
     public function getDemografiaCiudadanos() {

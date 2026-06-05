@@ -75,6 +75,7 @@ include __DIR__ . '/secretary_notifications.php';
       <a href="terminos.php" class="footer-link">Términos</a>
     </nav>
   </div>
+<script src="../assets/Js/validaciones.js?v=<?= time() ?>"></script>
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>

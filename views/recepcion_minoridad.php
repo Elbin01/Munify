@@ -95,11 +95,11 @@
                                 <div class="row g-3 mt-1">
                                     <div class="col-md-6">
                                         <label class="form-label fw-bold text-dark small">Nombres</label>
-                                        <input type="text" id="regNombres" class="form-control border-secondary-subtle shadow-none">
+                                        <input type="text" id="regNombres" class="form-control border-secondary-subtle shadow-none letras-only">
                                     </div>
                                     <div class="col-md-6">
                                         <label class="form-label fw-bold text-dark small">Apellidos</label>
-                                        <input type="text" id="regApellidos" class="form-control border-secondary-subtle shadow-none">
+                                        <input type="text" id="regApellidos" class="form-control border-secondary-subtle shadow-none letras-only">
                                     </div>
                                     <div class="col-md-6">
                                         <label class="form-label fw-bold text-dark small">Fecha Nacimiento</label>
@@ -118,11 +118,11 @@
                                     </div>
                                     <div class="col-md-6">
                                         <label class="form-label fw-bold text-dark small">Nombre del Padre</label>
-                                        <input type="text" id="regNombrePadre" class="form-control border-secondary-subtle shadow-none">
+                                        <input type="text" id="regNombrePadre" class="form-control border-secondary-subtle shadow-none letras-only">
                                     </div>
                                     <div class="col-md-6">
                                         <label class="form-label fw-bold text-dark small">Nombre de la Madre</label>
-                                        <input type="text" id="regNombreMadre" class="form-control border-secondary-subtle shadow-none">
+                                        <input type="text" id="regNombreMadre" class="form-control border-secondary-subtle shadow-none letras-only">
                                     </div>
                                 </div>
                             </div>
@@ -133,15 +133,15 @@
                             <div class="row g-3 mt-1">
                                 <div class="col-md-4">
                                     <label class="form-label fw-bold text-dark small">Color de Piel</label>
-                                    <input type="text" id="regColorPiel" class="form-control border-secondary-subtle shadow-none" placeholder="Ej: Trigueño, Blanco">
+                                    <input type="text" id="regColorPiel" class="form-control border-secondary-subtle shadow-none letras-only" placeholder="Ej: Trigueño, Blanco">
                                 </div>
                                 <div class="col-md-4">
                                     <label class="form-label fw-bold text-dark small">Color de Ojos</label>
-                                    <input type="text" id="regColorOjos" class="form-control border-secondary-subtle shadow-none" placeholder="Ej: Café, Negro">
+                                    <input type="text" id="regColorOjos" class="form-control border-secondary-subtle shadow-none letras-only" placeholder="Ej: Café, Negro">
                                 </div>
                                 <div class="col-md-4">
                                     <label class="form-label fw-bold text-dark small">Color de Cabello</label>
-                                    <input type="text" id="regColorCabello" class="form-control border-secondary-subtle shadow-none" placeholder="Ej: Negro, Castaño">
+                                    <input type="text" id="regColorCabello" class="form-control border-secondary-subtle shadow-none letras-only" placeholder="Ej: Negro, Castaño">
                                 </div>
                                 <div class="col-md-12">
                                     <label class="form-label fw-bold text-dark small">Señas Especiales</label>
@@ -162,7 +162,7 @@
                                 </div>
                                 <div class="col-md-8">
                                     <label class="form-label fw-bold text-dark small">Nombre Completo</label>
-                                    <input type="text" id="regNombreResponsable" class="form-control border-secondary-subtle shadow-none">
+                                    <input type="text" id="regNombreResponsable" class="form-control border-secondary-subtle shadow-none letras-only">
                                 </div>
                             </div>
                         </div>

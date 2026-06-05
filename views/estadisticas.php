@@ -12,16 +12,25 @@ $citasMes     = $estadisticaModel->getCitasPorMes($inicio, $fin);
 $distribucion = $estadisticaModel->getDistribucionTramites($inicio, $fin);
 $partidasMes  = $estadisticaModel->getPartidasPorMes($inicio, $fin);
 $testamentosMes = $estadisticaModel->getTestamentosPorMes($inicio, $fin);
+$defuncionesMes = $estadisticaModel->getDefuncionesPorMes($inicio, $fin);
+$minoridadMes = $estadisticaModel->getMinoridadPorMes($inicio, $fin);
+$matrimoniosMes = $estadisticaModel->getMatrimoniosPorMes($inicio, $fin);
 $demografia   = $estadisticaModel->getDemografiaCiudadanos();
 
 $mesesNombres = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
 $citasData    = array_fill(0,12,0);
 $partidasData = array_fill(0,12,0);
 $testamentosData = array_fill(0,12,0);
+$defuncionesData = array_fill(0,12,0);
+$minoridadData = array_fill(0,12,0);
+$matrimoniosData = array_fill(0,12,0);
 
 foreach ($citasMes as $c)     $citasData[$c['mes_num'] - 1] = (int)$c['total'];
 foreach ($partidasMes as $p)  $partidasData[$p['mes_num'] - 1] = (int)$p['total'];
 foreach ($testamentosMes as $t) $testamentosData[$t['mes_num'] - 1] = (int)$t['total'];
+foreach ($defuncionesMes as $d) $defuncionesData[$d['mes_num'] - 1] = (int)$d['total'];
+foreach ($minoridadMes as $m) $minoridadData[$m['mes_num'] - 1] = (int)$m['total'];
+foreach ($matrimoniosMes as $ma) $matrimoniosData[$ma['mes_num'] - 1] = (int)$ma['total'];
 
 $distLabels = [];
 $distValues = [];
@@ -126,6 +135,9 @@ foreach ($diasSemana as $i => $dia) {
                 <button type="submit" class="btn btn-primary btn-sm shadow-sm px-3" style="background-color: var(--color-3); border-color: var(--color-3); border-radius: 8px; font-weight: 500;">
                     <i class="bi bi-funnel"></i> Filtrar
                 </button>
+                <a href="estadisticas.php" class="btn btn-light btn-sm shadow-sm ms-2 px-3" style="border: 1px solid #ddd; border-radius: 8px; font-weight: 500;" title="Limpiar filtros">
+                    <i class="bi bi-eraser"></i> Limpiar
+                </a>
                 <button type="button" class="btn btn-primary btn-sm shadow-sm ms-2 px-3" style="background-color: var(--color-3); border-color: var(--color-3); border-radius: 8px; font-weight: 500;" onclick="generarPDF()">
                     <i class="bi bi-file-earmark-pdf"></i> Generar PDF
                 </button>
@@ -236,11 +248,14 @@ charts.push(new ApexCharts(document.querySelector("#chart-tendencia"),{
 series:[
 { name:'Citas', data:<?=json_encode($citasData)?> },
 { name:'Partidas', data:<?=json_encode($partidasData)?> },
-{ name:'Testamentos', data:<?=json_encode($testamentosData)?> }
+{ name:'Testamentos', data:<?=json_encode($testamentosData)?> },
+{ name:'Defunciones', data:<?=json_encode($defuncionesData)?> },
+{ name:'Minoridad', data:<?=json_encode($minoridadData)?> },
+{ name:'Matrimonios', data:<?=json_encode($matrimoniosData)?> }
 ],
 chart:{ type:'area', height:350 },
 xaxis:{ categories:<?=json_encode($mesesNombres)?> },
-colors:[primaryColor,'#27ae60','#f39c12']
+colors:[primaryColor,'#27ae60','#f39c12','#e74c3c','#9b59b6','#3498db']
 }));
 
 /* Distribución */

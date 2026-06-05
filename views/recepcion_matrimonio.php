@@ -233,16 +233,16 @@ $actas = $modelo->obtenerTodas();
                                     <h5 class="section-title">Datos del Novio</h5>
                                     <div class="mb-3">
                                         <label class="form-label small fw-bold">Nombre Completo</label>
-                                        <input type="text" class="form-control" name="novio_nombre_completo" required>
+                                        <input type="text" class="form-control letras-only" name="novio_nombre_completo" required>
                                     </div>
                                     <div class="row g-3 mb-3">
                                         <div class="col-md-6">
                                             <label class="form-label small fw-bold">Edad</label>
-                                            <input type="number" class="form-control" name="novio_edad" required>
+                                            <input type="number" class="form-control numeros-only" name="novio_edad" min="18" required>
                                         </div>
                                         <div class="col-md-6">
                                             <label class="form-label small fw-bold">Profesión</label>
-                                            <input type="text" class="form-control" name="novio_profesion" required>
+                                            <input type="text" class="form-control letras-only" name="novio_profesion" required>
                                         </div>
                                     </div>
                                     <div class="row g-3 mb-3">
@@ -252,7 +252,7 @@ $actas = $modelo->obtenerTodas();
                                         </div>
                                         <div class="col-md-6">
                                             <label class="form-label small fw-bold">DUI</label>
-                                            <input type="text" class="form-control" name="novio_dui" placeholder="00000000-0" required>
+                                            <input type="text" class="form-control dui-mask" name="novio_dui" placeholder="00000000-0" maxlength="10" required>
                                         </div>
                                     </div>
                                     <div class="mb-2">
@@ -267,16 +267,16 @@ $actas = $modelo->obtenerTodas();
                                     <h5 class="section-title">Datos de la Novia</h5>
                                     <div class="mb-3">
                                         <label class="form-label small fw-bold">Nombre Completo</label>
-                                        <input type="text" class="form-control" name="novia_nombre_completo" required>
+                                        <input type="text" class="form-control letras-only" name="novia_nombre_completo" required>
                                     </div>
                                     <div class="row g-3 mb-3">
                                         <div class="col-md-6">
                                             <label class="form-label small fw-bold">Edad</label>
-                                            <input type="number" class="form-control" name="novia_edad" required>
+                                            <input type="number" class="form-control numeros-only" name="novia_edad" min="18" required>
                                         </div>
                                         <div class="col-md-6">
                                             <label class="form-label small fw-bold">Profesión</label>
-                                            <input type="text" class="form-control" name="novia_profesion" required>
+                                            <input type="text" class="form-control letras-only" name="novia_profesion" required>
                                         </div>
                                     </div>
                                     <div class="row g-3 mb-3">
@@ -286,7 +286,7 @@ $actas = $modelo->obtenerTodas();
                                         </div>
                                         <div class="col-md-6">
                                             <label class="form-label small fw-bold">DUI</label>
-                                            <input type="text" class="form-control" name="novia_dui" placeholder="00000000-0" required>
+                                            <input type="text" class="form-control dui-mask" name="novia_dui" placeholder="00000000-0" maxlength="10" required>
                                         </div>
                                     </div>
                                     <div class="mb-2">
@@ -305,15 +305,15 @@ $actas = $modelo->obtenerTodas();
                             <div class="row g-3 mb-4">
                                 <div class="col-md-4">
                                     <label class="form-label small fw-bold">Número de Acta</label>
-                                    <input type="text" class="form-control" name="numero_acta" required>
+                                    <input type="text" class="form-control numeros-only" name="numero_acta" required>
                                 </div>
                                 <div class="col-md-4">
                                     <label class="form-label small fw-bold">Libro (Tomo)</label>
-                                    <input type="text" class="form-control" name="libro" required>
+                                    <input type="text" class="form-control numeros-only" name="libro" required>
                                 </div>
                                 <div class="col-md-4">
                                     <label class="form-label small fw-bold">Folio</label>
-                                    <input type="text" class="form-control" name="folio" required>
+                                    <input type="text" class="form-control numeros-only" name="folio" required>
                                 </div>
                             </div>
 
@@ -346,11 +346,11 @@ $actas = $modelo->obtenerTodas();
                             <div class="row g-3 mb-4">
                                 <div class="col-md-6">
                                     <label class="form-label small fw-bold">Nombre del Oficial</label>
-                                    <input type="text" class="form-control" name="nombre_oficial" value="Carlos Antonio Méndez" required>
+                                    <input type="text" class="form-control letras-only" name="nombre_oficial" value="Carlos Antonio Méndez" required>
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label small fw-bold">Cargo</label>
-                                    <input type="text" class="form-control" name="cargo_oficial" value="Alcalde Municipal" required>
+                                    <input type="text" class="form-control letras-only" name="cargo_oficial" value="Alcalde Municipal" required>
                                 </div>
                             </div>
 
@@ -358,11 +358,11 @@ $actas = $modelo->obtenerTodas();
                             <div class="row g-3 mb-2">
                                 <div class="col-md-6">
                                     <label class="form-label small fw-bold">Nombre Testigo 1</label>
-                                    <input type="text" class="form-control" name="testigo1_nombre" required>
+                                    <input type="text" class="form-control letras-only" name="testigo1_nombre" required>
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label small fw-bold">Nombre Testigo 2</label>
-                                    <input type="text" class="form-control" name="testigo2_nombre" required>
+                                    <input type="text" class="form-control letras-only" name="testigo2_nombre" required>
                                 </div>
                             </div>
                         </div>
@@ -493,6 +493,15 @@ $(document).ready(function() {
             url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json',
         },
         order: [[4, 'desc']]
+    });
+
+    // Máscara automática para DUI (formato: 00000000-0)
+    $('.dui-mask').on('input', function() {
+        let value = $(this).val().replace(/\D/g, ''); // Eliminar caracteres no numéricos
+        if (value.length > 8) {
+            value = value.substring(0, 8) + '-' + value.substring(8, 9);
+        }
+        $(this).val(value);
     });
 
     // WIZARD LOGIC

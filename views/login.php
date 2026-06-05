@@ -115,7 +115,7 @@
                             <label for="regNombre">Nombre Completo</label>
                             <div class="input-wrapper">
                                 <i class="fas fa-user"></i>
-                                <input type="text" id="regNombre" placeholder="Ej: Juan Pérez" required>
+                                <input type="text" id="regNombre" placeholder="Ej: Juan Pérez" class="letras-only" required>
                             </div>
                         </div>
 
@@ -223,6 +223,7 @@
     };
     </script>
 
+    <script src="../assets/Js/validaciones.js?v=<?php echo time(); ?>"></script>
     <script src="../assets/Js/Login.js?v=<?php echo time(); ?>"></script>
 </body>
 </html>
