@@ -35,11 +35,11 @@
                             <div class="row g-3 mt-1">
                                 <div class="col-md-6">
                                     <label class="form-label fw-bold text-dark small">Nombres</label>
-                                    <input type="text" id="regNombres" class="form-control border-secondary-subtle shadow-none">
+                                    <input type="text" id="regNombres" class="form-control border-secondary-subtle shadow-none letras-only">
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label fw-bold text-dark small">Apellidos</label>
-                                    <input type="text" id="regApellidos" class="form-control border-secondary-subtle shadow-none">
+                                    <input type="text" id="regApellidos" class="form-control border-secondary-subtle shadow-none letras-only">
                                 </div>
                                 <div class="col-md-4">
                                     <label class="form-label fw-bold text-dark small">Sexo</label>
@@ -59,11 +59,11 @@
                                 </div>
                                 <div class="col-md-4">
                                     <label class="form-label fw-bold text-dark small">Lugar Nacimiento</label>
-                                    <input type="text" id="regLugarNac" class="form-control border-secondary-subtle shadow-none">
+                                    <input type="text" id="regLugarNac" class="form-control border-secondary-subtle shadow-none letras-only">
                                 </div>
                                 <div class="col-md-4">
                                     <label class="form-label fw-bold text-dark small">Hospital / Clínica</label>
-                                    <input type="text" id="regHospital" class="form-control border-secondary-subtle shadow-none">
+                                    <input type="text" id="regHospital" class="form-control border-secondary-subtle shadow-none letras-only">
                                 </div>
                             </div>
                         </div>
@@ -80,7 +80,7 @@
                                                 <input type="text" class="form-control form-control-sm border-0 dui-mask" placeholder="Buscar DUI..." id="duiPadre" maxlength="10">
                                                 <button id="btnBuscarPadre" class="btn btn-sm text-white fw-bold" type="button" style="background-color: var(--color-3);">Buscar</button>
                                             </div>
-                                            <input type="text" id="regNombrePadre" class="form-control form-control-sm border-secondary-subtle shadow-none" placeholder="Nombre completo">
+                                            <input type="text" id="regNombrePadre" class="form-control form-control-sm border-secondary-subtle shadow-none letras-only" placeholder="Nombre completo">
                                         </div>
                                     </div>
                                 </div>
@@ -93,7 +93,7 @@
                                                 <input type="text" class="form-control form-control-sm border-0 dui-mask" placeholder="Buscar DUI..." id="duiMadre" maxlength="10">
                                                 <button id="btnBuscarMadre" class="btn btn-sm text-white fw-bold" type="button" style="background-color: var(--color-3);">Buscar</button>
                                             </div>
-                                            <input type="text" id="regNombreMadre" class="form-control form-control-sm border-secondary-subtle shadow-none" placeholder="Nombre completo">
+                                            <input type="text" id="regNombreMadre" class="form-control form-control-sm border-secondary-subtle shadow-none letras-only" placeholder="Nombre completo">
                                         </div>
                                     </div>
                                 </div>
@@ -149,15 +149,15 @@
                         <div class="col-12 mb-1"><h6 class="border-bottom pb-2 text-muted"><i class="bi bi-folder2-open me-1"></i> Información del Folio</h6></div>
                         <div class="col-md-4">
                             <label class="form-label fw-bold text-dark">Número de Partida</label>
-                            <input type="text" id="partidaNum" class="form-control form-control-lg border-secondary-subtle shadow-none" placeholder="Ej: 1542">
+                            <input type="text" id="partidaNum" class="form-control form-control-lg border-secondary-subtle shadow-none numeros-only" placeholder="Ej: 1542">
                         </div>
                         <div class="col-md-4">
                             <label class="form-label fw-bold text-dark">Libro (Tomo)</label>
-                            <input type="text" id="partidaLibro" class="form-control form-control-lg border-secondary-subtle shadow-none" placeholder="Ej: 12">
+                            <input type="text" id="partidaLibro" class="form-control form-control-lg border-secondary-subtle shadow-none numeros-only" placeholder="Ej: 12">
                         </div>
                         <div class="col-md-4">
                             <label class="form-label fw-bold text-dark">Folio</label>
-                            <input type="text" id="partidaFolio" class="form-control form-control-lg border-secondary-subtle shadow-none" placeholder="Ej: 45">
+                            <input type="text" id="partidaFolio" class="form-control form-control-lg border-secondary-subtle shadow-none numeros-only" placeholder="Ej: 45">
                         </div>
                     </form>
                 </div>

@@ -8,7 +8,7 @@ $servicios_pages = [
     'recepcion_defuncion.php',
     'recepcion_partida.php',
     'recepcion_testamento.php',
-    'solicitud_matrimonio_civil.php'
+    'recepcion_matrimonio.php'
 
 ];
 
@@ -184,8 +184,8 @@ function isActive($page, $current_page)
                     </li>
                     <li>
     <a
-        href="solicitud_matrimonio_civil.php"
-        class="nav-link py-2 <?= isActive('solicitud_matrimonio_civil.php', $current_page) ?>">
+        href="recepcion_matrimonio.php"
+        class="nav-link py-2 <?= isActive('recepcion_matrimonio.php', $current_page) ?>">
 
         <i class="bi bi-heart me-2"></i>
 

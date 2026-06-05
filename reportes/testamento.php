@@ -1,26 +1,7 @@
 <?php
-
 require_once __DIR__ . '/../controller/TestamentoController.php';
 
 $id = $_GET['id'] ?? null;
-
-if (!$id) {
-    die("No se especificó el ID del testamento.");
-}
-
-$controller = new TestamentoController();
-$datos = $controller->obtenerReporte($id);
-
-if (!$datos) {
-    die("No se encontró el testamento solicitado.");
-}
-
-$datos_municipio = [
-    'alcaldia'      => 'Alcaldía Municipal de Ilobasco',
-    'departamento'  => 'Cabañas',
-    'pais'          => 'El Salvador',
-    'escudo_nacion' => '../assets/Img/escudo.jpeg'
-];
 
 function fechaEspanol($fecha)
 {
@@ -40,37 +21,87 @@ function fechaEspanol($fecha)
     return "$dia de $mes de $anio";
 }
 
-$datos_testador = [
-    'nombre'        => $datos['nombre_testador'],
-    'dui'           => $datos['dui_testador'],
-    'edad'          => $datos['edad_testador'],
-    'estado_civil'  => $datos['estado_civil_testador'],
-    'domicilio'     => $datos['domicilio_testador']
-];
+if ($id) {
+    $controller = new TestamentoController();
+    $datos = $controller->obtenerReporte($id);
 
-$datos_heredero = [
-    'nombre'        => $datos['nombre_heredero'],
-    'parentesco'    => $datos['parentesco_heredero']
-];
+    if (!$datos) {
+        die("Error: No se encontró el testamento solicitado.");
+    }
 
-$datos_testamento = [
-    'bienes'        => $datos['bienes_declarados'],
-    'declaracion'   => $datos['declaracion_voluntad'],
-    'fecha'         => fechaEspanol($datos['fecha_registro'])
-];
+    $datos_municipio = [
+        'alcaldia'      => 'Alcaldía Municipal de Ilobasco',
+        'departamento'  => 'Cabañas',
+        'pais'          => 'El Salvador',
+        'escudo_nacion' => '../assets/Img/escudo.jpeg'
+    ];
 
-$datos_footer = [
-    'atendio'       => $datos['atendio_por'] ?? 'Registro del Estado Familiar',
-    'testador'      => $datos['nombre_testador']
-];
+    $datos_testador = [
+        'nombre'        => $datos['nombre_testador'],
+        'dui'           => $datos['dui_testador'],
+        'edad'          => $datos['edad_testador'],
+        'estado_civil'  => $datos['estado_civil_testador'],
+        'domicilio'     => $datos['domicilio_testador']
+    ];
 
+    $datos_heredero = [
+        'nombre'        => $datos['nombre_heredero'],
+        'parentesco'    => $datos['parentesco_heredero']
+    ];
+
+    $datos_testamento = [
+        'numero'        => $datos['id_testamento'],
+        'bienes'        => $datos['bienes_declarados'],
+        'declaracion'   => $datos['declaracion_voluntad'],
+        'fecha'         => fechaEspanol($datos['fecha_registro'])
+    ];
+
+    $datos_footer = [
+        'atendio'       => $datos['atendio_por'] ?? 'Registro del Estado Familiar',
+        'testador'      => $datos['nombre_testador']
+    ];
+} else {
+    $datos_municipio = [
+        'alcaldia'      => $_POST['alcaldia'] ?? 'Alcaldía Municipal de Ilobasco',
+        'departamento'  => $_POST['departamento'] ?? 'Cabañas',
+        'pais'          => 'El Salvador',
+        'escudo_nacion' => '../assets/Img/escudo.jpeg'
+    ];
+
+    $datos_testador = [
+        'nombre'        => $_POST['nombre_testador'] ?? '',
+        'dui'           => $_POST['dui_testador'] ?? '',
+        'edad'          => $_POST['edad_testador'] ?? '',
+        'estado_civil'  => $_POST['estado_civil_testador'] ?? '',
+        'domicilio'     => $_POST['domicilio_testador'] ?? ''
+    ];
+
+    $datos_heredero = [
+        'nombre'        => $_POST['nombre_heredero'] ?? '',
+        'parentesco'    => $_POST['parentesco_heredero'] ?? ''
+    ];
+
+    $fecha_raw = $_POST['fecha_registro'] ?? date('Y-m-d');
+    
+    $datos_testamento = [
+        'numero'        => '---',
+        'bienes'        => $_POST['bienes_declarados'] ?? '',
+        'declaracion'   => $_POST['declaracion_voluntad'] ?? '',
+        'fecha'         => fechaEspanol($fecha_raw)
+    ];
+
+    $datos_footer = [
+        'atendio'       => $_POST['atendio'] ?? 'Sistema Munify',
+        'testador'      => $_POST['nombre_testador'] ?? ''
+    ];
+}
 ?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Acta de Defunción</title>
+  <title>Testamento</title>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap');
@@ -369,7 +400,29 @@ $datos_footer = [
       .footer { padding: 0.8rem 1.5rem; }
     }
   </style>
-  <div class="card">
+</head>
+<body>
+
+<div class="hoja">
+  <div class="encabezado">
+    <div class="logo-wrap">
+      <?php if (!empty($datos_municipio['escudo_nacion'])): ?>
+        <img src="<?= htmlspecialchars($datos_municipio['escudo_nacion']) ?>" alt="Escudo Nacional">
+      <?php endif; ?>
+    </div>
+    <div class="encabezado-texto">
+      <h1>
+        <?= htmlspecialchars($datos_municipio['alcaldia']) ?><br>
+        Departamento de <?= htmlspecialchars($datos_municipio['departamento']) ?>
+        – <?= htmlspecialchars($datos_municipio['pais']) ?>
+      </h1>
+      <div class="subtitulo">Registro del Estado Familiar</div>
+      <div class="titulo-doc">Testamento</div>
+    </div>
+  </div>
+
+  <div class="cuerpo">
+    <div class="card">
     <div class="card-header">Información del Registro</div>
 
     <div class="card-body">
@@ -378,7 +431,7 @@ $datos_footer = [
             <div class="campo">
                 <label>Número de Registro</label>
                 <div class="valor">
-                    <?= $datos['id_testamento'] ?>
+                    <?= htmlspecialchars($datos_testamento['numero']) ?>
                 </div>
             </div>
 
@@ -482,6 +535,9 @@ $datos_footer = [
         </div>
     </div>
 </div>
+
+  </div> <!-- Fin de cuerpo -->
+
 <div class="footer">
 
     <div class="firmas">
@@ -511,10 +567,9 @@ $datos_footer = [
         </div>
 
     </div>
+  </div> <!-- Fin de hoja -->
 
-</div>
-
-<button class="btn-volver" onclick="window.close() || (window.location.href = '../views/recepcion_defuncion.php')">&#11013; Volver</button>
+<button class="btn-volver" onclick="window.close() || (window.location.href = '../views/recepcion_testamento.php')">&#11013; Volver</button>
 <button class="btn-imprimir" onclick="confirmarImpresion()">🖨️ Imprimir</button>
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -539,7 +594,9 @@ function confirmarImpresion(){
     });
 }
 
-
+<?php if ($id): ?>
+window.onload = function() { setTimeout(function() { confirmarImpresion(); }, 500); };
+<?php endif; ?>
 </script>
 </body>
 </html>

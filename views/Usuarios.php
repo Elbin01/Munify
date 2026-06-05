@@ -216,7 +216,7 @@
                         <label class="form-label fw-bold small">Nombre Completo</label>
                         <div class="input-group">
                             <span class="input-group-text bg-light"><i class="bi bi-person text-muted"></i></span>
-                            <input type="text" name="nombre" id="userName" class="form-control shadow-none" placeholder="Ej: Juan Pérez" required>
+                            <input type="text" name="nombre" id="userName" class="form-control shadow-none letras-only" placeholder="Ej: Juan Pérez" required>
                         </div>
                     </div>
                     <div class="mb-3">

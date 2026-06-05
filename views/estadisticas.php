@@ -2,20 +2,35 @@
 session_start();
 require_once __DIR__ . '/../models/EstadisticaModel.php';
 
+$inicio = $_GET['inicio'] ?? null;
+$fin = $_GET['fin'] ?? null;
+
 $estadisticaModel = new EstadisticaModel();
 
 /* ================= DATOS ================= */
-$citasMes     = $estadisticaModel->getCitasPorMes();
-$distribucion = $estadisticaModel->getDistribucionTramites();
-$partidasMes  = $estadisticaModel->getPartidasPorMes();
+$citasMes     = $estadisticaModel->getCitasPorMes($inicio, $fin);
+$distribucion = $estadisticaModel->getDistribucionTramites($inicio, $fin);
+$partidasMes  = $estadisticaModel->getPartidasPorMes($inicio, $fin);
+$testamentosMes = $estadisticaModel->getTestamentosPorMes($inicio, $fin);
+$defuncionesMes = $estadisticaModel->getDefuncionesPorMes($inicio, $fin);
+$minoridadMes = $estadisticaModel->getMinoridadPorMes($inicio, $fin);
+$matrimoniosMes = $estadisticaModel->getMatrimoniosPorMes($inicio, $fin);
 $demografia   = $estadisticaModel->getDemografiaCiudadanos();
 
 $mesesNombres = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
 $citasData    = array_fill(0,12,0);
 $partidasData = array_fill(0,12,0);
+$testamentosData = array_fill(0,12,0);
+$defuncionesData = array_fill(0,12,0);
+$minoridadData = array_fill(0,12,0);
+$matrimoniosData = array_fill(0,12,0);
 
 foreach ($citasMes as $c)     $citasData[$c['mes_num'] - 1] = (int)$c['total'];
 foreach ($partidasMes as $p)  $partidasData[$p['mes_num'] - 1] = (int)$p['total'];
+foreach ($testamentosMes as $t) $testamentosData[$t['mes_num'] - 1] = (int)$t['total'];
+foreach ($defuncionesMes as $d) $defuncionesData[$d['mes_num'] - 1] = (int)$d['total'];
+foreach ($minoridadMes as $m) $minoridadData[$m['mes_num'] - 1] = (int)$m['total'];
+foreach ($matrimoniosMes as $ma) $matrimoniosData[$ma['mes_num'] - 1] = (int)$ma['total'];
 
 $distLabels = [];
 $distValues = [];
@@ -25,7 +40,7 @@ foreach ($distribucion as $d) {
 }
 
 /* ================= HEATMAP ================= */
-$heatmapRaw = $estadisticaModel->getDemandaHeatmap();
+$heatmapRaw = $estadisticaModel->getDemandaHeatmap($inicio, $fin);
 $diasSemana = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
 $diasEs     = ['Lun','Mar','Mié','Jue','Vie','Sáb','Dom'];
 $heatmapData = [];
@@ -106,6 +121,29 @@ foreach ($diasSemana as $i => $dia) {
             </ol>
         </nav>
     </div>
+    <div>
+        <form id="filtro-estadisticas" method="GET" action="estadisticas.php" class="d-flex gap-2 align-items-center">
+            <div>
+                <label for="inicio" class="form-label small mb-0">Inicio:</label>
+                <input type="date" name="inicio" id="inicio" class="form-control form-control-sm" value="<?= htmlspecialchars($inicio ?? '') ?>">
+            </div>
+            <div>
+                <label for="fin" class="form-label small mb-0">Fin:</label>
+                <input type="date" name="fin" id="fin" class="form-control form-control-sm" value="<?= htmlspecialchars($fin ?? '') ?>">
+            </div>
+            <div class="d-flex align-items-end mt-3">
+                <button type="submit" class="btn btn-primary btn-sm shadow-sm px-3" style="background-color: var(--color-3); border-color: var(--color-3); border-radius: 8px; font-weight: 500;">
+                    <i class="bi bi-funnel"></i> Filtrar
+                </button>
+                <a href="estadisticas.php" class="btn btn-light btn-sm shadow-sm ms-2 px-3" style="border: 1px solid #ddd; border-radius: 8px; font-weight: 500;" title="Limpiar filtros">
+                    <i class="bi bi-eraser"></i> Limpiar
+                </a>
+                <button type="button" class="btn btn-primary btn-sm shadow-sm ms-2 px-3" style="background-color: var(--color-3); border-color: var(--color-3); border-radius: 8px; font-weight: 500;" onclick="generarPDF()">
+                    <i class="bi bi-file-earmark-pdf"></i> Generar PDF
+                </button>
+            </div>
+        </form>
+    </div>
 </div>
 <!-- ================= TABS ================= -->
 <ul class="nav nav-tabs mb-4">
@@ -147,8 +185,61 @@ foreach ($diasSemana as $i => $dia) {
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
+function generarPDF() {
+    const inicio = document.getElementById('inicio').value;
+    const fin = document.getElementById('fin').value;
+    
+    if (!inicio || !fin) {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Fechas incompletas',
+            text: 'Por favor seleccione una fecha de inicio y una fecha de fin para generar el reporte.',
+            confirmButtonColor: '#1C3166'
+        });
+        return;
+    }
+
+    if (inicio > fin) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Rango inválido',
+            text: 'La fecha de inicio no puede ser mayor que la fecha de fin.',
+            confirmButtonColor: '#1C3166'
+        });
+        return;
+    }
+
+    Swal.fire({
+        title: '¿Generar Reporte PDF?',
+        text: 'Se generará un reporte formal con las estadísticas del rango de fechas seleccionado.',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#1C3166',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Sí, generar PDF',
+        cancelButtonText: 'Cancelar'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            Swal.fire({
+                title: 'Generando Reporte',
+                text: 'Por favor espere...',
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+
+            setTimeout(() => {
+                Swal.close();
+                window.open(`../reportes/estadisticas_pdf.php?inicio=${inicio}&fin=${fin}`, '_blank');
+            }, 800);
+        }
+    });
+}
+
 const primaryColor = '#1C3166';
 const charts = [];
 
@@ -156,11 +247,15 @@ const charts = [];
 charts.push(new ApexCharts(document.querySelector("#chart-tendencia"),{
 series:[
 { name:'Citas', data:<?=json_encode($citasData)?> },
-{ name:'Partidas', data:<?=json_encode($partidasData)?> }
+{ name:'Partidas', data:<?=json_encode($partidasData)?> },
+{ name:'Testamentos', data:<?=json_encode($testamentosData)?> },
+{ name:'Defunciones', data:<?=json_encode($defuncionesData)?> },
+{ name:'Minoridad', data:<?=json_encode($minoridadData)?> },
+{ name:'Matrimonios', data:<?=json_encode($matrimoniosData)?> }
 ],
 chart:{ type:'area', height:350 },
 xaxis:{ categories:<?=json_encode($mesesNombres)?> },
-colors:[primaryColor,'#27ae60']
+colors:[primaryColor,'#27ae60','#f39c12','#e74c3c','#9b59b6','#3498db']
 }));
 
 /* Distribución */
@@ -168,7 +263,7 @@ charts.push(new ApexCharts(document.querySelector("#chart-distribucion"),{
 series:<?=json_encode($distValues)?>,
 chart:{ type:'donut', height:350 },
 labels:<?=json_encode($distLabels)?>,
-colors:[primaryColor,'#3498db','#9b59b6','#e67e22']
+colors:[primaryColor,'#3498db','#9b59b6','#e67e22', '#1abc9c']
 }));
 
 /* Barras */

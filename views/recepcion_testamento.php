@@ -70,7 +70,7 @@
                             <div class="row g-3 mt-1">
                                 <div class="col-md-12">
                                     <label class="form-label fw-bold text-dark small">Nombre Completo</label>
-                                    <input type="text" id="regNombreTestador" class="form-control border-secondary-subtle shadow-none" placeholder="Tal como aparece en el DUI">
+                                    <input type="text" id="regNombreTestador" class="form-control border-secondary-subtle shadow-none letras-only" placeholder="Tal como aparece en el DUI">
                                 </div>
                                 <div class="col-md-4">
                                     <label class="form-label fw-bold text-dark small">DUI</label>
@@ -78,7 +78,7 @@
                                 </div>
                                 <div class="col-md-4">
                                     <label class="form-label fw-bold text-dark small">Edad (Años)</label>
-                                    <input type="number" id="regEdad" class="form-control border-secondary-subtle shadow-none" min="18">
+                                    <input type="number" id="regEdad" class="form-control border-secondary-subtle shadow-none numeros-only" min="18">
                                 </div>
                                 <div class="col-md-4">
                                     <label class="form-label fw-bold text-dark small">Estado Civil</label>
@@ -103,11 +103,11 @@
                             <div class="row g-3 mt-1">
                                 <div class="col-md-7">
                                     <label class="form-label fw-bold text-dark small">Nombre del Heredero Principal</label>
-                                    <input type="text" id="regHeredero" class="form-control border-secondary-subtle shadow-none">
+                                    <input type="text" id="regHeredero" class="form-control border-secondary-subtle shadow-none letras-only">
                                 </div>
                                 <div class="col-md-5">
                                     <label class="form-label fw-bold text-dark small">Parentesco / Relación</label>
-                                    <input type="text" id="regParentesco" class="form-control border-secondary-subtle shadow-none" placeholder="Ej. Hijo, Cónyuge, Hermano...">
+                                    <input type="text" id="regParentesco" class="form-control border-secondary-subtle shadow-none letras-only" placeholder="Ej. Hijo, Cónyuge, Hermano...">
                                 </div>
                             </div>
                         </div>

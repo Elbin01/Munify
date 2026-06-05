@@ -68,11 +68,11 @@
                             <div class="row g-3 mt-1">
                                 <div class="col-md-6">
                                     <label class="form-label fw-bold text-dark small">Nombres</label>
-                                    <input type="text" id="regNombres" class="form-control border-secondary-subtle shadow-none">
+                                    <input type="text" id="regNombres" class="form-control border-secondary-subtle shadow-none letras-only">
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label fw-bold text-dark small">Apellidos</label>
-                                    <input type="text" id="regApellidos" class="form-control border-secondary-subtle shadow-none">
+                                    <input type="text" id="regApellidos" class="form-control border-secondary-subtle shadow-none letras-only">
                                 </div>
                                 <div class="col-md-4">
                                     <label class="form-label fw-bold text-dark small">DUI del Fallecido</label>
@@ -109,7 +109,7 @@
                                                 </div>
                                                 <div class="col-md-8">
                                                     <label class="fw-bold form-label text-dark small">Nombre Completo</label>
-                                                    <input type="text" id="regNombreDeclarante" class="form-control form-control-sm border-secondary-subtle shadow-none" placeholder="Nombre completo del declarante">
+                                                    <input type="text" id="regNombreDeclarante" class="form-control form-control-sm border-secondary-subtle shadow-none letras-only" placeholder="Nombre completo del declarante">
                                                 </div>
                                             </div>
                                         </div>
@@ -161,15 +161,15 @@
                         <div class="col-12 mb-1"><h6 class="border-bottom pb-2 text-muted"><i class="bi bi-folder2-open me-1"></i> Información del Folio</h6></div>
                         <div class="col-md-4">
                             <label class="form-label fw-bold text-dark">Número de Acta</label>
-                            <input type="text" id="partidaNum" class="form-control form-control-lg border-secondary-subtle shadow-none" placeholder="Ej: 1542">
+                            <input type="text" id="partidaNum" class="form-control form-control-lg border-secondary-subtle shadow-none numeros-only" placeholder="Ej: 1542">
                         </div>
                         <div class="col-md-4">
                             <label class="form-label fw-bold text-dark">Libro</label>
-                            <input type="text" id="partidaLibro" class="form-control form-control-lg border-secondary-subtle shadow-none" placeholder="Ej: 12">
+                            <input type="text" id="partidaLibro" class="form-control form-control-lg border-secondary-subtle shadow-none numeros-only" placeholder="Ej: 12">
                         </div>
                         <div class="col-md-4">
                             <label class="form-label fw-bold text-dark">Folio</label>
-                            <input type="text" id="partidaFolio" class="form-control form-control-lg border-secondary-subtle shadow-none" placeholder="Ej: 45">
+                            <input type="text" id="partidaFolio" class="form-control form-control-lg border-secondary-subtle shadow-none numeros-only" placeholder="Ej: 45">
                         </div>
                     </form>
                 </div>
